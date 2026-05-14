@@ -1,0 +1,2233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Your AI Builder's Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* palette tuned to slide 1 */
+  --bg:#F1F2F7;
+  --bg-2:#E7E9F2;
+  --paper:#FFFFFF;
+  --ink:#1A1C3A;
+  --ink-2:#3A3D6E;
+  --muted:#7A7E9F;
+  --navy:#252861;
+  --navy-2:#1A1C42;
+  --indigo:#3F4493;
+  --lavender:#8E92D0;
+  --lavender-2:#B6B9E2;
+  --pale:#D9DBEC;
+  --border:#DCDEEC;
+  --line:#2A2D5F;
+  --accent:#5B5FB8;
+  --topo-1:#D6DAEC;
+  --topo-2:#C0C5E2;
+  --topo-3:#A6ACD4;
+  --topo-4:#878DC3;
+  --topo-5:#5F66AE;
+  --radius:14px;
+  --shadow:0 8px 30px rgba(20,22,60,0.06), 0 2px 8px rgba(20,22,60,0.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+code,.mono{font-family:'JetBrains Mono',monospace}
+
+/* halftone backgrounds */
+.halftone-tr{position:fixed; top:0; right:0; width:48vw; height:50vh; pointer-events:none; z-index:0;
+  background-image: radial-gradient(circle, rgba(63,68,147,0.42) 1.3px, transparent 1.6px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(ellipse at 95% 5%, black 0%, transparent 65%);
+  mask-image: radial-gradient(ellipse at 95% 5%, black 0%, transparent 65%);
+}
+
+/* progress bar */
+.progress{position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:50}
+.progress > div{height:100%; width:0%; background:var(--navy); transition:width .25s ease}
+
+/* top nav */
+nav.topnav{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:40;
+  background:rgba(255,255,255,0.9); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--border); border-radius:999px; padding:5px;
+  display:flex; gap:2px; box-shadow:var(--shadow); max-width:calc(100vw - 32px); overflow-x:auto;
+}
+nav.topnav button{
+  border:0; background:transparent; color:var(--ink-2); font:600 13px/1 'Manrope',sans-serif;
+  padding:9px 14px; border-radius:999px; cursor:pointer; white-space:nowrap; letter-spacing:-0.005em;
+}
+nav.topnav button:hover{color:var(--ink)}
+nav.topnav button.active{background:var(--navy); color:#fff}
+
+section{
+  position:relative; z-index:1; min-height:100vh; padding:120px 24px 80px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.container{max-width:1180px; width:100%; margin:0 auto}
+.eyebrow{font:700 11px/1 'Manrope',sans-serif; letter-spacing:.22em; text-transform:uppercase; color:var(--indigo); margin-bottom:18px}
+h1,h2,h3{margin:0; color:var(--ink); letter-spacing:-0.025em}
+h1{font-weight:800; font-size:clamp(44px,7vw,92px); line-height:0.98}
+h2{font-weight:700; font-size:clamp(30px,4vw,46px); line-height:1.08}
+h3{font-weight:700; font-size:20px; line-height:1.3}
+p{color:var(--ink-2); line-height:1.6; font-size:16px}
+.lead{font-size:18px; color:var(--ink-2); max-width:680px; line-height:1.6}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; cursor:pointer; border:0;
+  background:var(--navy); color:#fff; font:700 14px/1 'Manrope',sans-serif;
+  padding:15px 24px; border-radius:8px; transition:transform .15s ease, background .15s ease;
+  letter-spacing:-0.005em;
+}
+.btn:hover{background:var(--navy-2); transform:translateY(-1px)}
+.btn.ghost{background:transparent; color:var(--navy); border:1px solid var(--navy); padding:14px 23px}
+.btn.ghost:hover{background:var(--navy); color:#fff}
+.btn .arr{transition:transform .2s ease; font-size:16px}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* ============ HERO ============ */
+#hero{padding-top:140px}
+#hero .container{display:flex; flex-direction:column; align-items:flex-start; max-width:1000px}
+.hero-title{font-weight:800; font-size:clamp(48px,7.5vw,104px); line-height:0.96; color:var(--navy); letter-spacing:-0.03em}
+.hero-title em{font-style:normal; color:var(--navy); font-weight:300; display:block; font-size:0.55em; letter-spacing:0.02em; color:var(--ink-2); margin-top:14px}
+.hero-sub{margin-top:28px; font-size:19px; color:var(--ink-2); max-width:580px; line-height:1.55}
+.cta-row{margin-top:40px; display:flex; gap:12px; flex-wrap:wrap}
+.hero-meta{display:flex; gap:16px; align-items:center; color:var(--muted); font:500 13px/1 'Manrope'; margin-top:48px; padding-top:32px; border-top:1px solid var(--border); width:100%; max-width:580px}
+.hero-meta .dot{width:3px; height:3px; background:var(--muted); border-radius:50%}
+
+/* ============ WHAT MAKES HUMANS INTELLIGENT ============ */
+.intel-wrap{margin-top:36px}
+.intel-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px}
+.intel-card{
+  perspective:1200px; height:300px; cursor:pointer; position:relative;
+}
+.intel-inner{
+  position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.4,.0,.2,1);
+}
+.intel-card.flipped .intel-inner{transform:rotateY(180deg)}
+.intel-face{
+  position:absolute; inset:0; -webkit-backface-visibility:hidden; backface-visibility:hidden;
+  border-radius:14px; padding:24px; display:flex; flex-direction:column; justify-content:space-between;
+  box-shadow:0 1px 3px rgba(20,22,60,0.04);
+}
+.intel-front{
+  background:var(--paper); border:1px solid var(--border); color:var(--ink);
+}
+.intel-front:hover{border-color:var(--lavender)}
+.intel-front .ic-icon{width:42px; height:42px; color:var(--indigo)}
+.intel-front .ic-name{font:800 24px/1.1 'Manrope'; color:var(--navy); letter-spacing:-0.02em}
+.intel-front .ic-tap{font:600 11px/1 'Manrope'; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:6px}
+.intel-back{
+  background:var(--navy); color:#fff; transform:rotateY(180deg);
+  border:1px solid var(--navy);
+}
+.intel-back .ic-eyebrow{font:700 10px/1 'Manrope'; letter-spacing:.2em; text-transform:uppercase; color:var(--lavender-2)}
+.intel-back .ic-ainame{font:800 19px/1.15 'Manrope'; letter-spacing:-0.02em; color:#fff; margin-top:8px}
+.intel-back .ic-aidesc{font-size:13px; line-height:1.45; color:rgba(255,255,255,0.78); margin-top:10px}
+.intel-back .ic-chips{display:flex; flex-wrap:wrap; gap:5px; margin-top:auto}
+.intel-back .ic-chip{font:600 11px/1 'Manrope'; padding:5px 9px; border-radius:6px; background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.15)}
+.intel-segue{margin-top:32px; padding:24px 28px; background:var(--paper); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); max-width:820px}
+.intel-segue p{margin:0; font-size:17px; color:var(--ink); line-height:1.55}
+.intel-segue strong{color:var(--navy); font-weight:700}
+.intel-segue code{color:var(--indigo); background:rgba(63,68,147,0.08); padding:2px 7px; border-radius:5px; font-size:14px; font-weight:600; font-family:'JetBrains Mono',monospace}
+.intel-progress{display:flex; gap:6px; margin-top:18px; align-items:center; font:600 12px/1 'Manrope'; color:var(--muted)}
+.intel-progress .dots{display:flex; gap:4px}
+.intel-progress .pd{width:8px; height:8px; border-radius:50%; background:var(--bg-2); transition:background .2s}
+.intel-progress .pd.on{background:var(--indigo)}
+
+/* ============ ERAS (vertical stacked rows) ============ */
+.eras{margin-top:36px; display:flex; flex-direction:column; gap:18px}
+.era-row{
+  background:var(--paper); border:1px solid var(--border); border-radius:16px; overflow:hidden;
+  display:grid; grid-template-columns:1fr; box-shadow:var(--shadow);
+  transition:transform .2s ease;
+}
+.era-row:hover{transform:translateY(-2px)}
+@media(min-width:820px){
+  .era-row{grid-template-columns: 5fr 6fr}
+  .era-row.flip{grid-template-columns: 6fr 5fr}
+  .era-row.flip .era-visual{order:2}
+}
+.era-visual{
+  position:relative; min-height:280px; background:var(--bg-2); overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.era-visual.dark{background:var(--navy)}
+.era-visual .visual-img{
+  position:absolute; inset:0; background-size:cover; background-position:center;
+  opacity:0.32; mix-blend-mode:multiply; filter:saturate(0.6) contrast(1.1);
+}
+.era-visual.dark .visual-img{opacity:0.45; mix-blend-mode:luminosity; filter:saturate(0.4) contrast(1.1)}
+.era-visual .anim{position:relative; z-index:2; width:100%; max-width:380px; padding:24px}
+.era-content{padding:32px 36px}
+.era-content .e-year{font:700 12px/1 'JetBrains Mono'; letter-spacing:.16em; color:var(--indigo); margin-bottom:8px}
+.era-content .e-name{font:800 30px/1.08 'Manrope'; color:var(--navy); letter-spacing:-0.025em}
+.era-content .e-theme{font-size:15px; color:var(--ink-2); line-height:1.55; margin-top:14px}
+.era-content .e-q{font:600 14px/1.4 'Manrope'; color:var(--navy); margin-top:18px; padding:14px 16px; background:var(--bg-2); border-left:3px solid var(--indigo); border-radius:0 8px 8px 0; font-style:italic}
+.era-content .e-ex-h{font:700 10px/1 'Manrope'; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-top:20px; margin-bottom:10px}
+.era-content .e-chips{display:flex; flex-wrap:wrap; gap:6px}
+.era-content .e-key{display:inline-flex; align-items:center; gap:6px; font:700 11px/1 'Manrope'; padding:5px 10px; border-radius:6px; background:var(--navy); color:#fff; letter-spacing:.02em}
+.era-content .e-key .dotx{width:6px; height:6px; border-radius:50%; background:#9CD89C}
+.chip{font:600 12px/1 'Manrope'; padding:6px 10px; border-radius:6px; border:1px solid var(--border); background:var(--paper); color:var(--ink-2)}
+
+/* visual animation helpers */
+.chess-board{display:grid; grid-template-columns:repeat(8, 1fr); width:240px; height:240px; border:2px solid var(--navy); border-radius:4px; box-shadow:0 10px 30px rgba(20,22,60,0.25); background:#fff}
+.chess-sq{width:100%; height:100%}
+.chess-sq.dark{background:#9AA2CC}
+.chess-sq.light{background:#F1F2F7}
+.chess-piece{display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--navy)}
+.chess-hl{box-shadow:inset 0 0 0 3px #E89B3C; animation:hlpulse 2.4s ease-in-out infinite}
+@keyframes hlpulse{0%,100%{box-shadow:inset 0 0 0 3px rgba(232,155,60,0.0)} 50%{box-shadow:inset 0 0 0 3px #E89B3C}}
+
+.scatter-anim{width:300px; height:240px}
+.scatter-anim .pt{opacity:0; animation:fadeIn 0.4s forwards}
+.scatter-anim .line{stroke-dasharray:400; stroke-dashoffset:400; animation:drawLine 2s 2s forwards}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+
+.nn-anim svg circle.pulse{animation:nodepulse 3s ease-in-out infinite}
+@keyframes nodepulse{0%,100%{r:6; fill:#fff} 50%{r:8; fill:#B6B9E2}}
+.nn-anim svg .signal{stroke-dasharray:6 200; stroke-dashoffset:0; animation:signal 2.4s linear infinite}
+@keyframes signal{to{stroke-dashoffset:-206}}
+
+.gen-anim{font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--navy); background:#fff; border-radius:8px; padding:18px 20px; box-shadow:0 10px 30px rgba(20,22,60,0.18); width:320px; line-height:1.55; border:1px solid var(--border)}
+.gen-anim .prompt{color:var(--muted); font-size:11px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px}
+.gen-anim .out{min-height:80px}
+.gen-anim .out .cur{display:inline-block; width:2px; height:14px; background:var(--navy); vertical-align:middle; animation:blink 1s infinite; margin-left:1px}
+
+.agent-anim{width:320px; background:#fff; border-radius:10px; padding:16px; box-shadow:0 10px 30px rgba(20,22,60,0.18); border:1px solid var(--border)}
+.agent-anim .row{display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:6px; margin-bottom:6px; font:500 13px/1.3 'Manrope'; color:var(--ink-2); background:var(--bg-2); opacity:0.3; transform:translateX(-8px); transition:all .3s}
+.agent-anim .row.on{opacity:1; transform:none; background:rgba(63,68,147,0.10); color:var(--navy)}
+.agent-anim .row .num{width:20px; height:20px; border-radius:50%; background:var(--indigo); color:#fff; font:700 11px/1 'JetBrains Mono'; display:flex; align-items:center; justify-content:center; flex-shrink:0}
+.agent-anim .row.done .num{background:#3BB273}
+.agent-anim .row.done::after{content:'✓'; margin-left:auto; color:#3BB273; font-weight:700}
+
+/* ---- Era examples (interactive chips) ---- */
+.era-content .e-ex-h .opt-badge{display:inline-block; margin-left:8px; font:700 9px/1 'Manrope'; letter-spacing:.14em; padding:3px 7px; background:var(--bg-2); color:var(--muted); border-radius:4px; vertical-align:middle}
+.chip-btn{font:600 12px/1 'Manrope'; padding:7px 12px; border-radius:6px; border:1px solid var(--border); background:var(--paper); color:var(--ink-2); cursor:pointer; transition:all .18s ease}
+.chip-btn:hover{border-color:var(--lavender); color:var(--ink); transform:translateY(-1px); box-shadow:0 4px 10px rgba(20,22,60,0.06)}
+.chip-btn.active{background:var(--indigo); color:#fff; border-color:var(--indigo)}
+.chip-btn .play-arrow{display:inline-block; margin-right:6px; opacity:.6; transition:opacity .18s; font-size:9px}
+.chip-btn:hover .play-arrow{opacity:1}
+.chip-btn.active .play-arrow{opacity:1}
+.chip-reset{font:600 11px/1 'Manrope'; padding:6px 10px; border-radius:6px; background:transparent; border:1px solid transparent; color:var(--muted); cursor:pointer; margin-top:8px; opacity:0; transition:opacity .2s}
+.chip-reset.show{opacity:1}
+.chip-reset:hover{color:var(--ink); border-color:var(--border)}
+.era-visual .anim-caption{
+  position:absolute; left:18px; right:18px; bottom:14px; z-index:3;
+  font:500 12px/1.4 'Manrope'; color:var(--ink); text-align:center;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(4px);
+  padding:8px 12px; border-radius:6px; border:1px solid var(--border);
+  opacity:0; transform:translateY(4px); transition:all .3s ease; pointer-events:none;
+}
+.era-visual.dark .anim-caption{background:rgba(37,40,97,0.92); color:#fff; border-color:rgba(255,255,255,0.18)}
+.era-visual.show-caption .anim-caption{opacity:1; transform:none}
+
+/* ---- mini-animations for optional examples ---- */
+/* ELIZA — code + chat */
+.eliza-anim{width:340px; display:flex; flex-direction:column; gap:10px}
+.eliza-code{background:#1A1C42; border-radius:8px; padding:12px 14px; font-family:'JetBrains Mono',monospace; font-size:10.5px; line-height:1.45; color:#E6E7F5; box-shadow:0 8px 20px rgba(20,22,60,0.25)}
+.eliza-code .cm{color:#7A7E9F}
+.eliza-code .kw{color:#D89BE0; font-weight:600}
+.eliza-code .str{color:#9CD89C}
+.eliza-code .line{opacity:0; animation:msgIn .4s forwards}
+.eliza-code .line:nth-child(1){animation-delay:.05s}
+.eliza-code .line:nth-child(2){animation-delay:.25s}
+.eliza-code .line:nth-child(3){animation-delay:.45s}
+.eliza-code .line:nth-child(4){animation-delay:.55s}
+.eliza-code .line:nth-child(5){animation-delay:.65s}
+.eliza-chat{background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px 12px; box-shadow:0 8px 20px rgba(20,22,60,0.10); display:flex; flex-direction:column; gap:6px}
+.eliza-chat .msg{padding:7px 11px; border-radius:10px; font:500 11.5px/1.4 'Manrope'; max-width:85%; opacity:0; animation:msgIn .4s forwards}
+.eliza-chat .msg.user{background:var(--bg-2); color:var(--ink-2); align-self:flex-end; border-bottom-right-radius:3px}
+.eliza-chat .msg.bot{background:var(--indigo); color:#fff; align-self:flex-start; border-bottom-left-radius:3px}
+.eliza-chat .msg.bot .hl{background:rgba(255,255,255,0.22); padding:1px 4px; border-radius:3px}
+.eliza-chat .msg:nth-child(1){animation-delay:1.0s}
+.eliza-chat .msg:nth-child(2){animation-delay:1.8s}
+.eliza-chat .msg:nth-child(3){animation-delay:2.8s}
+.eliza-chat .msg:nth-child(4){animation-delay:3.6s}
+@keyframes msgIn{to{opacity:1; transform:none}}
+
+/* Expert system rule cascade */
+.rules-anim{width:280px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-2); box-shadow:0 8px 20px rgba(20,22,60,0.15)}
+.rules-anim .rule{padding:6px 8px; border-radius:4px; margin-bottom:4px; opacity:.35; transition:all .35s}
+.rules-anim .rule.lit{opacity:1; background:rgba(63,68,147,0.08); color:var(--navy); font-weight:600}
+.rules-anim .rule .kw{color:#A65BB8; font-weight:700}
+.rules-anim .verdict{margin-top:8px; padding:8px 10px; border-radius:6px; background:#9CD89C; color:#1F4B2B; font-weight:700; opacity:0; transition:opacity .4s; text-align:center}
+.rules-anim.done .verdict{opacity:1}
+
+/* Spam filter */
+.spam-anim{width:280px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; box-shadow:0 8px 20px rgba(20,22,60,0.15); font:500 12px/1.4 'Manrope'}
+.spam-anim .mail{padding:10px 12px; border-radius:6px; background:var(--bg-2); margin-bottom:6px; display:flex; align-items:center; gap:10px; transition:all .4s; position:relative}
+.spam-anim .mail .label{font:700 9px/1 'JetBrains Mono'; letter-spacing:.1em; padding:3px 6px; border-radius:3px; margin-left:auto; opacity:0; transition:opacity .4s}
+.spam-anim .mail.inbox.shown .label{opacity:1; background:#9CD89C; color:#1F4B2B}
+.spam-anim .mail.spam.shown .label{opacity:1; background:#E89B3C; color:#5A3A0F}
+.spam-anim .mail .subj{color:var(--ink-2); font-weight:500; font-size:11.5px}
+
+/* PageRank */
+.pagerank-anim svg{width:300px; height:220px}
+.pagerank-anim circle{transition:r .5s, fill .5s}
+.pagerank-anim .pr-num{font:700 11px 'JetBrains Mono'; fill:#fff; text-anchor:middle; dominant-baseline:central}
+
+/* AlexNet classifier */
+.alex-anim{width:340px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px 16px; box-shadow:0 8px 20px rgba(20,22,60,0.15)}
+.alex-anim .alex-title{font:700 11px/1 'Manrope'; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:4px}
+.alex-anim .alex-sub{font:600 12.5px/1.35 'Manrope'; color:var(--navy); margin-bottom:12px}
+.alex-anim .flow{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.alex-anim .img-box{width:100px; height:100px; flex-shrink:0; border-radius:6px; background:linear-gradient(135deg,#8C7A5F,#4A3A28); position:relative; overflow:hidden}
+.alex-anim .img-box::before{content:''; position:absolute; inset:0; background:
+  radial-gradient(ellipse 35% 25% at 35% 38%, rgba(255,210,130,0.55) 0%, transparent 70%),
+  radial-gradient(ellipse 30% 22% at 68% 55%, rgba(220,160,80,0.45) 0%, transparent 70%),
+  radial-gradient(circle 4% at 38% 36%, #1a1a1a 0%, transparent 100%),
+  radial-gradient(circle 4% at 65% 50%, #1a1a1a 0%, transparent 100%)}
+.alex-anim .img-box::after{content:'INPUT'; position:absolute; bottom:6px; left:8px; font:700 8px/1 'JetBrains Mono'; color:rgba(255,255,255,0.75); letter-spacing:.16em}
+.alex-anim .arrow{flex-shrink:0; font:700 18px 'Manrope'; color:var(--indigo)}
+.alex-anim .arrow-label{font:600 9px/1 'JetBrains Mono'; letter-spacing:.12em; color:var(--muted); text-align:center; margin-top:2px}
+.alex-anim .preds-col{flex:1; min-width:0}
+.alex-anim .preds-h{font:700 8px/1 'JetBrains Mono'; letter-spacing:.16em; color:var(--muted); margin-bottom:6px}
+.alex-anim .bar{display:flex; align-items:center; gap:8px; font:500 11px 'JetBrains Mono'; color:var(--ink-2); margin-bottom:4px}
+.alex-anim .bar .name{width:78px; flex-shrink:0; font-weight:600; color:var(--navy); font-size:10.5px}
+.alex-anim .bar .track{flex:1; height:5px; background:var(--bg-2); border-radius:3px; overflow:hidden; min-width:0}
+.alex-anim .bar .fill{height:100%; background:var(--indigo); width:0; transition:width 1s ease-out}
+.alex-anim .bar.top .fill{background:#3BB273}
+.alex-anim .bar .pct{width:32px; text-align:right; font-size:10px; color:var(--muted)}
+.alex-anim .alex-foot{font:500 11px/1.4 'Manrope'; color:var(--muted); padding-top:10px; border-top:1px solid var(--border)}
+.alex-anim .alex-foot strong{color:var(--navy); font-weight:700}
+
+/* Siri waveform */
+.siri-anim{width:300px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:18px 16px; box-shadow:0 8px 20px rgba(20,22,60,0.15); text-align:center}
+.siri-anim .wave{display:flex; align-items:center; justify-content:center; gap:3px; height:50px; margin-bottom:12px}
+.siri-anim .wave span{display:block; width:4px; background:var(--indigo); border-radius:2px; animation:waveBounce 1s ease-in-out infinite}
+.siri-anim .wave span:nth-child(1){animation-delay:0s}
+.siri-anim .wave span:nth-child(2){animation-delay:.1s}
+.siri-anim .wave span:nth-child(3){animation-delay:.2s}
+.siri-anim .wave span:nth-child(4){animation-delay:.3s}
+.siri-anim .wave span:nth-child(5){animation-delay:.4s}
+.siri-anim .wave span:nth-child(6){animation-delay:.3s}
+.siri-anim .wave span:nth-child(7){animation-delay:.2s}
+.siri-anim .wave span:nth-child(8){animation-delay:.1s}
+.siri-anim .wave span:nth-child(9){animation-delay:0s}
+@keyframes waveBounce{0%,100%{height:10px}50%{height:38px}}
+.siri-anim .transcript{font:500 13px/1.4 'Manrope'; color:var(--ink-2); min-height:36px}
+.siri-anim .transcript .cur{display:inline-block; width:2px; height:13px; background:var(--navy); vertical-align:middle; animation:blink 1s infinite}
+
+/* GPT-3 token stream */
+.gpt-anim{width:300px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; box-shadow:0 8px 20px rgba(20,22,60,0.15); font-family:'JetBrains Mono',monospace}
+.gpt-anim .label{font:700 9px/1 'Manrope'; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px}
+.gpt-anim .tok-row{display:flex; flex-wrap:wrap; gap:4px; align-items:center}
+.gpt-anim .tok{padding:4px 8px; border-radius:4px; background:var(--bg-2); font:500 11px 'JetBrains Mono'; color:var(--ink); opacity:0; transform:translateY(4px); animation:tokIn .35s forwards}
+.gpt-anim .tok.new{background:var(--indigo); color:#fff}
+@keyframes tokIn{to{opacity:1; transform:none}}
+
+/* DALL·E image generation */
+.dalle-anim{width:300px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; box-shadow:0 8px 20px rgba(20,22,60,0.15)}
+.dalle-anim .prompt-line{font:500 12px/1.3 'Manrope'; color:var(--ink-2); margin-bottom:10px; padding:6px 10px; background:var(--bg-2); border-radius:5px; font-style:italic}
+.dalle-anim .grid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.dalle-anim .tile{aspect-ratio:1; border-radius:6px; opacity:0; animation:tileIn .8s forwards}
+.dalle-anim .tile:nth-child(1){background:linear-gradient(135deg,#FFC371,#FF5F6D); animation-delay:.3s}
+.dalle-anim .tile:nth-child(2){background:linear-gradient(135deg,#A8E6CF,#3F4493); animation-delay:.7s}
+.dalle-anim .tile:nth-child(3){background:linear-gradient(135deg,#FBC2EB,#A6C1EE); animation-delay:1.1s}
+.dalle-anim .tile:nth-child(4){background:linear-gradient(135deg,#84FAB0,#8FD3F4); animation-delay:1.5s}
+@keyframes tileIn{0%{opacity:0; filter:blur(20px) saturate(0.3); transform:scale(1.1)} 100%{opacity:1; filter:none; transform:scale(1)}}
+
+/* Cursor code editor */
+.cursor-anim{width:320px; background:#1A1C42; border-radius:8px; padding:14px 16px; box-shadow:0 8px 20px rgba(20,22,60,0.25); font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#E6E7F5}
+.cursor-anim .ln{display:flex; gap:10px; padding:1px 0}
+.cursor-anim .ln-num{color:#7A7E9F; user-select:none; width:18px; text-align:right}
+.cursor-anim .ln-code{flex:1; white-space:pre}
+.cursor-anim .kw{color:#D89BE0}
+.cursor-anim .str{color:#9CD89C}
+.cursor-anim .fn{color:#A8AADF}
+.cursor-anim .ghost{color:rgba(168,170,223,0.55); opacity:0; animation:ghostIn 1.5s 1s forwards}
+@keyframes ghostIn{to{opacity:1}}
+.cursor-anim .accepted{color:#E6E7F5; opacity:0; animation:ghostIn 0.5s 3s forwards}
+
+/* Operator browser actions */
+.operator-anim{width:320px; background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 20px rgba(20,22,60,0.18); overflow:hidden}
+.operator-anim .url-bar{background:var(--bg-2); padding:8px 12px; border-bottom:1px solid var(--border); font:500 11px 'JetBrains Mono'; color:var(--muted); display:flex; align-items:center; gap:6px}
+.operator-anim .url-bar::before{content:''; width:8px; height:8px; border-radius:50%; background:#FF6058; box-shadow:14px 0 0 #FFBD2E, 28px 0 0 #28C940}
+.operator-anim .url-bar span{margin-left:42px}
+.operator-anim .page{padding:14px; min-height:160px; position:relative}
+.operator-anim .action{padding:8px 10px; border-radius:6px; background:var(--bg-2); font:500 11.5px 'Manrope'; color:var(--ink-2); margin-bottom:5px; opacity:0; transform:translateX(-6px); transition:all .35s}
+.operator-anim .action.on{opacity:1; transform:none; background:rgba(63,68,147,0.10); color:var(--navy)}
+.operator-anim .action.done{background:rgba(59,178,115,0.12); color:#1F4B2B}
+.operator-anim .action::before{content:'▸'; margin-right:8px; color:var(--indigo)}
+.operator-anim .action.done::before{content:'✓'; color:#3BB273}
+.operator-anim .cur-pointer{position:absolute; width:14px; height:14px; pointer-events:none; transition:all 1s ease}
+
+/* ============ BUILDING BLOCKS ============ */
+.blocks{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:32px}
+.block{
+  background:var(--paper); border:1px solid var(--border); border-radius:var(--radius);
+  padding:26px 24px 24px; cursor:pointer; transition:all .25s ease; position:relative; overflow:hidden;
+}
+.block:hover{transform:translateY(-3px); box-shadow:var(--shadow); border-color:var(--lavender)}
+.block .num{font:700 11px/1 'JetBrains Mono'; color:var(--muted); letter-spacing:.16em}
+.block .ttl{font:800 24px/1.08 'Manrope'; color:var(--navy); margin-top:8px; letter-spacing:-0.025em}
+.block .role{font-size:14px; color:var(--ink-2); margin-top:8px; font-weight:600}
+.block .desc{font-size:13.5px; color:var(--muted); margin-top:14px; line-height:1.55}
+.block .examples{display:flex; flex-wrap:wrap; gap:6px; margin-top:0; max-height:0; opacity:0; transition:all .35s}
+.block.open .examples{max-height:200px; opacity:1; margin-top:16px}
+.block .pill{font:600 12px/1 'Manrope'; padding:5px 10px; border-radius:6px; background:var(--bg-2); color:var(--ink-2); border:1px solid var(--border)}
+.block .arrow{position:absolute; top:24px; right:24px; color:var(--muted); transition:transform .25s; font-size:13px}
+.block.open .arrow{transform:rotate(180deg); color:var(--indigo)}
+.block .icon{width:34px; height:34px; margin-bottom:14px; color:var(--indigo)}
+/* ---- inline mini-demo on each building block ---- */
+.bd-demo{
+  margin-top:14px; padding:10px 12px; background:var(--bg-2); border-left:3px solid var(--indigo);
+  border-radius:0 8px 8px 0; font:500 11.5px/1.5 'JetBrains Mono', monospace; color:var(--ink-2);
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+}
+.bd-demo .bd-arrow{color:var(--indigo); font-weight:700; font-size:13px}
+.bd-demo .bd-pre, .bd-demo .bd-call{color:var(--ink)}
+.bd-demo .bd-next, .bd-demo .bd-result{
+  color:var(--navy); font-weight:700; background:rgba(63,68,147,0.12);
+  padding:2px 6px; border-radius:3px
+}
+.bd-demo .bd-prob{font:700 10px/1 'Manrope'; color:#3BB273; background:rgba(59,178,115,0.12); padding:3px 6px; border-radius:3px}
+.bd-demo .bd-step{background:rgba(63,68,147,0.10); padding:3px 8px; border-radius:4px; font:600 11px/1 'Manrope'; color:var(--navy)}
+.bd-demo .bd-plus{color:var(--indigo); font-weight:700; font-size:13px; padding:0 2px}
+.bd-demo .bd-eq{color:var(--muted); font-weight:600; padding:0 4px}
+.bd-demo .bd-product{font:700 11.5px/1 'Manrope'; color:var(--navy); background:#fff; padding:4px 8px; border-radius:4px; border:1px solid var(--border)}
+
+/* ============ SIMULATOR ============ */
+.sim{
+  margin-top:32px; background:var(--paper); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden; display:grid; grid-template-columns: 1fr;
+}
+@media(min-width:880px){ .sim{grid-template-columns: 0.85fr 1.15fr} }
+.sim-left{padding:28px 28px; border-right:1px solid var(--border)}
+.sim-left h4{margin:0 0 6px; font:700 11px/1 'Manrope'; color:var(--muted); letter-spacing:.16em; text-transform:uppercase}
+.sim-left .sub{font-size:13px; color:var(--muted); margin-bottom:14px}
+.prompt-options{display:flex; flex-direction:column; gap:8px; margin-top:14px}
+.prompt-options button{
+  text-align:left; background:var(--bg-2); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px; font:500 14px/1.4 'Manrope'; cursor:pointer; color:var(--ink-2); transition:all .15s;
+}
+.prompt-options button:hover{background:#fff; border-color:var(--lavender); color:var(--ink)}
+.prompt-options button.selected{background:var(--navy); color:#fff; border-color:var(--navy)}
+.sim-controls{margin-top:20px; display:flex; gap:10px; align-items:center}
+.sim-right{padding:28px 28px; background:#13153A; color:#E6E7F5; min-height:520px; position:relative}
+.sim-right h4{color:#A8AADF; margin:0 0 16px; font:700 11px/1 'Manrope'; letter-spacing:.16em; text-transform:uppercase}
+.step{
+  margin-bottom:12px; padding:14px 16px; border-radius:10px; opacity:0; transform:translateY(8px);
+  transition:all .4s ease; border:1px solid rgba(255,255,255,0.08);
+}
+.step.show{opacity:1; transform:none}
+.step .step-head{display:flex; align-items:center; gap:10px; margin-bottom:8px; font:700 11px/1 'Manrope'; letter-spacing:.14em; text-transform:uppercase; color:#A8AADF}
+.step .step-num{width:22px; height:22px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font:700 11px/1 'JetBrains Mono'}
+.step.user{background:rgba(91,95,184,0.14)}
+.step.think{background:rgba(255,255,255,0.04)}
+.step.tool{background:rgba(166,91,184,0.12); border-color:rgba(166,91,184,0.25)}
+.step.api{background:rgba(59,178,115,0.10); border-color:rgba(59,178,115,0.22)}
+.step.final{background:rgba(91,95,184,0.18)}
+.step .body{font:400 14px/1.55 'Manrope'; color:#E6E7F5}
+.step.tool .body, .step.api .body{font-family:'JetBrains Mono',monospace; font-size:12.5px; white-space:pre-wrap}
+.cursor{display:inline-block; width:2px; height:14px; background:#A8AADF; vertical-align:middle; animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ============ MAP ============ */
+.map-card{margin-top:32px; background:#F6F7FB; border:1px solid var(--border); border-radius:var(--radius); padding:0; box-shadow:var(--shadow); overflow:hidden}
+.map-header{padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:#fff}
+.map-legend{display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--ink-2); font-weight:500}
+.legend-item{display:flex; align-items:center; gap:8px}
+.legend-dot{width:14px; height:14px; border-radius:50%; border:3px solid var(--navy); background:#fff}
+.legend-dot.w2{border-color:var(--lavender)}
+.map-hint{margin-left:auto; font:500 12px/1 'Manrope'; color:var(--muted)}
+.map-canvas{padding:8px 12px 12px; position:relative; background:#EEF0F8}
+svg.terrain{width:100%; height:auto; display:block}
+.station{cursor:pointer}
+.station .pin-bg{fill:#fff; stroke-width:3.5; transition:r .2s}
+.station:hover .pin-bg{r:22}
+.station.active .pin-bg{r:22; filter:drop-shadow(0 6px 12px rgba(31,33,80,0.35))}
+.station .pin-num{font:800 14px 'Manrope'; fill:var(--navy); text-anchor:middle; dominant-baseline:central; pointer-events:none; letter-spacing:-0.02em}
+.station.w2 .pin-num{fill:var(--navy)}
+.station .lbl-box{fill:#fff; stroke:var(--border); stroke-width:1; rx:6; filter:drop-shadow(0 2px 4px rgba(20,22,60,0.10))}
+.station .lbl-day{font:700 10px 'JetBrains Mono'; fill:var(--muted); letter-spacing:.08em}
+.station .lbl-name{font:700 12.5px 'Manrope'; fill:var(--ink); letter-spacing:-0.01em}
+.station:hover .lbl-box{stroke:var(--lavender)}
+.station.active .lbl-box{fill:var(--navy); stroke:var(--navy)}
+.station.active .lbl-day{fill:#A8AEDC}
+.station.active .lbl-name{fill:#fff}
+/* connector line from station pin to its callout label — hidden by default */
+.station .lbl-connector{stroke:#3A3D6E; stroke-width:1; opacity:0; fill:none; pointer-events:none; transition:opacity .25s}
+.station:hover .lbl-connector{opacity:0.35}
+.station.active .lbl-connector{opacity:0.55; stroke:var(--navy)}
+/* contour rings — very subtle, no orange */
+.contour{stroke:#BFC4DC; fill:none}
+.contour.major{stroke-width:0.9; opacity:0.45}
+.contour.minor{stroke-width:0.6; opacity:0.22}
+.contour.blurred{filter:url(#contourBlur)}
+
+/* trail flow */
+.trail-flow{stroke-dasharray:1 9; animation:trailFlow 24s linear infinite}
+@keyframes trailFlow{to{stroke-dashoffset:-200}}
+/* haze layer */
+.haze-curve{fill:none; opacity:0; animation:hazeBreathe 7s ease-in-out infinite}
+.haze-curve.h2{animation-delay:2.3s; animation-duration:9s}
+.haze-curve.h3{animation-delay:4.6s; animation-duration:11s}
+@keyframes hazeBreathe{
+  0%,100%{opacity:0; transform:translate(0,0)}
+  50%{opacity:0.45; transform:translate(-14px,8px)}
+}
+/* pulsing ring on active station */
+.station .pulse-ring{opacity:0; fill:none; stroke-width:2}
+.station.active .pulse-ring{animation:pulseRing 2.2s ease-out infinite}
+@keyframes pulseRing{
+  0%{opacity:0.6; r:18}
+  100%{opacity:0; r:42}
+}
+/* Summit station — larger pin, stronger pulse, bolder hover */
+.station.summit:hover .pin-bg{r:28}
+.station.summit.active .pin-bg{r:28; filter:drop-shadow(0 8px 18px rgba(31,33,80,0.55))}
+.station.summit .pulse-ring{stroke-width:3}
+.station.summit.active .pulse-ring{animation:pulseRingSummit 2.6s ease-out infinite}
+@keyframes pulseRingSummit{
+  0%{opacity:0.7; r:22}
+  100%{opacity:0; r:56}
+}
+/* scale bar + tick labels */
+.tick-label{font:600 9px 'JetBrains Mono'; fill:#7A7E9F; letter-spacing:.08em; opacity:.7}
+.scale-bar text{font:700 9px 'JetBrains Mono'; fill:#7A7E9F; letter-spacing:.1em}
+.scale-bar rect{fill:#7A7E9F}
+.scale-bar line{stroke:#7A7E9F; stroke-width:1.2}
+
+.station-panel{
+  background:#fff; border-top:1px solid var(--border); padding:28px 28px;
+  display:none;
+}
+.station-panel.show{display:block; animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+.sp-head{display:flex; gap:16px; align-items:center}
+.sp-badge{width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; font:800 18px 'Manrope'; color:#fff; flex-shrink:0; letter-spacing:-0.02em}
+.sp-title{font:800 22px/1.18 'Manrope'; color:var(--ink); letter-spacing:-0.02em}
+.sp-day{font:600 12px/1 'JetBrains Mono'; color:var(--muted); margin-top:6px; letter-spacing:.06em; text-transform:uppercase}
+.sp-grid{display:grid; grid-template-columns:1fr; gap:22px; margin-top:22px}
+@media(min-width:760px){ .sp-grid{grid-template-columns: 1fr 1fr 1fr} }
+.sp-col h5{font:700 10px/1 'Manrope'; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin:0 0 12px}
+.sp-col ul{padding:0; margin:0; list-style:none}
+.sp-col li{font:500 14px/1.5 'Manrope'; color:var(--ink-2); padding:5px 0; display:flex; gap:8px; align-items:flex-start}
+.sp-col li::before{content:''; width:5px; height:5px; background:var(--lavender); border-radius:50%; margin-top:8px; flex-shrink:0}
+.sp-tools{display:flex; gap:8px; flex-wrap:wrap}
+.tool-chip{display:inline-flex; gap:8px; align-items:center; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:6px 12px 6px 6px; font:600 13px/1 'Manrope'; color:var(--ink)}
+.tool-chip .tlogo{width:22px; height:22px; border-radius:5px; display:flex; align-items:center; justify-content:center; font:800 10px/1 'JetBrains Mono'; color:#fff; letter-spacing:-0.01em}
+
+/* ============ OUTRO ============ */
+.outro-card{margin-top:32px; background:var(--navy); color:#fff; border-radius:var(--radius); padding:42px 40px; box-shadow:var(--shadow); position:relative; overflow:hidden}
+.outro-card::before{content:''; position:absolute; top:0; right:0; width:45%; height:100%; background-image: radial-gradient(circle, rgba(255,255,255,0.10) 1.2px, transparent 1.6px); background-size:18px 18px;
+  -webkit-mask-image: radial-gradient(ellipse at 100% 0%, black 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 100% 0%, black 0%, transparent 70%);
+  pointer-events:none}
+.outro-card h2{color:#fff; max-width:560px; position:relative}
+.outro-card p{color:rgba(255,255,255,0.78); max-width:560px; margin-top:14px; position:relative; font-size:17px}
+.outro-card .btn{background:#fff; color:var(--navy); margin-top:28px; position:relative}
+.outro-card .btn:hover{background:var(--bg)}
+.outro-code{background:rgba(0,0,0,0.30); border-radius:8px; padding:16px 18px; margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:13px; color:#E6E7F5; max-width:480px; position:relative; line-height:1.6}
+.outro-code .c{color:#A8AADF}
+.outro-code .k{color:#D89BE0}
+</style>
+</head>
+<body>
+
+<div class="halftone-tr"></div>
+
+<div class="progress"><div id="progressbar"></div></div>
+
+<nav class="topnav" id="topnav">
+  <button data-target="hero" class="active">Start</button>
+  <button data-target="what">What is AI</button>
+  <button data-target="timeline">Eras</button>
+  <button data-target="blocks">Building Blocks</button>
+  <button data-target="sim">How It Works</button>
+  <button data-target="map">10-Day Map</button>
+  <button data-target="next">Next</button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="container">
+    <div class="eyebrow">Inspirit AI Scholars · 2026</div>
+    <h1 class="hero-title">Your AI Builder's Map
+      <em>Models, tools, agents, systems.</em>
+    </h1>
+    <p class="hero-sub">A brief tour of the AI context and tools you'll use, and a preview of the ten sessions ahead.</p>
+    <div class="cta-row">
+      <button class="btn" onclick="scrollToSec('what')">Begin the tour <span class="arr">→</span></button>
+      <button class="btn ghost" onclick="scrollToSec('map')">Skip to the map</button>
+    </div>
+    <div class="hero-meta">
+      <span>7 stops</span><span class="dot"></span><span>~10 min</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT MAKES HUMANS INTELLIGENT ============ -->
+<section id="what">
+  <div class="container">
+    <div class="eyebrow">Stop 1 · What is AI, really?</div>
+    <h2>What makes humans intelligent?</h2>
+    <p class="lead">Before we define AI, think about you. Click each ability humans have — and see the modern AI built to imitate it.</p>
+    <div class="intel-wrap">
+      <div class="intel-grid" id="intelgrid"></div>
+      <div class="intel-progress">
+        <div class="dots" id="inteldots"></div>
+        <span id="intelcount">0 of 6 revealed</span>
+      </div>
+      <div class="intel-segue">
+        <p><strong>AI</strong> is the branch of computer science that builds machines to do these things — to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERAS ============ -->
+<section id="timeline">
+  <div class="container">
+    <div class="eyebrow">Stop 2 · How we got here</div>
+    <h2>Seventy years of AI in five eras.</h2>
+    <p class="lead">Each era asked a question the previous one couldn't answer. Our work builds on these decades of progress!</p>
+    <div class="eras" id="eras"></div>
+  </div>
+</section>
+
+<!-- ============ BUILDING BLOCKS ============ -->
+<section id="blocks">
+  <div class="container">
+    <div class="eyebrow">Stop 3 · The builder's toolkit</div>
+    <h2>Four parts in every AI product.</h2>
+    <p class="lead">Once you can name these four pieces, you can take apart almost any AI app you encounter. Click a card to expand it.</p>
+    <div class="blocks" id="blocks-grid"></div>
+  </div>
+</section>
+
+<!-- ============ SIMULATOR ============ -->
+<section id="sim">
+  <div class="container">
+    <div class="eyebrow">Stop 4 · How a modern AI app actually answers you</div>
+    <h2>Prompt → LLM → Tool → API → Answer.</h2>
+    <p class="lead">An LLM on its own can't check the weather, the score, or the time. It needs <em>tools</em>. Pick a prompt and watch what happens behind the scenes.</p>
+    <div class="sim">
+      <div class="sim-left">
+        <h4>Pick a prompt</h4>
+        <div class="sub">You'll explore tools and agents like this yourself in Notebook 5.</div>
+        <div class="prompt-options" id="prompts"></div>
+        <div class="sim-controls">
+          <button class="btn" id="runsim">Run it <span class="arr">→</span></button>
+          <button class="btn ghost" id="resetsim">Reset</button>
+        </div>
+      </div>
+      <div class="sim-right">
+        <h4>Behind the scenes</h4>
+        <div id="simsteps"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section id="map">
+  <div class="container">
+    <div class="eyebrow">Stop 5 · Your 10-day journey</div>
+    <h2>Your AI Builder's Map.</h2>
+    <p class="lead">Each marker is one session. You'll ascend from data fundamentals to a deployed AI project of your own. Click a marker to see what's there.</p>
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-legend">
+          <div class="legend-item"><div class="legend-dot"></div><span>Week 1 · Foundations</span></div>
+          <div class="legend-item"><div class="legend-dot w2"></div><span>Week 2 · Build &amp; Ship</span></div>
+        </div>
+        <div class="map-hint">Click any marker</div>
+      </div>
+      <div class="map-canvas">
+        <svg class="terrain" id="terrain" viewBox="0 0 1400 950" preserveAspectRatio="xMidYMid meet" aria-label="10-session mountain map"></svg>
+      </div>
+      <div class="station-panel" id="spanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUTRO ============ -->
+<section id="next">
+  <div class="container">
+    <div class="eyebrow">You're ready</div>
+    <h2>Next: your first dataset.</h2>
+    <p class="lead">Every AI system starts with data. In Notebook 1, you'll open Python, load a real dataset, and start exploring — the same first step every ML engineer takes.</p>
+    <div class="outro-card">
+      <h2>Open Notebook 1</h2>
+      <p>Python + dataset exploration. Load data, peek at the rows, plot a distribution, ask your first real question of a real dataset.</p>
+      <div class="outro-code">
+        <span class="c"># NB1 · Day 1</span><br/>
+        <span class="k">import</span> pandas <span class="k">as</span> pd<br/>
+        df = pd.read_csv(<span style="color:#9CD89C">"dataset.csv"</span>)<br/>
+        df.head()
+      </div>
+      <button class="btn" onclick="scrollToSec('hero')">↑ Back to start</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ============ DATA ============ */
+const humanAbilities = [
+  {name:"Memory", icon:"memory",
+    aiName:"Retrieval & long-term memory",
+    aiDesc:"Vector databases and retrieval-augmented generation let AI store and recall facts it never saw in training.",
+    examples:["Perplexity","NotebookLM","ChatGPT memory"]},
+  {name:"Language", icon:"language",
+    aiName:"Large Language Models",
+    aiDesc:"LLMs predict text token by token. They read, write, translate, summarize — and increasingly, reason.",
+    examples:["GPT-5","Claude Opus 4.7","Gemini 2.5"]},
+  {name:"Sensing", icon:"sensing",
+    aiName:"Computer vision & speech",
+    aiDesc:"Neural nets turn pixels and sound waves into meaning — recognizing faces, objects, words, music.",
+    examples:["Face ID","Whisper","Tesla Vision"]},
+  {name:"Creativity", icon:"creativity",
+    aiName:"Generative AI",
+    aiDesc:"Models that produce new images, video, music, and text from a prompt — never copying, always generating.",
+    examples:["Sora","Midjourney","Suno","DALL·E"]},
+  {name:"Logical reasoning", icon:"reasoning",
+    aiName:"Reasoning models",
+    aiDesc:"Newer models that \"think out loud\" before answering — solving math, code, and logic that earlier LLMs couldn't.",
+    examples:["OpenAI o3","Claude extended thinking","DeepSeek-R1"]},
+  {name:"Judgment", icon:"judgment",
+    aiName:"Decision systems",
+    aiDesc:"AI that weighs evidence and picks an action — what to recommend, what to flag, when to brake.",
+    examples:["Tesla Autopilot","Fraud detection","Spotify recs"]},
+];
+
+const eras = [
+  {
+    style:"dark",
+    year:"1950 — 1980s",
+    name:"Symbolic AI",
+    theme:"Hand-crafted rules and logic. If humans could write down their reasoning, maybe a computer could follow it.",
+    question:"\"What if we just wrote down every rule?\"",
+    keyEx:"Deep Blue defeats Kasparov · 1997",
+    keyCaption:"Deep Blue searches 200 million chess positions per second, then picks the move with the best score.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/b/be/Deep_Blue.jpg",
+    anim:"chess",
+    optional:[
+      {name:"ELIZA (1966)", anim:"eliza",
+        caption:"ELIZA used pattern matching to mimic a Rogerian therapist. Users opened up to it — and the chatbot was born."},
+      {name:"Expert systems", anim:"rules",
+        caption:"Expert systems chained hand-coded IF/THEN rules to diagnose diseases, configure computers, and approve loans."}
+    ],
+    visualDark:true
+  },
+  {
+    year:"1990s — 2011",
+    name:"Machine Learning",
+    theme:"Stop writing rules — let the computer learn them from data. Statistics meets computing.",
+    question:"\"What if data could teach the rules?\"",
+    keyEx:"Netflix Prize · 2006–2009",
+    keyCaption:"Netflix offered $1M to improve its recommender by 10%. Teams used data, not rules, to predict what you'd love.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+    anim:"scatter",
+    optional:[
+      {name:"Spam filters", anim:"spam",
+        caption:"A trained model reads every word in an email and learns the patterns that mean \"spam\" — no hand-coded rules needed."},
+      {name:"PageRank", anim:"pagerank",
+        caption:"Google's PageRank ranks pages by how many other pages link to them — and how trusted those linkers are."}
+    ],
+    visualDark:false
+  },
+  {
+    year:"2012 — 2016",
+    name:"Deep Learning",
+    theme:"Layered neural networks plus GPUs unlock perception. Computers begin to see and hear.",
+    question:"\"Can a machine learn to see?\"",
+    keyEx:"AlphaGo defeats Lee Sedol · 2016",
+    keyCaption:"AlphaGo combines deep neural nets with self-play search to master Go — a game once thought decades out of reach.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/AlphaGo_logo_Reversed.svg",
+    anim:"network",
+    optional:[
+      {name:"AlexNet (2012)", anim:"alex",
+        caption:"AlexNet halved the error rate on ImageNet, proving deep neural nets + GPUs were the future of computer vision."},
+      {name:"Siri (2011)", anim:"siri",
+        caption:"Siri turned speech into text and text into action — putting a voice assistant in everyone's pocket."}
+    ],
+    visualDark:true
+  },
+  {
+    year:"2017 — 2022",
+    name:"Generative AI",
+    theme:"Transformers + massive scale + the entire internet as training data. Models start to create, not just classify.",
+    question:"\"Can a machine create?\"",
+    keyEx:"ChatGPT launches · Nov 2022",
+    keyCaption:"ChatGPT reaches 100 million users in two months — the fastest-adopted consumer product in history.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+    anim:"gen",
+    optional:[
+      {name:"GPT-3 (2020)", anim:"gpt",
+        caption:"GPT-3 generates text one token at a time, predicting the most likely next word given everything before it."},
+      {name:"DALL·E (2021)", anim:"dalle",
+        caption:"DALL·E turns a text prompt into novel images — visual ideas no human ever drew before."}
+    ],
+    visualDark:false
+  },
+  {
+    year:"2023 — today",
+    name:"Agentic AI",
+    theme:"Give an LLM tools, memory, and a goal — and it can act. Browse, code, plan, finish multi-step work.",
+    question:"\"Can a machine take action?\"",
+    keyEx:"Claude Code & Cursor reshape software · 2024",
+    keyCaption:"Agents plan, call tools, run code, and check their own work — turning LLMs from advisors into collaborators.",
+    img:"https://upload.wikimedia.org/wikipedia/commons/1/14/Anthropic.png",
+    anim:"agent",
+    optional:[
+      {name:"Cursor", anim:"cursor",
+        caption:"Cursor edits your codebase alongside you — suggesting, refactoring, and writing whole features on request."},
+      {name:"Operator (2025)", anim:"operator",
+        caption:"OpenAI's Operator drives a real browser — clicking buttons, filling forms, completing online tasks for you."}
+    ],
+    visualDark:true
+  }
+];
+
+const buildingBlocks = [
+  {num:"01", name:"Model",  role:"The brain", icon:"brain",
+   desc:"Learns patterns from massive amounts of data. Given an input, it outputs a prediction.",
+   demo:`<span class="bd-pre">"The cat sat on the…"</span><span class="bd-arrow">→</span><span class="bd-next">mat</span><span class="bd-prob">89%</span>`,
+   examples:["GPT-5","Claude Opus 4.7","Gemini 2.5 Pro","Llama 4","Stable Diffusion","Whisper"]},
+  {num:"02", name:"Tool",   role:"The hands", icon:"tool",
+   desc:"An external capability the model can call — a web search, a calculator, any API. Tools let a model do what it can't do on its own.",
+   demo:`<span class="bd-call">get_weather("Tokyo")</span><span class="bd-arrow">→</span><span class="bd-result">{ 18°C, sunny }</span>`,
+   examples:["Web search","Weather API","Code interpreter","File reader","Image generator","Database query"]},
+  {num:"03", name:"Agent",  role:"The planner", icon:"agent",
+   desc:"A model that decides — on its own — which tools to call, in what order, to finish a multi-step task. Plans, acts, observes, repeats.",
+   demo:`<span class="bd-step">1. Read</span><span class="bd-arrow">→</span><span class="bd-step">2. Search</span><span class="bd-arrow">→</span><span class="bd-step">3. Edit</span>`,
+   examples:["Claude Code","Cursor","Devin","ChatGPT Operator","Manus","Computer Use"]},
+  {num:"04", name:"System", role:"The full product", icon:"system",
+   desc:"Everything together: model + tools + agent + a user interface, plus the business logic that ties it to real users.",
+   demo:`<span class="bd-step">Model</span><span class="bd-plus">+</span><span class="bd-step">Tools</span><span class="bd-plus">+</span><span class="bd-step">Agent</span><span class="bd-plus">+</span><span class="bd-step">UI</span><span class="bd-eq">=</span><span class="bd-product">ChatGPT</span>`,
+   examples:["ChatGPT","Perplexity","Notion AI","GitHub Copilot","Granola","Cluely"]},
+];
+
+const simPrompts = [
+  {text:"What's the weather in Tokyo right now?", needsTool:true, tool:"get_weather",
+    args:'{"city":"Tokyo","units":"celsius"}',
+    apiResp:'{"city":"Tokyo","temp_c":18,"condition":"partly cloudy","humidity":62}',
+    finalAns:"It's 18°C and partly cloudy in Tokyo right now, with humidity around 62%."},
+  {text:"What's the score of the latest Lakers game?", needsTool:true, tool:"get_sports_score",
+    args:'{"team":"Los Angeles Lakers","sport":"NBA"}',
+    apiResp:'{"home":"Lakers","away":"Warriors","score":"112-108","status":"final","date":"2026-05-12"}',
+    finalAns:"The Lakers won their last game 112–108 against the Warriors (final, May 12)."},
+  {text:"What's the capital of France?", needsTool:false,
+    finalAns:"The capital of France is Paris. I knew this one from training — no tool needed."}
+];
+
+const sessions = [
+  {n:1, line:"w1", title:"Orientation + Python + AI Foundations", short:"Orientation + Foundations", day:"Session 1",
+    learn:[
+      "Program orientation and the AI builder mindset",
+      "Python fundamentals, data exploration, and how AI APIs work",
+      "Vibe coding and rapid experimentation with AI"
+    ],
+    build:[
+      "A Python + AI mini data exploration project",
+      "A quick prototype in a vibe-coding mini hackathon"
+    ],
+    tools:[{n:"Python",c:"#3776AB"},{n:"Google Colab",c:"#F9AB00"},{n:"Pandas",c:"#150458"},{n:"OpenAI API",c:"#10A37F"}]},
+
+  {n:2, line:"w1", title:"Machine Learning Foundations", short:"ML Foundations", day:"Session 2",
+    learn:[
+      "ML fundamentals: training, testing, features, and labels",
+      "Classification models, decision trees, and evaluation",
+      "Overfitting, bias, and responsible AI development"
+    ],
+    build:[
+      "A classification model trained on real-world data",
+      "A fairness and performance audit of your model"
+    ],
+    tools:[{n:"Python",c:"#3776AB"},{n:"Google Colab",c:"#F9AB00"},{n:"scikit-learn",c:"#F7931E"}]},
+
+  {n:3, line:"w1", title:"Neural Networks + Computer Vision", short:"Neural Nets + CV", day:"Session 3",
+    learn:[
+      "How neural networks learn patterns from data",
+      "Computer vision fundamentals and image classification",
+      "How multimodal AI systems interpret visual information"
+    ],
+    build:[
+      "An image classification model",
+      "A computer vision prototype"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"PyTorch",c:"#EE4C2C"},{n:"Lovable",c:"#FF4D8D"}]},
+
+  {n:4, line:"w1", title:"NLP + LLMs", short:"NLP + LLMs", day:"Session 4",
+    learn:[
+      "Natural language processing fundamentals",
+      "How LLMs work — prompt design and model behavior",
+      "Turning unstructured text into useful insights"
+    ],
+    build:[
+      "An AI-powered language analysis tool",
+      "A real-world NLP prototype"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"OpenAI API",c:"#10A37F"},{n:"Lovable",c:"#FF4D8D"}]},
+
+  {n:5, line:"w1", title:"AI Agents + Product Design", short:"Agents + Product", day:"Session 5",
+    learn:[
+      "AI agents, agentic systems, tool use, and workflows",
+      "Product design and vibe coding for AI experiences",
+      "Turning ideas into deployable products"
+    ],
+    build:[
+      "Kickoff of your chosen AI project",
+      "A custom AI agent or product prototype"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"OpenAI Agents SDK",c:"#10A37F"},{n:"Gradio",c:"#FF7C00"},{n:"Lovable",c:"#FF4D8D"}]},
+
+  {n:6, line:"w2", title:"AI Ethics Workshop", short:"Ethics Workshop", day:"Session 6",
+    learn:[
+      "Bias, fairness, accountability, and responsible decision-making",
+      "Real-world ethical tradeoffs in AI products and systems"
+    ],
+    build:[
+      "Ethical case-study analyses",
+      "Continued development of your chosen AI project"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"Workshop tools",c:"#605CA8"}]},
+
+  {n:7, line:"w2", title:"Instructor Spotlights", short:"Instructor Spotlights", day:"Session 7",
+    learn:[
+      "How AI is applied in research, startups, and industry",
+      "Real-world lessons from experienced AI builders"
+    ],
+    build:[
+      "Continued development of your chosen AI project",
+      "Project feedback and iteration plans"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"Research demos",c:"#3F4493"}]},
+
+  {n:8, line:"w2", title:"AI Research Workshop", short:"Research Workshop", day:"Session 8",
+    learn:[
+      "Using AI as a research and thinking partner",
+      "Brainstorming, synthesis, and hypothesis generation with AI"
+    ],
+    build:[
+      "Continued development of your chosen project",
+      "Project experimentation and testing"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"OpenAI",c:"#10A37F"}]},
+
+  {n:9, line:"w2", title:"Portfolio + Positioning", short:"Portfolio + Positioning", day:"Session 9",
+    learn:[
+      "Positioning technical projects for college, internships, and careers",
+      "Storytelling, branding, and showcasing technical work"
+    ],
+    build:[
+      "Continued development of your chosen AI project",
+      "A custom app built around your project",
+      "Portfolio materials for sharing your work publicly"
+    ],
+    tools:[{n:"Google Colab",c:"#F9AB00"},{n:"GitHub",c:"#181717"},{n:"LinkedIn",c:"#0A66C2"},{n:"Lovable",c:"#FF4D8D"}]},
+
+  {n:10,line:"w2", title:"Final Project Presentations", short:"Final Presentations", day:"Session 10",
+    learn:[
+      "Technical storytelling, pitching, and communicating ideas clearly",
+      "How to demo products and present research with confidence"
+    ],
+    build:[
+      "Final presentations and live demos of your AI project"
+    ],
+    tools:[{n:"Slides",c:"#252861"},{n:"Your deployed app",c:"#3F4493"},{n:"Portfolio",c:"#A65BB8"}]}
+];
+
+/* ============ HELPERS ============ */
+function $(s,r=document){return r.querySelector(s)}
+function $$(s,r=document){return [...r.querySelectorAll(s)]}
+function scrollToSec(id){ $('#'+id).scrollIntoView({behavior:'smooth', block:'start'}) }
+function svgEl(tag, attrs={}){
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
+  return el;
+}
+
+/* ============ NAV + PROGRESS ============ */
+const navBtns = $$('#topnav button');
+navBtns.forEach(b => b.addEventListener('click', ()=>scrollToSec(b.dataset.target)));
+const sectionsList = ['hero','what','timeline','blocks','sim','map','next'];
+window.addEventListener('scroll', ()=>{
+  const sc = window.scrollY;
+  const doc = document.documentElement.scrollHeight - window.innerHeight;
+  $('#progressbar').style.width = Math.min(100, (sc/doc)*100) + '%';
+  let cur = sectionsList[0];
+  for(const id of sectionsList){
+    const el = $('#'+id);
+    if(!el) continue;
+    if(el.getBoundingClientRect().top < window.innerHeight*0.45) cur = id;
+  }
+  navBtns.forEach(b=>b.classList.toggle('active', b.dataset.target===cur));
+});
+
+/* ============ HUMAN INTELLIGENCE FLIP CARDS ============ */
+function intelIcon(name){
+  const s = "stroke='currentColor' stroke-width='1.7' fill='none' stroke-linecap='round' stroke-linejoin='round'";
+  if(name==="memory") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M12 7v5l3 2"/><path d="M21 4v5h-5"/></svg>`;
+  if(name==="language") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><path d="M3 5h12M9 3v2M11 5c0 7-7 8-7 8M5 9c0 4 6 6 9 6"/><path d="M14 21l5-12 5 12M16 17h6"/></svg>`;
+  if(name==="sensing") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/></svg>`;
+  if(name==="creativity") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><path d="M12 2v3M12 19v3M5 5l2 2M17 17l2 2M2 12h3M19 12h3M5 19l2-2M17 7l2-2"/><circle cx="12" cy="12" r="4"/></svg>`;
+  if(name==="reasoning") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8M8 8l8 8"/></svg>`;
+  if(name==="judgment") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><path d="M12 3v18M5 8h14M5 8l-3 7a4 4 0 0 0 6 0zM19 8l-3 7a4 4 0 0 0 6 0z"/></svg>`;
+  return "";
+}
+const intelgrid = $('#intelgrid');
+const inteldots = $('#inteldots');
+const intelcount = $('#intelcount');
+const flipped = new Set();
+humanAbilities.forEach((a,i)=>{
+  const el = document.createElement('div');
+  el.className = 'intel-card';
+  el.dataset.idx = i;
+  el.innerHTML = `
+    <div class="intel-inner">
+      <div class="intel-face intel-front">
+        ${intelIcon(a.icon)}
+        <div class="ic-name">${a.name}</div>
+        <div class="ic-tap">Tap to reveal AI →</div>
+      </div>
+      <div class="intel-face intel-back">
+        <div class="ic-eyebrow">Imitated by</div>
+        <div class="ic-ainame">${a.aiName}</div>
+        <div class="ic-aidesc">${a.aiDesc}</div>
+        <div class="ic-chips">${a.examples.map(x=>`<span class="ic-chip">${x}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  el.addEventListener('click', ()=>{
+    el.classList.toggle('flipped');
+    if(el.classList.contains('flipped')) flipped.add(i); else flipped.delete(i);
+    updateProgress();
+  });
+  intelgrid.appendChild(el);
+  const dot = document.createElement('div');
+  dot.className = 'pd';
+  inteldots.appendChild(dot);
+});
+function updateProgress(){
+  [...inteldots.children].forEach((d,i)=>d.classList.toggle('on', flipped.has(i)));
+  intelcount.textContent = `${flipped.size} of 6 revealed`;
+}
+
+/* ============ ERAS (vertical rows with image + animation) ============ */
+function eraAnim(type){
+  if(type==="chess"){
+    // small chess board with two highlighted squares animating
+    let html = `<div class="chess-board">`;
+    for(let r=0;r<8;r++){
+      for(let c=0;c<8;c++){
+        const dark = (r+c)%2===1;
+        const hl = (r===6 && c===4) || (r===4 && c===4);
+        const piece = (r===6 && c===4) ? '♙' : (r===0 && c===4) ? '♚' : (r===1 && c===3) ? '♟' : (r===0 && c===3) ? '♛' : '';
+        html += `<div class="chess-sq ${dark?'dark':'light'} ${hl?'chess-hl':''}"><div class="chess-piece">${piece}</div></div>`;
+      }
+    }
+    html += `</div>`;
+    return html;
+  }
+  if(type==="scatter"){
+    const pts = [];
+    for(let i=0;i<12;i++){
+      const x = 30 + i*22 + (Math.random()-0.5)*8;
+      const y = 200 - i*14 + (Math.random()-0.5)*25;
+      const cls = y < 110 ? 'a' : 'b';
+      pts.push({x,y,cls,delay:i*120});
+    }
+    return `<svg class="scatter-anim" viewBox="0 0 300 240">
+      <line x1="20" y1="220" x2="290" y2="220" stroke="#7A7E9F" stroke-width="1"/>
+      <line x1="20" y1="20" x2="20" y2="220" stroke="#7A7E9F" stroke-width="1"/>
+      <line class="line" x1="25" y1="200" x2="285" y2="40" stroke="#252861" stroke-width="2" stroke-dasharray="6 4"/>
+      ${pts.map(p=>`<circle class="pt" cx="${p.x}" cy="${p.y}" r="5" fill="${p.cls==='a'?'#3F4493':'#A65BB8'}" style="animation-delay:${p.delay}ms"/>`).join('')}
+    </svg>`;
+  }
+  if(type==="network"){
+    // 4-layer neural net with signal pulses
+    const cols = [3,5,5,2];
+    const colX = [40, 130, 220, 310];
+    let nodes = '';
+    let lines = '';
+    const positions = [];
+    cols.forEach((cnt,ci)=>{
+      const rows = [];
+      for(let r=0;r<cnt;r++){
+        const y = 30 + r * ((220 - 60) / Math.max(1,cnt-1) + (cnt===1?0:0));
+        const yy = cnt===1 ? 125 : 40 + r * (170/(cnt-1));
+        rows.push({x:colX[ci], y:yy});
+      }
+      positions.push(rows);
+    });
+    positions.forEach((col,ci)=>{
+      col.forEach(n=>{
+        nodes += `<circle class="pulse" cx="${n.x}" cy="${n.y}" r="6" fill="#fff" stroke="${ci===0||ci===3?'#252861':'#3F4493'}" stroke-width="2" style="animation-delay:${ci*200}ms"/>`;
+      });
+    });
+    for(let ci=0;ci<positions.length-1;ci++){
+      positions[ci].forEach(a=>{
+        positions[ci+1].forEach(b=>{
+          lines += `<line class="signal" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#3F4493" stroke-width="0.8" opacity="0.45"/>`;
+        });
+      });
+    }
+    return `<svg class="nn-anim" viewBox="0 0 360 240" width="320">
+      <g>${lines}${nodes}</g>
+    </svg>`;
+  }
+  if(type==="gen"){
+    return `<div class="gen-anim">
+      <div class="prompt">PROMPT</div>
+      <div style="color:var(--ink-2); margin-bottom:10px">Write a haiku about the ocean.</div>
+      <div class="prompt">RESPONSE</div>
+      <div class="out" id="genout"><span class="cur"></span></div>
+    </div>`;
+  }
+  if(type==="agent"){
+    return `<div class="agent-anim">
+      <div class="row" data-step="0"><div class="num">1</div>Read project README</div>
+      <div class="row" data-step="1"><div class="num">2</div>Search the codebase</div>
+      <div class="row" data-step="2"><div class="num">3</div>Edit src/auth.ts</div>
+      <div class="row" data-step="3"><div class="num">4</div>Run tests</div>
+      <div class="row" data-step="4"><div class="num">5</div>Open pull request</div>
+    </div>`;
+  }
+  if(type==="eliza"){
+    return `<div class="eliza-anim">
+      <div class="eliza-code">
+        <div class="line"><span class="cm"># ELIZA pattern → response rule</span></div>
+        <div class="line"><span class="kw">if</span> input <span class="kw">matches</span> <span class="str">"* my MOTHER *"</span>:</div>
+        <div class="line">  reply <span class="str">"Tell me more about your mother."</span></div>
+        <div class="line"><span class="kw">if</span> input <span class="kw">matches</span> <span class="str">"* HEAD hurts *"</span>:</div>
+        <div class="line">  reply <span class="str">"Why do you say your head hurts?"</span></div>
+      </div>
+      <div class="eliza-chat">
+        <div class="msg user">My head hurts.</div>
+        <div class="msg bot">Why do you say your <span class="hl">head hurts</span>?</div>
+        <div class="msg user">My mother is making me anxious.</div>
+        <div class="msg bot">Tell me more about your <span class="hl">mother</span>.</div>
+      </div>
+    </div>`;
+  }
+  if(type==="rules"){
+    return `<div class="rules-anim">
+      <div class="rule" data-step="0"><span class="kw">IF</span>  patient has chest pain</div>
+      <div class="rule" data-step="1"><span class="kw">AND</span> age &gt; 50</div>
+      <div class="rule" data-step="2"><span class="kw">AND</span> shortness of breath</div>
+      <div class="rule" data-step="3"><span class="kw">THEN</span> suspect cardiac event</div>
+      <div class="verdict">→ refer to cardiology</div>
+    </div>`;
+  }
+  if(type==="spam"){
+    return `<div class="spam-anim">
+      <div class="mail inbox" data-step="0"><div class="subj">Re: lunch tomorrow</div><div class="label">INBOX</div></div>
+      <div class="mail spam"  data-step="1"><div class="subj">URGENT: claim your prize now!!!</div><div class="label">SPAM</div></div>
+      <div class="mail inbox" data-step="2"><div class="subj">Your order has shipped</div><div class="label">INBOX</div></div>
+      <div class="mail spam"  data-step="3"><div class="subj">Nigerian prince needs your help</div><div class="label">SPAM</div></div>
+    </div>`;
+  }
+  if(type==="pagerank"){
+    // 5 nodes A-E with directed links. A has many incoming → grows largest.
+    const nodes = [
+      {id:'A', x:150, y:110, r:18, fill:'#3F4493'},
+      {id:'B', x:50,  y:50,  r:11, fill:'#8E92D0'},
+      {id:'C', x:50,  y:170, r:11, fill:'#8E92D0'},
+      {id:'D', x:250, y:50,  r:13, fill:'#A65BB8'},
+      {id:'E', x:250, y:170, r:11, fill:'#8E92D0'},
+    ];
+    const edges = [['B','A'],['C','A'],['D','A'],['E','A'],['B','D'],['E','D'],['C','B']];
+    const lookup = Object.fromEntries(nodes.map(n=>[n.id,n]));
+    const arrows = edges.map((e,i)=>{
+      const a = lookup[e[0]], b = lookup[e[1]];
+      const dx = b.x-a.x, dy = b.y-a.y, d = Math.sqrt(dx*dx+dy*dy);
+      const sx = a.x + (dx/d)*a.r, sy = a.y + (dy/d)*a.r;
+      const ex = b.x - (dx/d)*(b.r+4), ey = b.y - (dy/d)*(b.r+4);
+      return `<path class="pr-edge" d="M ${sx} ${sy} L ${ex} ${ey}" stroke="#A8AADF" stroke-width="1.4" fill="none" marker-end="url(#prArr)" style="animation-delay:${i*150}ms; opacity:0; animation:fadeIn .5s forwards"/>`;
+    }).join('');
+    const circles = nodes.map(n=>`<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.fill}"/>`).join('');
+    const labels = nodes.map(n=>`<text class="pr-num" x="${n.x}" y="${n.y}">${n.id}</text>`).join('');
+    return `<div class="pagerank-anim"><svg viewBox="0 0 300 220">
+      <defs><marker id="prArr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A8AADF"/></marker></defs>
+      ${arrows}${circles}${labels}
+    </svg></div>`;
+  }
+  if(type==="alex"){
+    return `<div class="alex-anim">
+      <div class="alex-title">AlexNet · 2012</div>
+      <div class="alex-sub">A deep neural network that learned to label any image as one of 1,000 categories.</div>
+      <div class="flow">
+        <div class="img-box"></div>
+        <div>
+          <div class="arrow">→</div>
+          <div class="arrow-label">DEEP NN</div>
+        </div>
+        <div class="preds-col">
+          <div class="preds-h">PREDICTIONS</div>
+          <div class="bar top"><span class="name">leopard</span><div class="track"><div class="fill" data-pct="92"></div></div><span class="pct">92%</span></div>
+          <div class="bar"><span class="name">jaguar</span><div class="track"><div class="fill" data-pct="4"></div></div><span class="pct">4%</span></div>
+          <div class="bar"><span class="name">cheetah</span><div class="track"><div class="fill" data-pct="3"></div></div><span class="pct">3%</span></div>
+          <div class="bar"><span class="name">snow leopard</span><div class="track"><div class="fill" data-pct="1"></div></div><span class="pct">1%</span></div>
+        </div>
+      </div>
+      <div class="alex-foot">AlexNet halved the error rate on the <strong>ImageNet</strong> benchmark — and kicked off the deep learning era.</div>
+    </div>`;
+  }
+  if(type==="siri"){
+    const bars = Array.from({length:9},()=>`<span></span>`).join('');
+    return `<div class="siri-anim">
+      <div class="wave">${bars}</div>
+      <div class="transcript" data-target="What's the weather today in San Francisco?"><span class="cur"></span></div>
+    </div>`;
+  }
+  if(type==="gpt"){
+    const before = ["The","future","of","AI","is"];
+    const after = ["going","to","change","how","we","work"];
+    return `<div class="gpt-anim">
+      <div class="label">Prompt</div>
+      <div class="tok-row" style="margin-bottom:14px">
+        ${before.map((t,i)=>`<span class="tok" style="animation-delay:${i*60}ms">${t}</span>`).join('')}
+      </div>
+      <div class="label">Predicted tokens</div>
+      <div class="tok-row">
+        ${after.map((t,i)=>`<span class="tok ${i===after.length-1?'new':''}" style="animation-delay:${(i*250)+600}ms">${t}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+  if(type==="dalle"){
+    return `<div class="dalle-anim">
+      <div class="prompt-line">"a corgi astronaut riding a horse on Mars"</div>
+      <div class="grid">
+        <div class="tile"></div><div class="tile"></div>
+        <div class="tile"></div><div class="tile"></div>
+      </div>
+    </div>`;
+  }
+  if(type==="cursor"){
+    return `<div class="cursor-anim">
+      <div class="ln"><span class="ln-num">1</span><span class="ln-code"><span class="kw">function</span> <span class="fn">greetUser</span>(name) {</span></div>
+      <div class="ln"><span class="ln-num">2</span><span class="ln-code">  <span class="ghost">  <span class="kw">return</span> <span class="str">\`Welcome, \${name}!\`</span>;</span></span></div>
+      <div class="ln"><span class="ln-num">3</span><span class="ln-code">}</span></div>
+      <div class="ln"><span class="ln-num">4</span><span class="ln-code"></span></div>
+      <div class="ln"><span class="ln-num">5</span><span class="ln-code"><span class="accepted"><span class="fn">greetUser</span>(<span class="str">"Alex"</span>);</span></span></div>
+    </div>`;
+  }
+  if(type==="operator"){
+    return `<div class="operator-anim">
+      <div class="url-bar"><span>opentable.com/search</span></div>
+      <div class="page">
+        <div class="action" data-step="0">Open OpenTable</div>
+        <div class="action" data-step="1">Search "Italian, 7pm, party of 2"</div>
+        <div class="action" data-step="2">Click first available restaurant</div>
+        <div class="action" data-step="3">Confirm booking</div>
+      </div>
+    </div>`;
+  }
+  return "";
+}
+
+const ergrid = $('#eras');
+eras.forEach((e,i)=>{
+  const el = document.createElement('div');
+  el.className = 'era-row' + (i%2===1 ? ' flip' : '');
+  // Build chip list: key example + 2 optional
+  const chipsHTML = `
+    <button class="chip-btn key active" data-key="1"><span class="play-arrow">▸</span>${e.keyEx}</button>
+    ${e.optional.map((o,oi)=>`<button class="chip-btn" data-opt="${oi}"><span class="play-arrow">▸</span>${o.name}</button>`).join('')}
+  `;
+  el.innerHTML = `
+    <div class="era-visual ${e.visualDark?'dark':''}" data-era="${i}">
+      <div class="visual-img" style="background-image:url('${e.img}')"></div>
+      <div class="anim" data-anim="${e.anim}">${eraAnim(e.anim)}</div>
+      <div class="anim-caption">${e.keyCaption||''}</div>
+    </div>
+    <div class="era-content">
+      <div class="e-year">${e.year}</div>
+      <div class="e-name">${e.name}</div>
+      <div class="e-theme">${e.theme}</div>
+      <div class="e-q">${e.question}</div>
+      <div class="e-ex-h">Examples <span class="opt-badge">click to explore</span></div>
+      <div class="e-chips">${chipsHTML}</div>
+      <button class="chip-reset">↺ Back to key moment</button>
+    </div>`;
+  ergrid.appendChild(el);
+
+  // wire up chips
+  const visual = el.querySelector('.era-visual');
+  const animBox = el.querySelector('.anim');
+  const captionEl = el.querySelector('.anim-caption');
+  const resetBtn = el.querySelector('.chip-reset');
+  const chipBtns = el.querySelectorAll('.chip-btn');
+
+  function swapTo(animType, caption, isKey){
+    chipBtns.forEach(b=>b.classList.toggle('active',
+      isKey ? b.classList.contains('key') : b.dataset.opt!==undefined && parseInt(b.dataset.opt)===animType.optIdx
+    ));
+    animBox.dataset.anim = animType.anim;
+    animBox.innerHTML = eraAnim(animType.anim);
+    captionEl.textContent = caption || '';
+    visual.classList.toggle('show-caption', !!caption);
+    resetBtn.classList.toggle('show', !isKey);
+    // mark the row as played so the IntersectionObserver doesn't override the user's choice
+    el.dataset.played = '1';
+    kickoffAnim(animBox, animType.anim);
+  }
+
+  chipBtns.forEach((btn)=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.classList.contains('key')){
+        swapTo({anim:e.anim, optIdx:-1}, e.keyCaption||'', true);
+      } else {
+        const oi = parseInt(btn.dataset.opt);
+        const opt = e.optional[oi];
+        swapTo({anim:opt.anim, optIdx:oi}, opt.caption||'', false);
+        // mark active explicitly
+        chipBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    });
+  });
+  resetBtn.addEventListener('click', ()=>{
+    swapTo({anim:e.anim, optIdx:-1}, e.keyCaption||'', true);
+    chipBtns.forEach(b=>b.classList.remove('active'));
+    el.querySelector('.chip-btn.key').classList.add('active');
+  });
+
+  // kickoff initial caption (show it for key moment too)
+  if(e.keyCaption){ visual.classList.add('show-caption'); }
+
+  // store the era reference for the observer to use
+  el.dataset.eraIdx = i;
+  // hold the animation empty until the row scrolls into view (lazy trigger)
+  animBox.innerHTML = '';
+});
+
+// IntersectionObserver — play each era's animation when it enters the viewport
+const eraObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting) return;
+    const row = entry.target;
+    if(row.dataset.played==='1') return;
+    row.dataset.played='1';
+    const idx = parseInt(row.dataset.eraIdx);
+    const era = eras[idx];
+    const animBox = row.querySelector('.anim');
+    animBox.innerHTML = eraAnim(era.anim);
+    kickoffAnim(animBox, era.anim);
+    eraObserver.unobserve(row);
+  });
+}, {threshold:0.25, rootMargin:'0px 0px -10% 0px'});
+ergrid.querySelectorAll('.era-row').forEach(row => eraObserver.observe(row));
+
+/* ============ ANIMATION KICKOFFS (per-instance, safe to restart) ============ */
+function kickoffAnim(container, type){
+  if(!container) return;
+  // CSS-only animations: no JS needed (chess, scatter, network, eliza, dalle, cursor, gpt)
+  if(type==='gen') return runGenLoop(container);
+  if(type==='agent') return runStepLoop(container.querySelector('.agent-anim'), '.row');
+  if(type==='operator') return runStepLoop(container.querySelector('.operator-anim'), '.action');
+  if(type==='rules') return runRulesLoop(container);
+  if(type==='spam') return runSpamLoop(container);
+  if(type==='alex') return runAlexBars(container);
+  if(type==='siri') return runSiriLoop(container);
+  if(type==='pagerank') return runPageRankLoop(container);
+}
+
+async function runGenLoop(container){
+  const haikus = [
+    "Endless blue horizon —\nwaves return to the shore,\nthe moon listens close.",
+    "Salt wind on my face,\nfoam writes and unwrites itself —\nthe tide keeps the time.",
+    "Below, a slow drift;\nabove, gulls scribble the sky.\nThe sea breathes again."
+  ];
+  let idx = 0;
+  while(document.body.contains(container) && container.dataset.anim==='gen'){
+    const out = container.querySelector('#genout') || container.querySelector('.out');
+    if(!out) return;
+    const text = haikus[idx % haikus.length];
+    out.innerHTML = '<span class="genTyped"></span><span class="cur"></span>';
+    const typed = out.querySelector('.genTyped');
+    for(let i=0;i<text.length;i++){
+      if(!document.body.contains(out) || container.dataset.anim!=='gen') return;
+      typed.textContent += text[i];
+      await wait(text[i]==='\n' ? 220 : 40);
+    }
+    await wait(2200);
+    idx++;
+  }
+}
+
+async function runStepLoop(el, rowSel){
+  if(!el) return;
+  while(document.body.contains(el)){
+    const rows = el.querySelectorAll(rowSel);
+    if(rows.length===0) return;
+    rows.forEach(r=>r.classList.remove('on','done'));
+    await wait(450);
+    for(let i=0;i<rows.length;i++){
+      if(!document.body.contains(el)) return;
+      rows[i].classList.add('on');
+      await wait(850);
+      rows[i].classList.add('done');
+      await wait(200);
+    }
+    await wait(1600);
+  }
+}
+
+async function runRulesLoop(container){
+  while(document.body.contains(container) && container.dataset.anim==='rules'){
+    const root = container.querySelector('.rules-anim');
+    if(!root) return;
+    const rows = root.querySelectorAll('.rule');
+    root.classList.remove('done');
+    rows.forEach(r=>r.classList.remove('lit'));
+    await wait(450);
+    for(let i=0;i<rows.length;i++){
+      if(container.dataset.anim!=='rules') return;
+      rows[i].classList.add('lit');
+      await wait(650);
+    }
+    root.classList.add('done');
+    await wait(2200);
+  }
+}
+
+async function runSpamLoop(container){
+  while(document.body.contains(container) && container.dataset.anim==='spam'){
+    const mails = container.querySelectorAll('.spam-anim .mail');
+    if(mails.length===0) return;
+    mails.forEach(m=>m.classList.remove('shown'));
+    await wait(400);
+    for(let i=0;i<mails.length;i++){
+      if(container.dataset.anim!=='spam') return;
+      mails[i].classList.add('shown');
+      await wait(650);
+    }
+    await wait(2000);
+  }
+}
+
+async function runAlexBars(container){
+  // play once; fills animate via CSS transitions
+  await wait(200);
+  const fills = container.querySelectorAll('.alex-anim .fill');
+  fills.forEach(f=>{ f.style.width = '0%'; });
+  await wait(50);
+  fills.forEach(f=>{
+    const pct = f.dataset.pct;
+    f.style.width = pct + '%';
+  });
+}
+
+async function runSiriLoop(container){
+  const phrases = [
+    "What's the weather today in San Francisco?",
+    "Remind me to call Mom at 6pm.",
+    "Play \"Lo-fi Beats\" on Spotify."
+  ];
+  let idx = 0;
+  while(document.body.contains(container) && container.dataset.anim==='siri'){
+    const t = container.querySelector('.transcript');
+    if(!t) return;
+    const target = phrases[idx % phrases.length];
+    t.innerHTML = '<span class="siriTyped"></span><span class="cur"></span>';
+    const typed = t.querySelector('.siriTyped');
+    for(let i=0;i<target.length;i++){
+      if(container.dataset.anim!=='siri') return;
+      typed.textContent += target[i];
+      await wait(40);
+    }
+    await wait(2200);
+    idx++;
+  }
+}
+
+async function runPageRankLoop(container){
+  // pulse each node briefly then settle on showing A as biggest
+  const circles = container.querySelectorAll('.pagerank-anim circle');
+  if(circles.length===0) return;
+  while(document.body.contains(container) && container.dataset.anim==='pagerank'){
+    for(let i=0;i<circles.length;i++){
+      if(container.dataset.anim!=='pagerank') return;
+      const c = circles[i];
+      const r = parseFloat(c.getAttribute('r'));
+      c.setAttribute('r', r+3);
+      await wait(180);
+      c.setAttribute('r', r);
+      await wait(120);
+    }
+    await wait(2400);
+  }
+}
+
+/* ============ BUILDING BLOCKS ============ */
+function blockIcon(name){
+  const s = "stroke='currentColor' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'";
+  if(name==="brain") return `<svg class="icon" viewBox="0 0 24 24" ${s}><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 3 3V4z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-3 3V4z"/></svg>`;
+  if(name==="tool") return `<svg class="icon" viewBox="0 0 24 24" ${s}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
+  if(name==="agent") return `<svg class="icon" viewBox="0 0 24 24" ${s}><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>`;
+  if(name==="system") return `<svg class="icon" viewBox="0 0 24 24" ${s}><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M9 16v4M15 16v4"/></svg>`;
+  return "";
+}
+const bg = $('#blocks-grid');
+buildingBlocks.forEach(b=>{
+  const el = document.createElement('div');
+  el.className = 'block';
+  el.innerHTML = `
+    ${blockIcon(b.icon)}
+    <div class="num">${b.num}</div>
+    <div class="ttl">${b.name}</div>
+    <div class="role">${b.role}</div>
+    <div class="desc">${b.desc}</div>
+    <div class="bd-demo">${b.demo}</div>
+    <div class="examples">${b.examples.map(x=>`<span class="pill">${x}</span>`).join('')}</div>
+    <div class="arrow">▾</div>`;
+  el.addEventListener('click', ()=>el.classList.toggle('open'));
+  bg.appendChild(el);
+});
+
+/* ============ SIMULATOR ============ */
+let currentPrompt = simPrompts[0];
+const pwrap = $('#prompts');
+simPrompts.forEach((p,i)=>{
+  const b = document.createElement('button');
+  b.textContent = p.text;
+  if(i===0) b.classList.add('selected');
+  b.addEventListener('click', ()=>{
+    currentPrompt = simPrompts[i];
+    $$('#prompts button').forEach(x=>x.classList.remove('selected'));
+    b.classList.add('selected');
+  });
+  pwrap.appendChild(b);
+});
+
+function stepHTML(cls, n, headText, body){
+  return `<div class="step ${cls}"><div class="step-head"><span class="step-num">${n}</span>${headText}</div><div class="body">${body}</div></div>`;
+}
+async function runSim(){
+  const p = currentPrompt;
+  if(!p) return;
+  const root = $('#simsteps');
+  root.innerHTML = '';
+  const steps = [];
+  steps.push(stepHTML('user','1','User asks', `"${p.text}"`));
+  if(p.needsTool){
+    steps.push(stepHTML('think','2','LLM decides', `<em>"I don't have live data for this. I'll need to call a tool."</em>`));
+    steps.push(stepHTML('tool','3','Tool call', `<span style="color:#D89BE0">${p.tool}</span>(<span style="color:#9CD89C">${p.args}</span>)`));
+    steps.push(stepHTML('api','4','API response', `<span style="color:#9CD89C">${p.apiResp}</span>`));
+    steps.push(stepHTML('final','5','LLM responds', `<span id="finaltype"></span><span class="cursor"></span>`));
+  } else {
+    steps.push(stepHTML('think','2','LLM decides', `<em>"General knowledge. No tool needed."</em>`));
+    steps.push(stepHTML('final','3','LLM responds', `<span id="finaltype"></span><span class="cursor"></span>`));
+  }
+  for(let i=0;i<steps.length;i++){
+    const div = document.createElement('div');
+    div.innerHTML = steps[i];
+    const node = div.firstChild;
+    root.appendChild(node);
+    await wait(80);
+    node.classList.add('show');
+    await wait(i===steps.length-1 ? 350 : 700);
+  }
+  const target = $('#finaltype');
+  if(target){
+    const ans = p.finalAns;
+    for(let i=0;i<ans.length;i++){
+      target.textContent += ans[i];
+      await wait(18);
+    }
+    const cur = root.querySelector('.cursor');
+    if(cur) cur.remove();
+  }
+}
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+$('#runsim').addEventListener('click', runSim);
+$('#resetsim').addEventListener('click', ()=>{ $('#simsteps').innerHTML=''; });
+
+/* ============ 3D MOUNTAIN MAP — twin-peak alpine ============ */
+const terrain = $('#terrain');
+const W = 1400, H = 950;
+
+// === Mountain geometry — wider + less tall (welcoming, not daunting) ===
+const mainPeak   = {x: 525, y: 195};
+const secondPeak = {x: 825, y: 275};
+const saddle     = {x: 710, y: 325};
+const baseY = 740;
+const baseLeftX = 50, baseRightX = 1080;
+
+// Right-side label column
+const labelColX = 1180;
+
+// === Ridge generation ===
+function jaggedRidge(start, end, segments, jitter, seed){
+  const pts = [start];
+  for(let i=1; i<segments; i++){
+    const t = i/segments;
+    const bx = start.x + (end.x - start.x) * t;
+    const by = start.y + (end.y - start.y) * t;
+    const perpX = -(end.y - start.y);
+    const perpY = (end.x - start.x);
+    const perpLen = Math.sqrt(perpX*perpX + perpY*perpY) || 1;
+    const n = Math.sin(seed + t*4.1) * 0.55
+            + Math.cos(seed*1.4 + t*7.7) * 0.28
+            + Math.sin(seed*2.7 + t*13.3) * 0.10;
+    const peakTaper = t < 0.82 ? 1 : (1-t)/0.18;
+    const baseTaper = t > 0.08 ? 1 : t/0.08;
+    const offset = n * jitter * peakTaper * baseTaper;
+    pts.push({x: bx + (perpX / perpLen) * offset, y: by + (perpY / perpLen) * offset});
+  }
+  pts.push(end);
+  return pts;
+}
+function chainRidge(waypoints, segPerSeg, jitter, seedBase){
+  const result = [waypoints[0]];
+  for(let i=0;i<waypoints.length-1;i++){
+    const pts = jaggedRidge(waypoints[i], waypoints[i+1], segPerSeg, jitter, seedBase + i*0.71);
+    result.push(...pts.slice(1));
+  }
+  return result;
+}
+
+// Twin-peak profile, scaled to the new wider/shorter mountain
+const leftFlankWP = [
+  {x: baseLeftX, y: baseY},
+  {x: 115, y: 685},
+  {x: 200, y: 595},
+  {x: 285, y: 500},
+  {x: 360, y: 405},
+  {x: 425, y: 315},
+  {x: 480, y: 240},
+  mainPeak
+];
+const peakToSaddleWP = [
+  mainPeak,
+  {x: 575, y: 240},
+  {x: 625, y: 275},
+  {x: 670, y: 305},
+  saddle
+];
+const saddleToSecondWP = [
+  saddle,
+  {x: 750, y: 315},
+  {x: 790, y: 290},
+  secondPeak
+];
+const rightFlankWP = [
+  secondPeak,
+  {x: 870, y: 360},
+  {x: 920, y: 450},
+  {x: 970, y: 540},
+  {x: 1020, y: 635},
+  {x: baseRightX, y: baseY}
+];
+
+const fullRidge = [
+  ...chainRidge(leftFlankWP,       4, 9, 1.3),
+  ...chainRidge(peakToSaddleWP,    4, 6, 2.1).slice(1),
+  ...chainRidge(saddleToSecondWP,  4, 5, 2.9).slice(1),
+  ...chainRidge(rightFlankWP,      4, 9, 3.7).slice(1)
+];
+
+// Mountain silhouette path
+let mountainPath = `M ${fullRidge[0].x.toFixed(1)} ${fullRidge[0].y.toFixed(1)}`;
+for(let i=1;i<fullRidge.length;i++){
+  mountainPath += ` L ${fullRidge[i].x.toFixed(1)} ${fullRidge[i].y.toFixed(1)}`;
+}
+// Curve back along the front base
+mountainPath += ` Q ${(baseLeftX+baseRightX)/2} ${baseY+28} ${baseLeftX} ${baseY} Z`;
+
+// === SVG DEFS — hybrid palette (cool gray body, warm cream highlights, green-gray foothill) ===
+const defs = svgEl('defs');
+defs.innerHTML = `
+  <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#EEF1F8"/>
+    <stop offset="60%"  stop-color="#F4F5FB"/>
+    <stop offset="100%" stop-color="#F8F9FC"/>
+  </linearGradient>
+  <!-- Mountain body: warm cream peak → cool gray-lavender body → green-gray base -->
+  <linearGradient id="mountainGrad" x1="22%" y1="0%" x2="78%" y2="100%">
+    <stop offset="0%"   stop-color="#F0E8D0"/>
+    <stop offset="14%"  stop-color="#D5CDB2"/>
+    <stop offset="32%"  stop-color="#9CA1BD"/>
+    <stop offset="55%"  stop-color="#6E76A0"/>
+    <stop offset="78%"  stop-color="#4F558E"/>
+    <stop offset="92%"  stop-color="#5C6883"/>
+    <stop offset="100%" stop-color="#7A8580"/>
+  </linearGradient>
+  <!-- Foothill foreground (rolling green-gray base) -->
+  <linearGradient id="foothillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#94A096"/>
+    <stop offset="50%"  stop-color="#7A857B"/>
+    <stop offset="100%" stop-color="#5E6960"/>
+  </linearGradient>
+  <!-- ============ FACET GRADIENTS (each face of the 3D mountain) ============ -->
+  <!-- Lit faces: warm cream tones -->
+  <linearGradient id="mainLitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#FFF6E0"/>
+    <stop offset="30%"  stop-color="#F2E4BE"/>
+    <stop offset="65%"  stop-color="#C8B98C"/>
+    <stop offset="100%" stop-color="#8B8E7A"/>
+  </linearGradient>
+  <linearGradient id="secondLitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#E8DBB0"/>
+    <stop offset="50%"  stop-color="#B5A87E"/>
+    <stop offset="100%" stop-color="#80785A"/>
+  </linearGradient>
+  <!-- Shadow faces: deep cool tones -->
+  <linearGradient id="leftFlankGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#3C4480"/>
+    <stop offset="55%"  stop-color="#2A3068"/>
+    <stop offset="100%" stop-color="#1C2050"/>
+  </linearGradient>
+  <linearGradient id="saddleDeepGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#1F2452"/>
+    <stop offset="55%"  stop-color="#141838"/>
+    <stop offset="100%" stop-color="#0C0F2A"/>
+  </linearGradient>
+  <linearGradient id="rightFlankGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#4E5588"/>
+    <stop offset="60%"  stop-color="#3A4070"/>
+    <stop offset="100%" stop-color="#262C58"/>
+  </linearGradient>
+  <!-- ============ FOOTHILL BUMP GRADIENTS (small daily-checkpoint peaks) ============ -->
+  <!-- Front (closer = darker, more saturated) -->
+  <linearGradient id="bumpFrontGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+    <stop offset="0%"   stop-color="#9CA5BE"/>
+    <stop offset="50%"  stop-color="#646C8C"/>
+    <stop offset="100%" stop-color="#3A4070"/>
+  </linearGradient>
+  <linearGradient id="bumpMidGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+    <stop offset="0%"   stop-color="#AAB3CA"/>
+    <stop offset="50%"  stop-color="#7680A0"/>
+    <stop offset="100%" stop-color="#4D5680"/>
+  </linearGradient>
+  <linearGradient id="bumpBackGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+    <stop offset="0%"   stop-color="#B8C2D6"/>
+    <stop offset="50%"  stop-color="#8590AE"/>
+    <stop offset="100%" stop-color="#5C6488"/>
+  </linearGradient>
+  <!-- Atmospheric haze overlay (pushes background elements visually further away) -->
+  <linearGradient id="atmospheric" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#F4F5FB" stop-opacity="0.55"/>
+    <stop offset="50%"  stop-color="#F4F5FB" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#F4F5FB" stop-opacity="0"/>
+  </linearGradient>
+  <!-- Warm cream "lit face" overlay (creates the visible front-ridge glow) -->
+  <radialGradient id="frontFaceLight" cx="42%" cy="32%" r="55%">
+    <stop offset="0%"   stop-color="#F5EBD1" stop-opacity="0.62"/>
+    <stop offset="45%"  stop-color="#E8DEC4" stop-opacity="0.22"/>
+    <stop offset="100%" stop-color="#E8DEC4" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Deep shadow on left flank -->
+  <radialGradient id="leftShadow" cx="14%" cy="58%" r="60%">
+    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.62"/>
+    <stop offset="55%"  stop-color="#0F1130" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#0F1130" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Saddle / cleft shadow between peaks -->
+  <radialGradient id="saddleShadow" cx="55%" cy="50%" r="22%">
+    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.50"/>
+    <stop offset="80%"  stop-color="#0F1130" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Right side ambient shadow -->
+  <radialGradient id="rightShadow" cx="82%" cy="70%" r="45%">
+    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#0F1130" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="summitHaze" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.65"/>
+    <stop offset="45%"  stop-color="#E8EAF6" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="#A8AEDC" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="summitGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.85"/>
+    <stop offset="40%" stop-color="#E8EAF6" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#A8AEDC" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="summitPin" cx="35%" cy="30%" r="80%">
+    <stop offset="0%"  stop-color="#FFFFFF"/>
+    <stop offset="60%" stop-color="#E8EAF6"/>
+    <stop offset="100%" stop-color="#C5C9E0"/>
+  </radialGradient>
+  <filter id="pinShadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="2.5" stdDeviation="2" flood-color="#0F1130" flood-opacity="0.40"/>
+  </filter>
+  <filter id="summitShadow" x="-100%" y="-100%" width="300%" height="300%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0F1130" flood-opacity="0.55"/>
+  </filter>
+  <filter id="mountainShadowFilter" x="-20%" y="-10%" width="140%" height="130%">
+    <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#1A1C42" flood-opacity="0.25"/>
+  </filter>
+  <clipPath id="mountainClip"><path d="${mountainPath}"/></clipPath>
+`;
+terrain.appendChild(defs);
+
+// === SKY BACKGROUND ===
+terrain.appendChild(svgEl('rect',{x:0,y:0,width:W,height:H, fill:'url(#skyGrad)'}));
+
+// halftone dots upper-right corner (very faint)
+const dots = svgEl('g',{opacity:'0.14'});
+for(let i=0;i<14;i++){
+  for(let j=0;j<5;j++){
+    const x = 980 + i*30, y = 20 + j*28;
+    if(x > W) continue;
+    const r = 1.4 - Math.min(1, ((x-1320)**2 + (y-40)**2)/120000);
+    if(r>0.2) dots.appendChild(svgEl('circle',{cx:x,cy:y,r:r.toFixed(1), fill:'#3F4493'}));
+  }
+}
+terrain.appendChild(dots);
+
+// === FOREGROUND FOOTHILL PLATEAU (behind / below the mountain) ===
+const foothillPath = `M 0 748 Q 110 732 220 746 Q 340 760 460 736 Q 580 718 720 742 Q 850 764 990 738 Q 1130 718 1290 740 Q 1350 748 1400 736 L 1400 950 L 0 950 Z`;
+terrain.appendChild(svgEl('path',{
+  d: foothillPath, fill:'url(#foothillGrad)', opacity:0.82
+}));
+// Soft cast shadow from the mountain onto the foothill (grounds the 3D form)
+terrain.appendChild(svgEl('ellipse',{
+  cx: 600, cy: 765, rx: 600, ry: 28,
+  fill:'#1A1C42', opacity:0.18,
+  filter:'blur(8px)'
+}));
+
+// === MOUNTAIN BODY (base layer — facets will overlay this) ===
+terrain.appendChild(svgEl('path',{
+  d: mountainPath, fill: 'url(#mountainGrad)',
+  filter: 'url(#mountainShadowFilter)'
+}));
+
+// === 3D FACETS — distinct polygon faces tile the mountain to create real volume ===
+// Each face has its own gradient. Strong contrast between adjacent facets is what
+// reads as "3D" — like a low-poly mountain illustration.
+const facets = svgEl('g',{'clip-path':'url(#mountainClip)'});
+
+// Interior fold lines (peak → foothill) — visible "ridges" between facets.
+// Slightly curved to feel more natural / less mechanical.
+const mainLeftFold = [
+  mainPeak,
+  {x:513, y:265}, {x:498, y:350}, {x:480, y:435},
+  {x:460, y:520}, {x:438, y:610}, {x:418, y:740}
+];
+const mainRightFold = [
+  mainPeak,
+  {x:540, y:265}, {x:558, y:350}, {x:578, y:435},
+  {x:596, y:520}, {x:610, y:610}, {x:618, y:740}
+];
+const secondLeftFold = [
+  secondPeak,
+  {x:813, y:365}, {x:800, y:455}, {x:786, y:550},
+  {x:775, y:650}, {x:768, y:740}
+];
+const secondRightFold = [
+  secondPeak,
+  {x:835, y:365}, {x:848, y:455}, {x:862, y:550},
+  {x:875, y:650}, {x:885, y:740}
+];
+
+function polyD(pts){
+  return 'M ' + pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L ') + ' Z';
+}
+
+// LEFT FLANK — deep shadow on the left side of the mountain
+const leftFlankFace = [
+  mainPeak,
+  {x:480, y:240}, {x:425, y:315}, {x:360, y:405},
+  {x:285, y:500}, {x:200, y:595}, {x:115, y:685},
+  {x: 30, y:790},        // extended below baseY for clean clipping
+  {x:418, y:790},
+  ...mainLeftFold.slice(1).reverse()   // back up the fold to peak
+];
+facets.appendChild(svgEl('path',{d: polyD(leftFlankFace), fill:'url(#leftFlankGrad)'}));
+
+// SADDLE V — the deep dark valley between the two peaks
+const saddleVFace = [
+  mainPeak,
+  // Across the peak-to-saddle ridge
+  {x:575, y:240}, {x:625, y:275}, {x:670, y:305}, saddle,
+  // Up the saddle-to-second-peak ridge
+  {x:750, y:315}, {x:790, y:290}, secondPeak,
+  // Down second peak's LEFT fold
+  ...secondLeftFold.slice(1),
+  // Across the foothill
+  {x:618, y:790},
+  // Up main peak's RIGHT fold (reversed)
+  ...mainRightFold.slice(1).reverse()
+];
+facets.appendChild(svgEl('path',{d: polyD(saddleVFace), fill:'url(#saddleDeepGrad)'}));
+
+// RIGHT FLANK — medium shadow on the right side
+const rightFlankFace = [
+  secondPeak,
+  {x: 870, y:360}, {x: 920, y:450}, {x: 970, y:540},
+  {x:1020, y:635}, {x:1120, y:790},   // extended below
+  {x: 885, y:790},
+  ...secondRightFold.slice(1).reverse()
+];
+facets.appendChild(svgEl('path',{d: polyD(rightFlankFace), fill:'url(#rightFlankGrad)'}));
+
+// MAIN FRONT FACE — bright lit cream wedge (the hero face of the mountain)
+const mainFrontFace = [
+  mainPeak,
+  ...mainLeftFold.slice(1),
+  {x: 618, y: 740},
+  ...mainRightFold.slice(1).reverse()
+];
+facets.appendChild(svgEl('path',{d: polyD(mainFrontFace), fill:'url(#mainLitGrad)'}));
+
+// SECOND PEAK FRONT — secondary lit face
+const secondFrontFace = [
+  secondPeak,
+  ...secondLeftFold.slice(1),
+  {x: 885, y: 740},
+  ...secondRightFold.slice(1).reverse()
+];
+facets.appendChild(svgEl('path',{d: polyD(secondFrontFace), fill:'url(#secondLitGrad)'}));
+
+terrain.appendChild(facets);
+
+// === RIDGE HIGHLIGHTS — thin bright lines along facet edges (visible "crests") ===
+const ridges = svgEl('g',{'clip-path':'url(#mountainClip)'});
+function ridgeStroke(pts, sw, opacity){
+  return svgEl('path',{
+    d: 'M ' + pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L '),
+    stroke:'#FFF3D8','stroke-width':sw, fill:'none', opacity:opacity,
+    'stroke-linecap':'round','stroke-linejoin':'round'
+  });
+}
+ridges.appendChild(ridgeStroke(mainLeftFold, 1.4, 0.65));
+ridges.appendChild(ridgeStroke(mainRightFold, 1.0, 0.40));
+ridges.appendChild(ridgeStroke(secondLeftFold, 1.1, 0.50));
+ridges.appendChild(ridgeStroke(secondRightFold, 0.9, 0.35));
+terrain.appendChild(ridges);
+
+// === DIRECTIONAL SHADING — softens facet edges, blends transitions ===
+const shading = svgEl('g',{'clip-path':'url(#mountainClip)'});
+// Deep shadow on left flank
+shading.appendChild(svgEl('ellipse',{
+  cx: 200, cy: 480, rx: 320, ry: 360, fill:'url(#leftShadow)'
+}));
+// Saddle/cleft shadow between peaks
+shading.appendChild(svgEl('ellipse',{
+  cx: 700, cy: 360, rx: 140, ry: 100, fill:'url(#saddleShadow)'
+}));
+// Right side ambient shadow
+shading.appendChild(svgEl('ellipse',{
+  cx: 940, cy: 580, rx: 240, ry: 260, fill:'url(#rightShadow)'
+}));
+// Warm front-face light overlay
+shading.appendChild(svgEl('ellipse',{
+  cx: 490, cy: 420, rx: 270, ry: 310, fill:'url(#frontFaceLight)'
+}));
+// Volume highlight — bright spot on the upper-left of the main lit face
+// (suggests the face curves outward, catching light like a real 3D form)
+shading.appendChild(svgEl('ellipse',{
+  cx: 510, cy: 320, rx: 90, ry: 140,
+  fill:'#FFFFFF', opacity:0.18
+}));
+// Volume shadow — recessed dark area in the lower-left of the left flank
+shading.appendChild(svgEl('ellipse',{
+  cx: 270, cy: 620, rx: 130, ry: 110,
+  fill:'#0F1130', opacity:0.25
+}));
+terrain.appendChild(shading);
+
+// === EROSION GULLIES — vertical fall lines giving rocky 3D texture ===
+const gullyG = svgEl('g',{'clip-path':'url(#mountainClip)'});
+let _gs = 31;
+const grnd = () => { _gs = (_gs * 1103515245 + 12345) & 0x7fffffff; return _gs / 0x80000000; };
+for(let i=0; i<150; i++){
+  const x0 = 60 + grnd() * 1010;
+  const y0 = 220 + grnd() * 510;
+  const verticalT = (y0 - 195) / 545;
+  const len = 25 + grnd() * 160 * (0.6 + verticalT * 0.5);
+  const angle = Math.PI/2 + (grnd() - 0.5) * 0.4;
+  const x1 = x0 + Math.cos(angle) * len;
+  const y1 = y0 + Math.sin(angle) * len;
+  const cx = (x0+x1)/2 + (grnd()-0.5) * 5;
+  const cy = (y0+y1)/2 + (grnd()-0.5) * 5;
+  const isHighlight = grnd() < 0.18;
+  let color, opacity, sw;
+  if(isHighlight){
+    color = '#F5ECD3';
+    opacity = (0.12 + grnd() * 0.20).toFixed(2);
+    sw = (0.35 + grnd() * 0.45).toFixed(2);
+  } else {
+    const distFromSpine = Math.abs(x0 - 500);
+    const shadowness = Math.min(1, distFromSpine / 380);
+    color = '#0F1130';
+    opacity = (0.10 + shadowness * 0.20 + grnd() * 0.13).toFixed(2);
+    sw = (0.4 + grnd() * 0.5).toFixed(2);
+  }
+  gullyG.appendChild(svgEl('path',{
+    d:`M ${x0.toFixed(1)} ${y0.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
+    stroke: color, 'stroke-width': sw, 'stroke-linecap':'round',
+    fill:'none', opacity: opacity
+  }));
+}
+terrain.appendChild(gullyG);
+
+// === ATMOSPHERIC HAZE near summit (welcoming halo) ===
+[
+  {rx: 250, ry: 140, opacity: 0.40},
+  {rx: 160, ry: 90,  opacity: 0.50},
+  {rx: 90,  ry: 55,  opacity: 0.65}
+].forEach(g=>{
+  terrain.appendChild(svgEl('ellipse',{
+    cx: mainPeak.x, cy: mainPeak.y - 6,
+    rx: g.rx, ry: g.ry,
+    fill: 'url(#summitHaze)', opacity: g.opacity
+  }));
+});
+
+// === ATMOSPHERIC HAZE OVERLAY on main mountain — pushes it visually back ===
+// A pale overlay clipped to the mountain makes it read as the "distant" element,
+// while the foothill bumps in front (drawn next) feel closer and more present.
+terrain.appendChild(svgEl('rect',{
+  x:0, y:0, width:W, height:740,
+  fill:'url(#atmospheric)', 'clip-path':'url(#mountainClip)'
+}));
+
+// === FOOTHILL BUMPS — small short peaks, one per daily checkpoint (Days 1-9) ===
+// Each station sits on its own small peak. Drawn back-to-front with atmospheric
+// perspective: back bumps lighter/hazier, front bumps darker/sharper.
+const bumpGround = 818;
+const bumps = [
+  {n:1, x:135, y:768, w:78, layer:'front'},
+  {n:2, x:225, y:728, w:88, layer:'front'},
+  {n:3, x:320, y:686, w:96, layer:'front'},
+  {n:4, x:410, y:642, w:104, layer:'mid'},
+  {n:5, x:490, y:598, w:112, layer:'mid'},
+  {n:6, x:560, y:552, w:120, layer:'mid'},
+  {n:7, x:615, y:502, w:128, layer:'back'},
+  {n:8, x:648, y:448, w:136, layer:'back'},
+  {n:9, x:660, y:388, w:144, layer:'back'}
+];
+
+function bumpPath(b){
+  return `M ${b.x - b.w} ${bumpGround}
+    C ${b.x - b.w*0.55} ${(bumpGround + b.y)/2 - 8},
+      ${b.x - 14} ${b.y + 6}, ${b.x} ${b.y}
+    C ${b.x + 14} ${b.y + 6},
+      ${b.x + b.w*0.55} ${(bumpGround + b.y)/2 - 8},
+      ${b.x + b.w} ${bumpGround} Z`;
+}
+
+// Draw back layer first, then mid, then front (so foreground appears on top)
+const bumpLayers = ['back','mid','front'];
+const bumpsG = svgEl('g');
+bumpLayers.forEach(layer => {
+  bumps.filter(b => b.layer === layer).forEach(b => {
+    // Soft cast shadow under each bump (grounds it in 3D space)
+    bumpsG.appendChild(svgEl('ellipse',{
+      cx: b.x + 6, cy: bumpGround + 4,
+      rx: b.w * 0.82, ry: 4,
+      fill:'#1A1C42', opacity: layer==='front' ? 0.22 : layer==='mid' ? 0.16 : 0.10
+    }));
+    // The bump itself
+    const fillId = layer==='front' ? 'bumpFrontGrad' : layer==='mid' ? 'bumpMidGrad' : 'bumpBackGrad';
+    bumpsG.appendChild(svgEl('path',{
+      d: bumpPath(b),
+      fill: `url(#${fillId})`,
+      opacity: layer==='back' ? 0.88 : 0.96
+    }));
+    // Lit-side ridge highlight — thin cream stroke along the bump's NW edge
+    bumpsG.appendChild(svgEl('path',{
+      d: `M ${b.x} ${b.y} C ${b.x - 14} ${b.y + 6}, ${b.x - b.w*0.55} ${(bumpGround + b.y)/2 - 8}, ${b.x - b.w} ${bumpGround}`,
+      stroke:'#FFF4DA', 'stroke-width': 1.1, fill:'none',
+      opacity: layer==='front' ? 0.45 : layer==='mid' ? 0.38 : 0.28,
+      'stroke-linecap':'round'
+    }));
+  });
+});
+terrain.appendChild(bumpsG);
+
+// === STATIONS sit on top of foothill bumps (or main summit for #10) ===
+// Stations 1-9 sit precisely on their foothill bump peaks.
+// Station 10 sits at the main summit. Path connects them sequentially.
+const stationsPos = bumps.map(b => ({x: b.x, y: b.y}));
+stationsPos.push({x: mainPeak.x, y: mainPeak.y}); // station 10 = summit
+
+// Trail path: smooth bezier through station positions
+function smoothPath(pts){
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for(let i=0;i<pts.length-1;i++){
+    const p0 = pts[Math.max(0,i-1)];
+    const p1 = pts[i];
+    const p2 = pts[i+1];
+    const p3 = pts[Math.min(pts.length-1,i+2)];
+    const c1x = p1.x + (p2.x-p0.x)/6;
+    const c1y = p1.y + (p2.y-p0.y)/6;
+    const c2x = p2.x - (p3.x-p1.x)/6;
+    const c2y = p2.y - (p3.y-p1.y)/6;
+    d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2.x} ${p2.y}`;
+  }
+  return d;
+}
+// Split trail at the week boundary (stations 5/6)
+const w1Pts = stationsPos.slice(0, 6); // stations 1-5 plus transition to 6
+const w2Pts = stationsPos.slice(5);     // stations 6-10
+
+// Soft trail halo (cooler shadow, narrow)
+terrain.appendChild(svgEl('path',{
+  d: smoothPath(stationsPos), fill:'none',
+  stroke:'rgba(20,22,60,0.16)', 'stroke-width':7,
+  'stroke-linecap':'round','stroke-linejoin':'round'
+}));
+// White inner halo for visibility on the dark lower slopes
+terrain.appendChild(svgEl('path',{
+  d: smoothPath(stationsPos), fill:'none',
+  stroke:'#FFFFFF', 'stroke-width':3.8,
+  'stroke-linecap':'round','stroke-linejoin':'round', opacity:0.45
+}));
+// Week 1 dotted flowing trail
+terrain.appendChild(svgEl('path',{
+  class:'trail-flow', d: smoothPath(w1Pts), fill:'none',
+  stroke:'#252861', 'stroke-width':3.2,
+  'stroke-linecap':'round','stroke-linejoin':'round'
+}));
+// Week 2 dotted flowing trail
+terrain.appendChild(svgEl('path',{
+  class:'trail-flow', d: smoothPath(w2Pts), fill:'none',
+  stroke:'#8E92D0', 'stroke-width':3.2,
+  'stroke-linecap':'round','stroke-linejoin':'round'
+}));
+
+// Label callout anchors — all in the right column, aligned vertically with each station
+const labelAnchors = stationsPos.map((s, i) => ({
+  x: labelColX,
+  y: s.y,
+  side: i === stationsPos.length - 1 ? 'above' : 'right'
+}));
+// Summit label sits just above the peak instead of in the right column
+labelAnchors[stationsPos.length - 1] = {x: mainPeak.x, y: mainPeak.y - 65, side: 'above'};
+
+// BASE CAMP marker — small text below station 1
+const base = svgEl('text',{x: stationsPos[0].x, y: H-30, 'text-anchor':'middle',
+  'font-family':'JetBrains Mono', 'font-size':10, 'font-weight':700,
+  fill:'#7A7E9F', 'letter-spacing':'0.18em'});
+base.textContent = 'BASE CAMP';
+terrain.appendChild(base);
+
+// === STATIONS (pin + connector + callout) ===
+stationsPos.forEach((pos, i)=>{
+  const sess = sessions[i];
+  const isSummit = i === stationsPos.length - 1;
+  const g = svgEl('g',{class:'station '+sess.line + (isSummit?' summit':''),'data-idx':i, transform:`translate(${pos.x},${pos.y})`});
+
+  const stroke = sess.line==='w1' ? '#252861' : '#8E92D0';
+  const pinR = isSummit ? 22 : 15;
+
+  // ---- Callout label + connector ----
+  const anchor = labelAnchors[i];
+  const lblLocalX = anchor.x - pos.x;
+  const lblLocalY = anchor.y - pos.y;
+
+  if(!isSummit){
+    // connector from pin to label edge
+    const lblHalfW = 90;  // half of 180
+    const lblHalfH = 19;  // half of 38
+    let connX, connY;
+    if(anchor.side === 'left'){       connX = lblLocalX + lblHalfW; connY = lblLocalY; }
+    else if(anchor.side === 'right'){ connX = lblLocalX - lblHalfW; connY = lblLocalY; }
+    else if(anchor.side === 'below'){ connX = lblLocalX;            connY = lblLocalY - lblHalfH; }
+    else {                             connX = lblLocalX;            connY = lblLocalY + lblHalfH; }
+    g.appendChild(svgEl('path',{class:'lbl-connector', d:`M 0 0 L ${connX.toFixed(1)} ${connY.toFixed(1)}`}));
+  }
+
+  // Summit: extra halo behind the pin
+  if(isSummit){
+    g.appendChild(svgEl('circle',{cx:0,cy:0, r:60, fill:'url(#summitGlow)', opacity:0.95}));
+    g.appendChild(svgEl('circle',{cx:0,cy:0, r:40, fill:'url(#summitGlow)', opacity:0.95}));
+  }
+
+  // pulse ring
+  g.appendChild(svgEl('circle',{class:'pulse-ring', cx:0, cy:0, r:pinR, stroke: isSummit ? '#252861' : stroke}));
+
+  // pin with drop shadow
+  const pinGroup = svgEl('g',{filter: isSummit ? 'url(#summitShadow)' : 'url(#pinShadow)'});
+  pinGroup.appendChild(svgEl('circle',{
+    class:'pin-bg', cx:0, cy:0, r:pinR,
+    stroke: isSummit ? '#252861' : stroke,
+    fill: isSummit ? 'url(#summitPin)' : '#fff',
+    'stroke-width': isSummit ? 4 : 3
+  }));
+  g.appendChild(pinGroup);
+
+  const num = svgEl('text',{x:0,y:1,class:'pin-num'});
+  num.textContent = sess.n;
+  if(isSummit){
+    num.setAttribute('font-size','16');
+    num.setAttribute('font-weight','800');
+  } else {
+    num.setAttribute('font-size','11');
+  }
+  g.appendChild(num);
+
+  // ---- Callout box ----
+  if(isSummit){
+    // Summit label floats just above the peak (lblLocalY is negative, label centered there)
+    const lblW = 220, lblH = 46;
+    const lblX = lblLocalX - lblW/2;
+    const lblY = lblLocalY - lblH/2;
+    // subtle connector from pin to bottom of summit label
+    g.appendChild(svgEl('path',{class:'lbl-connector', d:`M 0 ${-pinR-3} L 0 ${lblY + lblH + 2}`}));
+    const box = svgEl('rect',{class:'lbl-box summit-lbl', x:lblX, y:lblY, width:lblW, height:lblH, rx:6, fill:'#252861', stroke:'#252861', 'stroke-width':1});
+    g.appendChild(box);
+    const day = svgEl('text',{x:lblLocalX, y:lblY+17, 'text-anchor':'middle','font-family':'JetBrains Mono','font-size':10,'font-weight':700,fill:'#A8AEDC','letter-spacing':'0.16em'});
+    day.textContent = 'SUMMIT · DAY 10';
+    g.appendChild(day);
+    const name = svgEl('text',{x:lblLocalX, y:lblY+35, 'text-anchor':'middle','font-family':'Manrope','font-size':13,'font-weight':800,fill:'#fff','letter-spacing':'-0.01em'});
+    name.textContent = 'Final Presentations';
+    g.appendChild(name);
+  } else {
+    const lblW = 180, lblH = 38;
+    const lblX = lblLocalX - lblW/2;
+    const lblY = lblLocalY - lblH/2;
+    const box = svgEl('rect',{class:'lbl-box', x:lblX, y:lblY, width:lblW, height:lblH, rx:6});
+    g.appendChild(box);
+    const day = svgEl('text',{x:lblLocalX, y:lblY+13, class:'lbl-day','text-anchor':'middle'});
+    day.textContent = `DAY ${sess.n}`;
+    g.appendChild(day);
+    const short = sess.short || (sess.title.length > 22 ? sess.title.slice(0,20)+'…' : sess.title);
+    const name = svgEl('text',{x:lblLocalX, y:lblY+29, class:'lbl-name','text-anchor':'middle'});
+    name.textContent = short;
+    g.appendChild(name);
+  }
+
+  g.addEventListener('click', ()=>selectStation(i));
+  terrain.appendChild(g);
+});
+
+const spanel = $('#spanel');
+function selectStation(idx){
+  $$('.station').forEach(s=>s.classList.toggle('active', parseInt(s.dataset.idx)===idx));
+  const s = sessions[idx];
+  const color = s.line==='w1' ? '#252861' : '#8E92D0';
+  spanel.innerHTML = `
+    <div class="sp-head">
+      <div class="sp-badge" style="background:${color}">${s.n}</div>
+      <div>
+        <div class="sp-title">${s.title}</div>
+        <div class="sp-day">${s.day} · Week ${s.line==='w1'?'1':'2'}</div>
+      </div>
+    </div>
+    <div class="sp-grid">
+      <div class="sp-col">
+        <h5>You'll learn</h5>
+        <ul>${s.learn.map(x=>`<li>${x}</li>`).join('')}</ul>
+      </div>
+      <div class="sp-col">
+        <h5>You'll build</h5>
+        <ul>${s.build.map(x=>`<li>${x}</li>`).join('')}</ul>
+      </div>
+      <div class="sp-col">
+        <h5>Tools you'll use</h5>
+        <div class="sp-tools">
+          ${s.tools.map(t=>`<span class="tool-chip"><span class="tlogo" style="background:${t.c}">${t.n.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase()}</span>${t.n}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  spanel.classList.add('show');
+}
+setTimeout(()=>selectStation(0), 400);
+
+</script>
+</body>
+</html>
