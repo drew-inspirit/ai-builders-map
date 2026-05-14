@@ -437,7 +437,7 @@ p{color:var(--ink-2); line-height:1.6; font-size:16px}
 .legend-dot{width:14px; height:14px; border-radius:50%; border:3px solid var(--navy); background:#fff}
 .legend-dot.w2{border-color:var(--lavender)}
 .map-hint{margin-left:auto; font:500 12px/1 'Manrope'; color:var(--muted)}
-.map-canvas{padding:8px 12px 12px; position:relative; background:#EEF0F8}
+.map-canvas{padding:8px 12px 12px; position:relative; background:linear-gradient(180deg, #D8DCEF 0%, #E5E8F4 45%, #F1F2F7 100%)}
 svg.terrain{width:100%; height:auto; display:block}
 .station{cursor:pointer}
 .station .pin-bg{fill:#fff; stroke-width:3.5; transition:r .2s}
@@ -642,7 +642,7 @@ svg.terrain{width:100%; height:auto; display:block}
         <div class="map-hint">Click any marker</div>
       </div>
       <div class="map-canvas">
-        <svg class="terrain" id="terrain" viewBox="0 0 1400 950" preserveAspectRatio="xMidYMid meet" aria-label="10-session mountain map"></svg>
+        <svg class="terrain" id="terrain" viewBox="0 0 1400 788" preserveAspectRatio="xMidYMid meet" aria-label="10-session mountain map"></svg>
       </div>
       <div class="station-panel" id="spanel"></div>
     </div>
@@ -1542,204 +1542,37 @@ function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 $('#runsim').addEventListener('click', runSim);
 $('#resetsim').addEventListener('click', ()=>{ $('#simsteps').innerHTML=''; });
 
-/* ============ 3D MOUNTAIN MAP — twin-peak alpine ============ */
+/* ============ MOUNTAIN MAP — atmospheric layered landscape ============ */
+// New approach: depth via 4 receding atmospheric layers (the classic 3D trick that
+// actually works in 2D). Single smooth natural mountain (no jagged facets). Path
+// gentler at base (foothill traverse), steeper near summit.
 const terrain = $('#terrain');
-const W = 1400, H = 950;
+const W = 1400, H = 788;
+const labelColX = 1200;
 
-// === Mountain geometry — wider + less tall (welcoming, not daunting) ===
-const mainPeak   = {x: 525, y: 195};
-const secondPeak = {x: 825, y: 275};
-const saddle     = {x: 710, y: 325};
-const baseY = 740;
-const baseLeftX = 50, baseRightX = 1080;
+// Main peak / summit marker position — taken from waypoint 10 of the editor.
+const mainPeak = {x: 646, y: 126};
 
-// Right-side label column
-const labelColX = 1180;
-
-// === Ridge generation ===
-function jaggedRidge(start, end, segments, jitter, seed){
-  const pts = [start];
-  for(let i=1; i<segments; i++){
-    const t = i/segments;
-    const bx = start.x + (end.x - start.x) * t;
-    const by = start.y + (end.y - start.y) * t;
-    const perpX = -(end.y - start.y);
-    const perpY = (end.x - start.x);
-    const perpLen = Math.sqrt(perpX*perpX + perpY*perpY) || 1;
-    const n = Math.sin(seed + t*4.1) * 0.55
-            + Math.cos(seed*1.4 + t*7.7) * 0.28
-            + Math.sin(seed*2.7 + t*13.3) * 0.10;
-    const peakTaper = t < 0.82 ? 1 : (1-t)/0.18;
-    const baseTaper = t > 0.08 ? 1 : t/0.08;
-    const offset = n * jitter * peakTaper * baseTaper;
-    pts.push({x: bx + (perpX / perpLen) * offset, y: by + (perpY / perpLen) * offset});
-  }
-  pts.push(end);
-  return pts;
-}
-function chainRidge(waypoints, segPerSeg, jitter, seedBase){
-  const result = [waypoints[0]];
-  for(let i=0;i<waypoints.length-1;i++){
-    const pts = jaggedRidge(waypoints[i], waypoints[i+1], segPerSeg, jitter, seedBase + i*0.71);
-    result.push(...pts.slice(1));
-  }
-  return result;
-}
-
-// Twin-peak profile, scaled to the new wider/shorter mountain
-const leftFlankWP = [
-  {x: baseLeftX, y: baseY},
-  {x: 115, y: 685},
-  {x: 200, y: 595},
-  {x: 285, y: 500},
-  {x: 360, y: 405},
-  {x: 425, y: 315},
-  {x: 480, y: 240},
-  mainPeak
-];
-const peakToSaddleWP = [
-  mainPeak,
-  {x: 575, y: 240},
-  {x: 625, y: 275},
-  {x: 670, y: 305},
-  saddle
-];
-const saddleToSecondWP = [
-  saddle,
-  {x: 750, y: 315},
-  {x: 790, y: 290},
-  secondPeak
-];
-const rightFlankWP = [
-  secondPeak,
-  {x: 870, y: 360},
-  {x: 920, y: 450},
-  {x: 970, y: 540},
-  {x: 1020, y: 635},
-  {x: baseRightX, y: baseY}
+// === TRAIL WAYPOINTS — placed via path-editor.html and copied verbatim ===
+const trailWaypoints = [
+  {x: 320, y: 632},  // 1
+  {x: 462, y: 583},  // 2
+  {x: 574, y: 624},  // 3
+  {x: 700, y: 611},  // 4
+  {x: 832, y: 575},  // 5
+  {x: 719, y: 497},  // 6
+  {x: 619, y: 424},  // 7
+  {x: 517, y: 281},  // 8
+  {x: 574, y: 142},  // 9
+  {x: mainPeak.x, y: mainPeak.y}  // 10 — SUMMIT
 ];
 
-const fullRidge = [
-  ...chainRidge(leftFlankWP,       4, 9, 1.3),
-  ...chainRidge(peakToSaddleWP,    4, 6, 2.1).slice(1),
-  ...chainRidge(saddleToSecondWP,  4, 5, 2.9).slice(1),
-  ...chainRidge(rightFlankWP,      4, 9, 3.7).slice(1)
-];
-
-// Mountain silhouette path
-let mountainPath = `M ${fullRidge[0].x.toFixed(1)} ${fullRidge[0].y.toFixed(1)}`;
-for(let i=1;i<fullRidge.length;i++){
-  mountainPath += ` L ${fullRidge[i].x.toFixed(1)} ${fullRidge[i].y.toFixed(1)}`;
-}
-// Curve back along the front base
-mountainPath += ` Q ${(baseLeftX+baseRightX)/2} ${baseY+28} ${baseLeftX} ${baseY} Z`;
-
-// === SVG DEFS — hybrid palette (cool gray body, warm cream highlights, green-gray foothill) ===
+// === SVG DEFS — minimal set: pin shadows, summit pin gradient, atmospheric haze ===
 const defs = svgEl('defs');
 defs.innerHTML = `
-  <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#EEF1F8"/>
-    <stop offset="60%"  stop-color="#F4F5FB"/>
-    <stop offset="100%" stop-color="#F8F9FC"/>
-  </linearGradient>
-  <!-- Mountain body: warm cream peak → cool gray-lavender body → green-gray base -->
-  <linearGradient id="mountainGrad" x1="22%" y1="0%" x2="78%" y2="100%">
-    <stop offset="0%"   stop-color="#F0E8D0"/>
-    <stop offset="14%"  stop-color="#D5CDB2"/>
-    <stop offset="32%"  stop-color="#9CA1BD"/>
-    <stop offset="55%"  stop-color="#6E76A0"/>
-    <stop offset="78%"  stop-color="#4F558E"/>
-    <stop offset="92%"  stop-color="#5C6883"/>
-    <stop offset="100%" stop-color="#7A8580"/>
-  </linearGradient>
-  <!-- Foothill foreground (rolling green-gray base) -->
-  <linearGradient id="foothillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#94A096"/>
-    <stop offset="50%"  stop-color="#7A857B"/>
-    <stop offset="100%" stop-color="#5E6960"/>
-  </linearGradient>
-  <!-- ============ FACET GRADIENTS (each face of the 3D mountain) ============ -->
-  <!-- Lit faces: warm cream tones -->
-  <linearGradient id="mainLitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#FFF6E0"/>
-    <stop offset="30%"  stop-color="#F2E4BE"/>
-    <stop offset="65%"  stop-color="#C8B98C"/>
-    <stop offset="100%" stop-color="#8B8E7A"/>
-  </linearGradient>
-  <linearGradient id="secondLitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#E8DBB0"/>
-    <stop offset="50%"  stop-color="#B5A87E"/>
-    <stop offset="100%" stop-color="#80785A"/>
-  </linearGradient>
-  <!-- Shadow faces: deep cool tones -->
-  <linearGradient id="leftFlankGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#3C4480"/>
-    <stop offset="55%"  stop-color="#2A3068"/>
-    <stop offset="100%" stop-color="#1C2050"/>
-  </linearGradient>
-  <linearGradient id="saddleDeepGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#1F2452"/>
-    <stop offset="55%"  stop-color="#141838"/>
-    <stop offset="100%" stop-color="#0C0F2A"/>
-  </linearGradient>
-  <linearGradient id="rightFlankGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#4E5588"/>
-    <stop offset="60%"  stop-color="#3A4070"/>
-    <stop offset="100%" stop-color="#262C58"/>
-  </linearGradient>
-  <!-- ============ FOOTHILL BUMP GRADIENTS (small daily-checkpoint peaks) ============ -->
-  <!-- Front (closer = darker, more saturated) -->
-  <linearGradient id="bumpFrontGrad" x1="25%" y1="0%" x2="75%" y2="100%">
-    <stop offset="0%"   stop-color="#9CA5BE"/>
-    <stop offset="50%"  stop-color="#646C8C"/>
-    <stop offset="100%" stop-color="#3A4070"/>
-  </linearGradient>
-  <linearGradient id="bumpMidGrad" x1="25%" y1="0%" x2="75%" y2="100%">
-    <stop offset="0%"   stop-color="#AAB3CA"/>
-    <stop offset="50%"  stop-color="#7680A0"/>
-    <stop offset="100%" stop-color="#4D5680"/>
-  </linearGradient>
-  <linearGradient id="bumpBackGrad" x1="25%" y1="0%" x2="75%" y2="100%">
-    <stop offset="0%"   stop-color="#B8C2D6"/>
-    <stop offset="50%"  stop-color="#8590AE"/>
-    <stop offset="100%" stop-color="#5C6488"/>
-  </linearGradient>
-  <!-- Atmospheric haze overlay (pushes background elements visually further away) -->
-  <linearGradient id="atmospheric" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"   stop-color="#F4F5FB" stop-opacity="0.55"/>
-    <stop offset="50%"  stop-color="#F4F5FB" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#F4F5FB" stop-opacity="0"/>
-  </linearGradient>
-  <!-- Warm cream "lit face" overlay (creates the visible front-ridge glow) -->
-  <radialGradient id="frontFaceLight" cx="42%" cy="32%" r="55%">
-    <stop offset="0%"   stop-color="#F5EBD1" stop-opacity="0.62"/>
-    <stop offset="45%"  stop-color="#E8DEC4" stop-opacity="0.22"/>
-    <stop offset="100%" stop-color="#E8DEC4" stop-opacity="0"/>
-  </radialGradient>
-  <!-- Deep shadow on left flank -->
-  <radialGradient id="leftShadow" cx="14%" cy="58%" r="60%">
-    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.62"/>
-    <stop offset="55%"  stop-color="#0F1130" stop-opacity="0.20"/>
-    <stop offset="100%" stop-color="#0F1130" stop-opacity="0"/>
-  </radialGradient>
-  <!-- Saddle / cleft shadow between peaks -->
-  <radialGradient id="saddleShadow" cx="55%" cy="50%" r="22%">
-    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.50"/>
-    <stop offset="80%"  stop-color="#0F1130" stop-opacity="0"/>
-  </radialGradient>
-  <!-- Right side ambient shadow -->
-  <radialGradient id="rightShadow" cx="82%" cy="70%" r="45%">
-    <stop offset="0%"   stop-color="#0F1130" stop-opacity="0.35"/>
-    <stop offset="100%" stop-color="#0F1130" stop-opacity="0"/>
-  </radialGradient>
-  <radialGradient id="summitHaze" cx="50%" cy="50%" r="50%">
-    <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.65"/>
-    <stop offset="45%"  stop-color="#E8EAF6" stop-opacity="0.28"/>
-    <stop offset="100%" stop-color="#A8AEDC" stop-opacity="0"/>
-  </radialGradient>
   <radialGradient id="summitGlow" cx="50%" cy="50%" r="50%">
-    <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.85"/>
-    <stop offset="40%" stop-color="#E8EAF6" stop-opacity="0.35"/>
+    <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.95"/>
+    <stop offset="40%" stop-color="#E8EAF6" stop-opacity="0.45"/>
     <stop offset="100%" stop-color="#A8AEDC" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="summitPin" cx="35%" cy="30%" r="80%">
@@ -1748,23 +1581,31 @@ defs.innerHTML = `
     <stop offset="100%" stop-color="#C5C9E0"/>
   </radialGradient>
   <filter id="pinShadow" x="-50%" y="-50%" width="200%" height="200%">
-    <feDropShadow dx="0" dy="2.5" stdDeviation="2" flood-color="#0F1130" flood-opacity="0.40"/>
+    <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#0F1130" flood-opacity="0.55"/>
   </filter>
   <filter id="summitShadow" x="-100%" y="-100%" width="300%" height="300%">
-    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0F1130" flood-opacity="0.55"/>
+    <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0F1130" flood-opacity="0.65"/>
   </filter>
-  <filter id="mountainShadowFilter" x="-20%" y="-10%" width="140%" height="130%">
-    <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#1A1C42" flood-opacity="0.25"/>
-  </filter>
-  <clipPath id="mountainClip"><path d="${mountainPath}"/></clipPath>
+  <!-- Subtle vignette to anchor the mountain in the page -->
+  <radialGradient id="vignette" cx="50%" cy="55%" r="75%">
+    <stop offset="0%"   stop-color="#000000" stop-opacity="0"/>
+    <stop offset="70%"  stop-color="#000000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#1A1C42" stop-opacity="0.18"/>
+  </radialGradient>
+  <!-- Cool palette overlay — gentle navy/indigo wash to harmonize with the site -->
+  <linearGradient id="coolWash" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"  stop-color="#252861" stop-opacity="0.10"/>
+    <stop offset="50%" stop-color="#3F4493" stop-opacity="0.05"/>
+    <stop offset="100%" stop-color="#1A1C42" stop-opacity="0.06"/>
+  </linearGradient>
 `;
 terrain.appendChild(defs);
 
-// === SKY BACKGROUND ===
-terrain.appendChild(svgEl('rect',{x:0,y:0,width:W,height:H, fill:'url(#skyGrad)'}));
+// === BACKGROUND — soft paper tone so the mountain sits naturally ===
+terrain.appendChild(svgEl('rect',{x:0,y:0,width:W,height:H, fill:'#F1F2F7'}));
 
 // halftone dots upper-right corner (very faint)
-const dots = svgEl('g',{opacity:'0.14'});
+const dots = svgEl('g',{opacity:'0.18'});
 for(let i=0;i<14;i++){
   for(let j=0;j<5;j++){
     const x = 980 + i*30, y = 20 + j*28;
@@ -1775,276 +1616,39 @@ for(let i=0;i<14;i++){
 }
 terrain.appendChild(dots);
 
-// === FOREGROUND FOOTHILL PLATEAU (behind / below the mountain) ===
-const foothillPath = `M 0 748 Q 110 732 220 746 Q 340 760 460 736 Q 580 718 720 742 Q 850 764 990 738 Q 1130 718 1290 740 Q 1350 748 1400 736 L 1400 950 L 0 950 Z`;
-terrain.appendChild(svgEl('path',{
-  d: foothillPath, fill:'url(#foothillGrad)', opacity:0.82
+// === MAIN MOUNTAIN — real 3D-rendered reference image ===
+// The image is the source of truth for shape, lighting, and texture. We just
+// tint it slightly cool to harmonize with the navy/lavender palette.
+const mountainImg = svgEl('image',{
+  x: 0, y: 0, width: W, height: H,
+  href: 'mountain.webp',
+  preserveAspectRatio: 'xMidYMid slice'
+});
+mountainImg.setAttribute('style', 'filter: saturate(0.88) contrast(1.02) brightness(1.03);');
+terrain.appendChild(mountainImg);
+
+// Cool palette wash — very gentle, multiplies onto the image
+terrain.appendChild(svgEl('rect',{
+  x:0, y:0, width:W, height:H, fill:'url(#coolWash)',
+  style:'mix-blend-mode: multiply'
 }));
-// Soft cast shadow from the mountain onto the foothill (grounds the 3D form)
-terrain.appendChild(svgEl('ellipse',{
-  cx: 600, cy: 765, rx: 600, ry: 28,
-  fill:'#1A1C42', opacity:0.18,
-  filter:'blur(8px)'
+// Soft vignette for visual focus
+terrain.appendChild(svgEl('rect',{
+  x:0, y:0, width:W, height:H, fill:'url(#vignette)'
 }));
 
-// === MOUNTAIN BODY (base layer — facets will overlay this) ===
-terrain.appendChild(svgEl('path',{
-  d: mountainPath, fill: 'url(#mountainGrad)',
-  filter: 'url(#mountainShadowFilter)'
-}));
-
-// === 3D FACETS — distinct polygon faces tile the mountain to create real volume ===
-// Each face has its own gradient. Strong contrast between adjacent facets is what
-// reads as "3D" — like a low-poly mountain illustration.
-const facets = svgEl('g',{'clip-path':'url(#mountainClip)'});
-
-// Interior fold lines (peak → foothill) — visible "ridges" between facets.
-// Slightly curved to feel more natural / less mechanical.
-const mainLeftFold = [
-  mainPeak,
-  {x:513, y:265}, {x:498, y:350}, {x:480, y:435},
-  {x:460, y:520}, {x:438, y:610}, {x:418, y:740}
-];
-const mainRightFold = [
-  mainPeak,
-  {x:540, y:265}, {x:558, y:350}, {x:578, y:435},
-  {x:596, y:520}, {x:610, y:610}, {x:618, y:740}
-];
-const secondLeftFold = [
-  secondPeak,
-  {x:813, y:365}, {x:800, y:455}, {x:786, y:550},
-  {x:775, y:650}, {x:768, y:740}
-];
-const secondRightFold = [
-  secondPeak,
-  {x:835, y:365}, {x:848, y:455}, {x:862, y:550},
-  {x:875, y:650}, {x:885, y:740}
-];
-
-function polyD(pts){
-  return 'M ' + pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L ') + ' Z';
-}
-
-// LEFT FLANK — deep shadow on the left side of the mountain
-const leftFlankFace = [
-  mainPeak,
-  {x:480, y:240}, {x:425, y:315}, {x:360, y:405},
-  {x:285, y:500}, {x:200, y:595}, {x:115, y:685},
-  {x: 30, y:790},        // extended below baseY for clean clipping
-  {x:418, y:790},
-  ...mainLeftFold.slice(1).reverse()   // back up the fold to peak
-];
-facets.appendChild(svgEl('path',{d: polyD(leftFlankFace), fill:'url(#leftFlankGrad)'}));
-
-// SADDLE V — the deep dark valley between the two peaks
-const saddleVFace = [
-  mainPeak,
-  // Across the peak-to-saddle ridge
-  {x:575, y:240}, {x:625, y:275}, {x:670, y:305}, saddle,
-  // Up the saddle-to-second-peak ridge
-  {x:750, y:315}, {x:790, y:290}, secondPeak,
-  // Down second peak's LEFT fold
-  ...secondLeftFold.slice(1),
-  // Across the foothill
-  {x:618, y:790},
-  // Up main peak's RIGHT fold (reversed)
-  ...mainRightFold.slice(1).reverse()
-];
-facets.appendChild(svgEl('path',{d: polyD(saddleVFace), fill:'url(#saddleDeepGrad)'}));
-
-// RIGHT FLANK — medium shadow on the right side
-const rightFlankFace = [
-  secondPeak,
-  {x: 870, y:360}, {x: 920, y:450}, {x: 970, y:540},
-  {x:1020, y:635}, {x:1120, y:790},   // extended below
-  {x: 885, y:790},
-  ...secondRightFold.slice(1).reverse()
-];
-facets.appendChild(svgEl('path',{d: polyD(rightFlankFace), fill:'url(#rightFlankGrad)'}));
-
-// MAIN FRONT FACE — bright lit cream wedge (the hero face of the mountain)
-const mainFrontFace = [
-  mainPeak,
-  ...mainLeftFold.slice(1),
-  {x: 618, y: 740},
-  ...mainRightFold.slice(1).reverse()
-];
-facets.appendChild(svgEl('path',{d: polyD(mainFrontFace), fill:'url(#mainLitGrad)'}));
-
-// SECOND PEAK FRONT — secondary lit face
-const secondFrontFace = [
-  secondPeak,
-  ...secondLeftFold.slice(1),
-  {x: 885, y: 740},
-  ...secondRightFold.slice(1).reverse()
-];
-facets.appendChild(svgEl('path',{d: polyD(secondFrontFace), fill:'url(#secondLitGrad)'}));
-
-terrain.appendChild(facets);
-
-// === RIDGE HIGHLIGHTS — thin bright lines along facet edges (visible "crests") ===
-const ridges = svgEl('g',{'clip-path':'url(#mountainClip)'});
-function ridgeStroke(pts, sw, opacity){
-  return svgEl('path',{
-    d: 'M ' + pts.map(p => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L '),
-    stroke:'#FFF3D8','stroke-width':sw, fill:'none', opacity:opacity,
-    'stroke-linecap':'round','stroke-linejoin':'round'
-  });
-}
-ridges.appendChild(ridgeStroke(mainLeftFold, 1.4, 0.65));
-ridges.appendChild(ridgeStroke(mainRightFold, 1.0, 0.40));
-ridges.appendChild(ridgeStroke(secondLeftFold, 1.1, 0.50));
-ridges.appendChild(ridgeStroke(secondRightFold, 0.9, 0.35));
-terrain.appendChild(ridges);
-
-// === DIRECTIONAL SHADING — softens facet edges, blends transitions ===
-const shading = svgEl('g',{'clip-path':'url(#mountainClip)'});
-// Deep shadow on left flank
-shading.appendChild(svgEl('ellipse',{
-  cx: 200, cy: 480, rx: 320, ry: 360, fill:'url(#leftShadow)'
-}));
-// Saddle/cleft shadow between peaks
-shading.appendChild(svgEl('ellipse',{
-  cx: 700, cy: 360, rx: 140, ry: 100, fill:'url(#saddleShadow)'
-}));
-// Right side ambient shadow
-shading.appendChild(svgEl('ellipse',{
-  cx: 940, cy: 580, rx: 240, ry: 260, fill:'url(#rightShadow)'
-}));
-// Warm front-face light overlay
-shading.appendChild(svgEl('ellipse',{
-  cx: 490, cy: 420, rx: 270, ry: 310, fill:'url(#frontFaceLight)'
-}));
-// Volume highlight — bright spot on the upper-left of the main lit face
-// (suggests the face curves outward, catching light like a real 3D form)
-shading.appendChild(svgEl('ellipse',{
-  cx: 510, cy: 320, rx: 90, ry: 140,
-  fill:'#FFFFFF', opacity:0.18
-}));
-// Volume shadow — recessed dark area in the lower-left of the left flank
-shading.appendChild(svgEl('ellipse',{
-  cx: 270, cy: 620, rx: 130, ry: 110,
-  fill:'#0F1130', opacity:0.25
-}));
-terrain.appendChild(shading);
-
-// === EROSION GULLIES — vertical fall lines giving rocky 3D texture ===
-const gullyG = svgEl('g',{'clip-path':'url(#mountainClip)'});
-let _gs = 31;
-const grnd = () => { _gs = (_gs * 1103515245 + 12345) & 0x7fffffff; return _gs / 0x80000000; };
-for(let i=0; i<150; i++){
-  const x0 = 60 + grnd() * 1010;
-  const y0 = 220 + grnd() * 510;
-  const verticalT = (y0 - 195) / 545;
-  const len = 25 + grnd() * 160 * (0.6 + verticalT * 0.5);
-  const angle = Math.PI/2 + (grnd() - 0.5) * 0.4;
-  const x1 = x0 + Math.cos(angle) * len;
-  const y1 = y0 + Math.sin(angle) * len;
-  const cx = (x0+x1)/2 + (grnd()-0.5) * 5;
-  const cy = (y0+y1)/2 + (grnd()-0.5) * 5;
-  const isHighlight = grnd() < 0.18;
-  let color, opacity, sw;
-  if(isHighlight){
-    color = '#F5ECD3';
-    opacity = (0.12 + grnd() * 0.20).toFixed(2);
-    sw = (0.35 + grnd() * 0.45).toFixed(2);
-  } else {
-    const distFromSpine = Math.abs(x0 - 500);
-    const shadowness = Math.min(1, distFromSpine / 380);
-    color = '#0F1130';
-    opacity = (0.10 + shadowness * 0.20 + grnd() * 0.13).toFixed(2);
-    sw = (0.4 + grnd() * 0.5).toFixed(2);
-  }
-  gullyG.appendChild(svgEl('path',{
-    d:`M ${x0.toFixed(1)} ${y0.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
-    stroke: color, 'stroke-width': sw, 'stroke-linecap':'round',
-    fill:'none', opacity: opacity
-  }));
-}
-terrain.appendChild(gullyG);
-
-// === ATMOSPHERIC HAZE near summit (welcoming halo) ===
+// === SUMMIT GLOW — soft halo at the peak ===
 [
-  {rx: 250, ry: 140, opacity: 0.40},
-  {rx: 160, ry: 90,  opacity: 0.50},
-  {rx: 90,  ry: 55,  opacity: 0.65}
+  {rx: 90, ry: 60, opacity:0.55},
+  {rx: 50, ry: 32, opacity:0.75}
 ].forEach(g=>{
   terrain.appendChild(svgEl('ellipse',{
-    cx: mainPeak.x, cy: mainPeak.y - 6,
-    rx: g.rx, ry: g.ry,
-    fill: 'url(#summitHaze)', opacity: g.opacity
+    cx: mainPeak.x, cy: mainPeak.y - 4, rx: g.rx, ry: g.ry,
+    fill:'url(#summitGlow)', opacity: g.opacity
   }));
 });
 
-// === ATMOSPHERIC HAZE OVERLAY on main mountain — pushes it visually back ===
-// A pale overlay clipped to the mountain makes it read as the "distant" element,
-// while the foothill bumps in front (drawn next) feel closer and more present.
-terrain.appendChild(svgEl('rect',{
-  x:0, y:0, width:W, height:740,
-  fill:'url(#atmospheric)', 'clip-path':'url(#mountainClip)'
-}));
-
-// === FOOTHILL BUMPS — small short peaks, one per daily checkpoint (Days 1-9) ===
-// Each station sits on its own small peak. Drawn back-to-front with atmospheric
-// perspective: back bumps lighter/hazier, front bumps darker/sharper.
-const bumpGround = 818;
-const bumps = [
-  {n:1, x:135, y:768, w:78, layer:'front'},
-  {n:2, x:225, y:728, w:88, layer:'front'},
-  {n:3, x:320, y:686, w:96, layer:'front'},
-  {n:4, x:410, y:642, w:104, layer:'mid'},
-  {n:5, x:490, y:598, w:112, layer:'mid'},
-  {n:6, x:560, y:552, w:120, layer:'mid'},
-  {n:7, x:615, y:502, w:128, layer:'back'},
-  {n:8, x:648, y:448, w:136, layer:'back'},
-  {n:9, x:660, y:388, w:144, layer:'back'}
-];
-
-function bumpPath(b){
-  return `M ${b.x - b.w} ${bumpGround}
-    C ${b.x - b.w*0.55} ${(bumpGround + b.y)/2 - 8},
-      ${b.x - 14} ${b.y + 6}, ${b.x} ${b.y}
-    C ${b.x + 14} ${b.y + 6},
-      ${b.x + b.w*0.55} ${(bumpGround + b.y)/2 - 8},
-      ${b.x + b.w} ${bumpGround} Z`;
-}
-
-// Draw back layer first, then mid, then front (so foreground appears on top)
-const bumpLayers = ['back','mid','front'];
-const bumpsG = svgEl('g');
-bumpLayers.forEach(layer => {
-  bumps.filter(b => b.layer === layer).forEach(b => {
-    // Soft cast shadow under each bump (grounds it in 3D space)
-    bumpsG.appendChild(svgEl('ellipse',{
-      cx: b.x + 6, cy: bumpGround + 4,
-      rx: b.w * 0.82, ry: 4,
-      fill:'#1A1C42', opacity: layer==='front' ? 0.22 : layer==='mid' ? 0.16 : 0.10
-    }));
-    // The bump itself
-    const fillId = layer==='front' ? 'bumpFrontGrad' : layer==='mid' ? 'bumpMidGrad' : 'bumpBackGrad';
-    bumpsG.appendChild(svgEl('path',{
-      d: bumpPath(b),
-      fill: `url(#${fillId})`,
-      opacity: layer==='back' ? 0.88 : 0.96
-    }));
-    // Lit-side ridge highlight — thin cream stroke along the bump's NW edge
-    bumpsG.appendChild(svgEl('path',{
-      d: `M ${b.x} ${b.y} C ${b.x - 14} ${b.y + 6}, ${b.x - b.w*0.55} ${(bumpGround + b.y)/2 - 8}, ${b.x - b.w} ${bumpGround}`,
-      stroke:'#FFF4DA', 'stroke-width': 1.1, fill:'none',
-      opacity: layer==='front' ? 0.45 : layer==='mid' ? 0.38 : 0.28,
-      'stroke-linecap':'round'
-    }));
-  });
-});
-terrain.appendChild(bumpsG);
-
-// === STATIONS sit on top of foothill bumps (or main summit for #10) ===
-// Stations 1-9 sit precisely on their foothill bump peaks.
-// Station 10 sits at the main summit. Path connects them sequentially.
-const stationsPos = bumps.map(b => ({x: b.x, y: b.y}));
-stationsPos.push({x: mainPeak.x, y: mainPeak.y}); // station 10 = summit
-
-// Trail path: smooth bezier through station positions
+// Smooth bezier through a set of points (Catmull-Rom interpolation)
 function smoothPath(pts){
   let d = `M ${pts[0].x} ${pts[0].y}`;
   for(let i=0;i<pts.length-1;i++){
@@ -2060,46 +1664,57 @@ function smoothPath(pts){
   }
   return d;
 }
-// Split trail at the week boundary (stations 5/6)
-const w1Pts = stationsPos.slice(0, 6); // stations 1-5 plus transition to 6
-const w2Pts = stationsPos.slice(5);     // stations 6-10
 
-// Soft trail halo (cooler shadow, narrow)
+// === BUILD THE TRAIL PATH ===
+// Stations sit at exactly the waypoint positions (set in path-editor.html).
+const stationsPos = trailWaypoints.map(p => ({...p}));
+const trailD = smoothPath(trailWaypoints);
+
+// Split trail at the week boundary — between stations 5 and 6.
+const splitIdx = 5;
+const w1D = smoothPath(trailWaypoints.slice(0, splitIdx + 1));
+const w2D = smoothPath(trailWaypoints.slice(splitIdx));
+
+// Wide soft shadow under trail — anchors it visually on the textured image
 terrain.appendChild(svgEl('path',{
-  d: smoothPath(stationsPos), fill:'none',
-  stroke:'rgba(20,22,60,0.16)', 'stroke-width':7,
+  d: trailD, fill:'none',
+  stroke:'rgba(15,17,48,0.35)', 'stroke-width':9,
   'stroke-linecap':'round','stroke-linejoin':'round'
 }));
-// White inner halo for visibility on the dark lower slopes
+// White halo for visibility against varied terrain colors
 terrain.appendChild(svgEl('path',{
-  d: smoothPath(stationsPos), fill:'none',
-  stroke:'#FFFFFF', 'stroke-width':3.8,
-  'stroke-linecap':'round','stroke-linejoin':'round', opacity:0.45
+  d: trailD, fill:'none',
+  stroke:'#FFFFFF', 'stroke-width':5,
+  'stroke-linecap':'round','stroke-linejoin':'round', opacity:0.75
 }));
-// Week 1 dotted flowing trail
+// Week 1 dotted trail (navy) — base camp through first switchback
 terrain.appendChild(svgEl('path',{
-  class:'trail-flow', d: smoothPath(w1Pts), fill:'none',
-  stroke:'#252861', 'stroke-width':3.2,
+  class:'trail-flow', d: w1D, fill:'none',
+  stroke:'#252861', 'stroke-width':3.8,
   'stroke-linecap':'round','stroke-linejoin':'round'
 }));
-// Week 2 dotted flowing trail
+// Week 2 dotted trail (lavender) — first switchback to summit
 terrain.appendChild(svgEl('path',{
-  class:'trail-flow', d: smoothPath(w2Pts), fill:'none',
-  stroke:'#8E92D0', 'stroke-width':3.2,
+  class:'trail-flow', d: w2D, fill:'none',
+  stroke:'#8E92D0', 'stroke-width':3.8,
   'stroke-linecap':'round','stroke-linejoin':'round'
 }));
 
-// Label callout anchors — all in the right column, aligned vertically with each station
-const labelAnchors = stationsPos.map((s, i) => ({
-  x: labelColX,
-  y: s.y,
-  side: i === stationsPos.length - 1 ? 'above' : 'right'
-}));
-// Summit label sits just above the peak instead of in the right column
-labelAnchors[stationsPos.length - 1] = {x: mainPeak.x, y: mainPeak.y - 65, side: 'above'};
+// Label callout anchors — right column, evenly spaced for breathing room.
+const labelYTop = 170;
+const labelYBot = 720;
+const labelStep = (labelYBot - labelYTop) / 8;
+const labelAnchors = stationsPos.map((s, i) => {
+  if(i === stationsPos.length - 1){
+    // Summit label floats just above the peak
+    return {x: mainPeak.x, y: mainPeak.y - 55, side: 'above'};
+  }
+  // Day 1 at bottom, ascending to Day 9 at top
+  return {x: labelColX, y: labelYBot - i * labelStep, side: 'right'};
+});
 
-// BASE CAMP marker — small text below station 1
-const base = svgEl('text',{x: stationsPos[0].x, y: H-30, 'text-anchor':'middle',
+// BASE CAMP marker — small text just below station 1's pin
+const base = svgEl('text',{x: stationsPos[0].x, y: stationsPos[0].y + 32, 'text-anchor':'middle',
   'font-family':'JetBrains Mono', 'font-size':10, 'font-weight':700,
   fill:'#7A7E9F', 'letter-spacing':'0.18em'});
 base.textContent = 'BASE CAMP';
