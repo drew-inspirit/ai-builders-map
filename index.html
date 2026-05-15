@@ -102,7 +102,7 @@ p{color:var(--ink-2); line-height:1.6; font-size:16px}
 .intel-wrap{margin-top:36px}
 .intel-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px}
 .intel-card{
-  perspective:1200px; height:300px; cursor:pointer; position:relative;
+  perspective:1200px; height:340px; cursor:pointer; position:relative;
 }
 .intel-inner{
   position:relative; width:100%; height:100%; transform-style:preserve-3d;
@@ -118,8 +118,18 @@ p{color:var(--ink-2); line-height:1.6; font-size:16px}
   background:var(--paper); border:1px solid var(--border); color:var(--ink);
 }
 .intel-front:hover{border-color:var(--lavender)}
-.intel-front .ic-icon{width:42px; height:42px; color:var(--indigo)}
-.intel-front .ic-name{font:800 24px/1.1 'Manrope'; color:var(--navy); letter-spacing:-0.02em}
+.intel-front .ic-icon{width:36px; height:36px; color:var(--indigo); flex-shrink:0}
+.intel-front .ic-top{display:flex; align-items:flex-start; gap:14px; justify-content:space-between}
+.intel-front .ic-diagram{
+  flex:1; max-width:140px; height:60px; background:var(--bg);
+  border-radius:8px; padding:4px 6px; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--border);
+}
+.intel-front .ic-diagram svg{display:block; max-width:100%; max-height:100%}
+.intel-front .ic-name{font:800 22px/1.1 'Manrope'; color:var(--navy); letter-spacing:-0.02em; margin-top:6px}
+.intel-front .ic-human-hint{
+  font:500 13px/1.4 'Manrope'; color:var(--ink-2); margin-top:6px; font-style:italic;
+}
 .intel-front .ic-tap{font:600 11px/1 'Manrope'; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:6px}
 .intel-back{
   background:var(--navy); color:#fff; transform:rotateY(180deg);
@@ -528,6 +538,631 @@ svg.terrain{width:100%; height:auto; display:block}
 .outro-code{background:rgba(0,0,0,0.30); border-radius:8px; padding:16px 18px; margin-top:22px; font-family:'JetBrains Mono',monospace; font-size:13px; color:#E6E7F5; max-width:480px; position:relative; line-height:1.6}
 .outro-code .c{color:#A8AADF}
 .outro-code .k{color:#D89BE0}
+
+/* ============ WELCOME (intros + goals) ============ */
+.welcome-grid{display:grid; grid-template-columns:1fr; gap:18px; margin-top:36px}
+@media(min-width:820px){ .welcome-grid{grid-template-columns:1fr 1fr; gap:22px} }
+.wcard{
+  background:var(--paper); border:1px solid var(--border); border-radius:16px;
+  padding:28px 30px; box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+.wcard.intros{background:linear-gradient(180deg,#fff 0%, #FAFBFE 100%)}
+.wcard.goals{background:linear-gradient(180deg, var(--navy) 0%, #1A1C42 100%); color:#fff; border-color:var(--navy)}
+.wcard.goals h3, .wcard.goals .wcard-sub{color:#fff}
+.wcard.goals .wcard-sub{color:rgba(255,255,255,0.78)}
+.wcard-head{display:flex; align-items:center; gap:14px; margin-bottom:6px}
+.wcard-badge{
+  font:800 11px/1 'JetBrains Mono'; letter-spacing:.12em; padding:6px 10px;
+  border-radius:6px; background:var(--bg-2); color:var(--indigo);
+}
+.wcard.goals .wcard-badge{background:rgba(255,255,255,0.12); color:var(--lavender-2)}
+.wcard h3{font:800 22px/1.15 'Manrope'; color:var(--navy); letter-spacing:-0.02em; margin:0}
+.wcard-sub{margin:8px 0 18px; font-size:15px; line-height:1.55; color:var(--ink-2)}
+.zoom-hint{
+  display:inline-flex; align-items:center; gap:5px; margin-left:6px;
+  font:600 11px/1 'Manrope'; padding:4px 8px; border-radius:999px;
+  background:rgba(63,68,147,0.08); color:var(--indigo); cursor:default;
+  letter-spacing:.02em; vertical-align:middle;
+}
+.zoom-hint svg{flex-shrink:0}
+.intro-prompts{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px}
+.intro-prompts li{display:flex; gap:14px; align-items:flex-start; padding:14px 16px; background:var(--bg); border-radius:10px; border:1px solid var(--border); transition:all .18s}
+.intro-prompts li:hover{border-color:var(--lavender); transform:translateY(-1px); box-shadow:0 4px 12px rgba(20,22,60,0.05)}
+.ip-num{
+  flex-shrink:0; width:28px; height:28px; border-radius:50%;
+  background:var(--navy); color:#fff; font:800 13px/1 'Manrope';
+  display:flex; align-items:center; justify-content:center;
+}
+.intro-prompts li strong{font-weight:700; color:var(--ink); font-size:15px}
+.intro-prompts li .ip-hint{display:block; color:var(--muted); font-size:13px; margin-top:3px; font-weight:500}
+.intro-example{
+  margin-top:16px; padding:14px 16px; border-radius:10px;
+  background:linear-gradient(135deg, rgba(156,216,156,0.18) 0%, rgba(63,68,147,0.10) 100%);
+  border:1px dashed rgba(63,68,147,0.30);
+  display:flex; gap:12px; align-items:flex-start;
+}
+.intro-example .ie-tag{
+  flex-shrink:0; font:700 9px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--indigo); background:rgba(255,255,255,0.7);
+  padding:5px 8px; border-radius:5px; margin-top:1px;
+}
+.intro-example p{margin:0; font:500 13.5px/1.5 'Manrope'; color:var(--ink)}
+.intro-example strong{color:var(--navy); font-weight:700}
+.wcard-btn{
+  display:inline-flex; align-items:center; gap:8px; margin-top:18px;
+  background:transparent; color:var(--navy); border:1.5px solid var(--border);
+  border-radius:8px; padding:10px 14px; font:700 13px/1 'Manrope'; cursor:pointer; transition:all .15s;
+}
+.wcard-btn:hover{border-color:var(--navy); background:var(--navy); color:#fff}
+.wcard-btn .arr{transition:transform .2s}
+.wcard-btn:hover .arr{transform:translateX(3px)}
+.idea-pill{
+  display:inline-block; margin-top:14px; margin-left:12px;
+  font:600 13px/1.4 'Manrope'; color:var(--indigo); padding:8px 12px;
+  background:rgba(63,68,147,0.08); border-radius:8px; max-width:340px; opacity:0;
+  transition:opacity .25s, transform .25s; transform:translateY(4px);
+}
+.idea-pill.show{opacity:1; transform:none}
+
+.goal-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px}
+.goal-list li{
+  display:flex; gap:14px; align-items:flex-start; padding:14px 16px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+  border-radius:10px; cursor:pointer; transition:all .18s; color:rgba(255,255,255,0.88);
+}
+.goal-list li:hover{background:rgba(255,255,255,0.10); border-color:rgba(255,255,255,0.18); transform:translateX(2px)}
+.goal-check{
+  flex-shrink:0; width:24px; height:24px; border-radius:6px;
+  border:1.5px solid rgba(255,255,255,0.35); transition:all .2s;
+  display:flex; align-items:center; justify-content:center;
+}
+.goal-list li.done .goal-check{background:#9CD89C; border-color:#9CD89C}
+.goal-list li.done .goal-check::after{
+  content:''; width:7px; height:11px; border:solid #1A1C42;
+  border-width:0 2.5px 2.5px 0; transform:rotate(45deg) translate(-1px,-1px);
+}
+.goal-list li strong{color:#fff; font-weight:700; font-size:15px}
+.goal-list li em{font-style:italic; color:var(--lavender-2)}
+.goal-list li.done strong{text-decoration:line-through; text-decoration-color:rgba(255,255,255,0.45)}
+.goal-list li > div{font-size:14px; line-height:1.45}
+.goal-progress{
+  font:600 12px/1 'JetBrains Mono'; letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(255,255,255,0.55); margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.10);
+}
+.goal-progress #goalCount{color:#9CD89C; font-weight:800}
+
+/* ============ MINDSET · User vs Builder ============ */
+.vs-examples{display:grid; grid-template-columns:1fr; gap:18px; margin-top:36px}
+@media(min-width:820px){ .vs-examples{grid-template-columns:1fr 1fr; gap:22px} }
+.vs-card{
+  background:var(--paper); border:1px solid var(--border); border-radius:16px;
+  padding:24px 26px; box-shadow:var(--shadow); position:relative; overflow:hidden;
+  cursor:pointer; transition:all .22s ease;
+}
+.vs-card:hover{transform:translateY(-3px); box-shadow:0 12px 30px rgba(20,22,60,0.10); border-color:var(--lavender)}
+.vs-card.active{border-color:var(--indigo); box-shadow:0 12px 30px rgba(63,68,147,0.18)}
+.vs-card[data-vs="A"]{border-top:4px solid var(--lavender)}
+.vs-card[data-vs="B"]{border-top:4px solid var(--navy)}
+.vs-tag{font:700 11px/1 'JetBrains Mono'; letter-spacing:.14em; color:var(--muted); margin-bottom:14px}
+.vs-illus{
+  height:160px; border-radius:10px; background:var(--bg-2); position:relative;
+  display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom:18px;
+}
+.vs-illus.user-illus{background:linear-gradient(135deg,#EFEFF7 0%, #DEDFEE 100%); height:200px}
+.vs-illus.builder-illus{background:linear-gradient(135deg, #2A2D5F 0%, #5B5FB8 100%); height:200px}
+.bi-tag{
+  position:absolute; bottom:14px; left:14px; font:700 9px/1 'JetBrains Mono';
+  letter-spacing:.14em; padding:5px 8px; border-radius:5px;
+  background:#9CD89C; color:#1F4B2B; z-index:5;
+}
+/* ChatGPT-style mock */
+.chat-mock{
+  width:88%; max-width:280px; background:#fff; border-radius:10px;
+  box-shadow:0 8px 22px rgba(20,22,60,0.18); overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.chat-mock-head{
+  display:flex; align-items:center; gap:6px; padding:8px 12px;
+  background:#F6F7FB; border-bottom:1px solid var(--border);
+}
+.chat-mock-dot{width:9px; height:9px; border-radius:50%; background:#D4D7E6}
+.chat-mock-dot:nth-child(1){background:#FF6058}
+.chat-mock-dot:nth-child(2){background:#FFBD2E}
+.chat-mock-dot:nth-child(3){background:#28C940}
+.chat-mock-title{margin-left:8px; font:500 10px/1 'JetBrains Mono'; color:var(--muted)}
+.chat-mock-msg{
+  padding:10px 14px; font:500 12px/1.45 'Manrope'; max-width:88%;
+}
+.chat-mock-msg.user{align-self:flex-end; color:var(--ink); background:#F1F2F7; margin:8px 10px 4px; border-radius:10px 10px 2px 10px}
+.chat-mock-msg.bot{align-self:flex-start; color:var(--ink-2); margin:4px 10px 12px; padding:8px 12px; line-height:1.45}
+.chat-cursor{display:inline-block; width:2px; height:12px; background:var(--navy); vertical-align:middle; animation:blink 1s infinite; margin-left:1px}
+
+/* Custom AI tutor mock (Example B) */
+.tutor-mock{
+  width:88%; max-width:280px; background:#fff; border-radius:14px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.30); overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.tutor-mock-head{
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  background:linear-gradient(90deg,#F6F7FB 0%, #ECEEF8 100%);
+  border-bottom:1px solid var(--border);
+}
+.tutor-avatar{flex-shrink:0; border-radius:50%; overflow:hidden; box-shadow:0 2px 6px rgba(63,68,147,0.30)}
+.tutor-mock-name{font:800 13px/1 'Manrope'; color:var(--navy); display:flex; align-items:center; gap:6px; letter-spacing:-0.01em}
+.tutor-pulse{
+  display:inline-block; width:7px; height:7px; border-radius:50%;
+  background:#3BB273; box-shadow:0 0 0 0 rgba(59,178,115,0.6);
+  animation:tutorPulse 2s infinite;
+}
+@keyframes tutorPulse{0%{box-shadow:0 0 0 0 rgba(59,178,115,0.55)} 70%{box-shadow:0 0 0 8px rgba(59,178,115,0)} 100%{box-shadow:0 0 0 0 rgba(59,178,115,0)}}
+.tutor-status{font:600 10px/1 'JetBrains Mono'; color:#3BB273; letter-spacing:.06em}
+.tutor-mock .chat-mock-msg.bot{margin:8px 12px 6px; padding:8px 11px; background:#F1F2F7; border-radius:10px 10px 10px 2px; color:var(--ink)}
+.tutor-quiz{padding:4px 14px 12px}
+.tutor-q{font:700 12px/1.3 'JetBrains Mono'; color:var(--navy); margin-bottom:6px}
+.tutor-opts{display:flex; gap:5px; flex-wrap:wrap}
+.tutor-opt{
+  font:700 11px/1 'JetBrains Mono'; padding:5px 8px; border-radius:5px;
+  background:var(--indigo); color:#fff;
+}
+.tutor-opt.dim{background:var(--bg-2); color:var(--muted)}
+
+/* ============ DISCUSSION PROMPT (instructor-led) ============ */
+.discuss-prompt{
+  margin-top:32px; padding:22px 26px; background:var(--paper);
+  border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+  display:flex; gap:18px; align-items:flex-start; max-width:880px;
+  border-left:4px solid var(--indigo);
+}
+.dq-tag{
+  flex-shrink:0; font:700 10px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:#fff; background:var(--indigo);
+  padding:7px 10px; border-radius:6px;
+}
+.dq-body{flex:1}
+.dq-body p{margin:0; font:600 15px/1.55 'Manrope'; color:var(--ink)}
+.dq-body em{font-style:italic; color:var(--indigo)}
+.dq-body strong{color:var(--navy)}
+.dq-body .wcard-btn{margin-top:14px}
+
+/* ============ MATCH GAME (abilities) ============ */
+.match-game{
+  margin-top:36px; padding:28px 30px; background:var(--paper);
+  border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow);
+}
+.match-head{display:flex; gap:18px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:20px}
+.match-title{font:800 22px/1.15 'Manrope'; color:var(--navy); letter-spacing:-0.02em; margin:0 0 6px}
+.match-sub{margin:0; font-size:14px; color:var(--ink-2); line-height:1.5}
+.match-board{display:grid; grid-template-columns:1fr; gap:22px; margin-top:6px}
+@media(min-width:780px){ .match-board{grid-template-columns:1fr 1fr; gap:28px} }
+.match-examples, .match-targets{display:flex; flex-direction:column; gap:10px}
+.match-col-label{
+  font:700 10px/1 'JetBrains Mono'; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:4px;
+}
+.match-example{
+  background:var(--bg); border:1.5px solid var(--border); border-radius:10px;
+  padding:14px 16px; cursor:grab; font:600 14px/1.45 'Manrope'; color:var(--ink);
+  display:flex; gap:12px; align-items:center; transition:all .18s ease; user-select:none;
+}
+.match-example:hover{border-color:var(--lavender); transform:translateY(-1px)}
+.match-example.dragging{opacity:0.5; cursor:grabbing}
+.match-example.selected{border-color:var(--indigo); background:rgba(63,68,147,0.08); box-shadow:0 0 0 3px rgba(63,68,147,0.15)}
+.match-example.matched{background:rgba(59,178,115,0.10); border-color:#3BB273; cursor:default; opacity:0.85}
+.match-example.matched::after{content:'✓'; margin-left:auto; color:#3BB273; font-weight:800}
+.match-ex-icon{flex-shrink:0; width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg, var(--lavender) 0%, var(--indigo) 100%); display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px}
+.match-target{
+  background:var(--paper); border:2px dashed var(--border); border-radius:10px;
+  padding:12px 14px; min-height:56px; display:flex; gap:12px; align-items:center;
+  transition:all .18s ease;
+}
+.match-target.over{border-color:var(--indigo); background:rgba(63,68,147,0.06)}
+.match-target.matched{border-style:solid; border-color:#3BB273; background:rgba(59,178,115,0.08)}
+.match-target.wrong{border-color:#E89B3C; animation:shake .35s}
+@keyframes shake{0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}}
+.match-target-label{font:700 14px/1.2 'Manrope'; color:var(--navy); flex:1}
+.match-target-icon{flex-shrink:0; width:28px; height:28px; border-radius:7px; background:var(--bg-2); display:flex; align-items:center; justify-content:center; color:var(--indigo)}
+.match-target.matched .match-target-icon{background:#3BB273; color:#fff}
+.match-target .matched-pill{
+  display:none; font:600 12px/1 'Manrope'; padding:5px 10px; border-radius:999px;
+  background:rgba(59,178,115,0.18); color:#1F4B2B;
+}
+.match-target.matched .matched-pill{display:inline-flex; align-items:center; gap:6px}
+.match-status{
+  margin-top:18px; padding-top:14px; border-top:1px solid var(--border);
+  font:700 12px/1 'JetBrains Mono'; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+}
+.match-status.complete{color:#3BB273}
+
+/* ============ ERA STEPPER ============ */
+.era-stepper{
+  display:flex; gap:14px; align-items:center; margin-top:24px;
+  padding:12px 14px; background:var(--paper); border:1px solid var(--border);
+  border-radius:999px; box-shadow:var(--shadow); position:sticky; top:84px; z-index:20;
+  max-width:880px;
+}
+.era-step-btn{
+  background:transparent; border:1px solid var(--border); color:var(--ink-2);
+  font:700 12px/1 'Manrope'; padding:8px 14px; border-radius:999px; cursor:pointer;
+  transition:all .15s ease;
+}
+.era-step-btn:hover{background:var(--navy); color:#fff; border-color:var(--navy)}
+.era-step-dots{display:flex; gap:6px; flex:1; flex-wrap:wrap}
+.era-dot{
+  display:flex; align-items:center; gap:6px; padding:6px 10px;
+  background:transparent; border:1px solid transparent; border-radius:999px;
+  font:600 11px/1 'Manrope'; color:var(--muted); cursor:pointer; transition:all .15s;
+}
+.era-dot:hover{color:var(--ink); background:var(--bg-2)}
+.era-dot.active{background:var(--navy); color:#fff}
+.era-dot-n{font:800 10px/1 'JetBrains Mono'; opacity:.7}
+.era-dot.active .era-dot-n{opacity:1}
+@media(max-width:760px){
+  .era-stepper{flex-direction:column; border-radius:14px; align-items:stretch}
+  .era-dot-name{display:none}
+}
+
+/* ============ ERA QUIZ ============ */
+.era-quiz{
+  margin-top:24px; padding:18px 20px; background:var(--bg);
+  border:1px solid var(--border); border-radius:12px;
+}
+.eq-head{display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap}
+.eq-tag{
+  flex-shrink:0; font:700 10px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:#fff; background:var(--indigo);
+  padding:6px 9px; border-radius:5px;
+}
+.eq-q{font:700 14.5px/1.4 'Manrope'; color:var(--ink); flex:1; min-width:180px}
+.eq-options{display:flex; flex-direction:column; gap:8px}
+.eq-opt{
+  display:flex; gap:12px; align-items:flex-start; padding:11px 14px;
+  background:var(--paper); border:1.5px solid var(--border); border-radius:9px;
+  font:500 13.5px/1.4 'Manrope'; color:var(--ink); cursor:pointer;
+  text-align:left; transition:all .18s ease;
+}
+.eq-opt:hover{border-color:var(--lavender); transform:translateY(-1px)}
+.eq-opt.right{background:rgba(59,178,115,0.12); border-color:#3BB273}
+.eq-opt.wrong{background:rgba(232,155,60,0.10); border-color:#E89B3C}
+.eq-letter{
+  flex-shrink:0; width:24px; height:24px; border-radius:6px;
+  background:var(--bg-2); color:var(--ink-2); font:800 12px/1 'JetBrains Mono';
+  display:flex; align-items:center; justify-content:center;
+}
+.eq-opt.right .eq-letter, .eq-opt.correct-answer .eq-letter{background:#3BB273; color:#fff}
+.eq-opt.wrong .eq-letter{background:#E89B3C; color:#fff}
+.eq-text{flex:1}
+.eq-feedback{
+  margin-top:12px; padding:0 14px; max-height:0; overflow:hidden; opacity:0;
+  font:500 13px/1.5 'Manrope'; color:var(--ink-2);
+  transition:max-height .35s ease, opacity .3s ease, padding .25s ease;
+}
+.eq-feedback.show{max-height:200px; opacity:1; padding:12px 14px;}
+.eq-feedback.ok{background:rgba(59,178,115,0.08); border-radius:8px; border-left:3px solid #3BB273}
+.eq-feedback.no{background:rgba(232,155,60,0.08); border-radius:8px; border-left:3px solid #E89B3C}
+.eq-fb-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%; color:#fff; font-weight:800;
+  margin-right:8px; vertical-align:middle; font-size:14px;
+}
+.eq-fb-icon.ok{background:#3BB273}
+.eq-fb-icon.no{background:#E89B3C}
+
+/* ============ COMBINE GAME (2048-style) ============ */
+.combine-game{
+  margin-top:24px; padding:28px 30px; background:var(--paper);
+  border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow);
+}
+.combine-head{display:flex; gap:18px; justify-content:space-between; flex-wrap:wrap; align-items:flex-start; margin-bottom:18px}
+.combine-title{font:800 22px/1.15 'Manrope'; color:var(--navy); letter-spacing:-0.02em; margin:0 0 6px}
+.combine-sub{margin:0; font-size:14px; color:var(--ink-2); line-height:1.5; max-width:560px}
+.combine-sub strong{color:var(--navy); font-weight:700}
+.combine-actions{display:flex; gap:8px; flex-wrap:wrap}
+.combine-board{
+  position:relative; min-height:260px; padding:18px;
+  background:linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+  border-radius:12px; border:1.5px dashed var(--border); overflow:hidden;
+}
+.combine-tile{
+  position:absolute; width:120px; height:80px; border-radius:10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:grab; user-select:none; transition:transform .25s ease, box-shadow .2s, opacity .3s;
+  box-shadow:0 4px 12px rgba(20,22,60,0.10); border:1.5px solid var(--border);
+  background:var(--paper); color:var(--ink);
+}
+.combine-tile.dragging{cursor:grabbing; transform:scale(1.05); z-index:50; box-shadow:0 10px 24px rgba(20,22,60,0.25)}
+.combine-tile.over{box-shadow:0 0 0 3px var(--indigo)}
+.combine-tile .ct-label{font:800 13px/1 'Manrope'; letter-spacing:-0.01em; margin-top:4px}
+.combine-tile .ct-icon{font-size:20px; line-height:1}
+.combine-tile.model{background:linear-gradient(135deg,#F3F4FB 0%, #E1E4F2 100%); border-color:#A6ACD4}
+.combine-tile.model .ct-label{color:var(--navy)}
+.combine-tile.tool{background:linear-gradient(135deg,#FFF6E5 0%, #FFE6B8 100%); border-color:#E89B3C}
+.combine-tile.tool .ct-label{color:#7A4F0F}
+.combine-tile.agent{background:linear-gradient(135deg,#E3F4E9 0%, #BCE6CD 100%); border-color:#3BB273}
+.combine-tile.agent .ct-label{color:#1F4B2B}
+.combine-tile.system{background:linear-gradient(135deg, var(--navy) 0%, var(--indigo) 100%); border-color:var(--navy); color:#fff; width:160px; height:96px}
+.combine-tile.system .ct-label{color:#fff; font-size:15px}
+.combine-tile.system .ct-icon{color:#9CD89C}
+.combine-tile.super{
+  width:200px; height:120px;
+  background:radial-gradient(circle at 50% 50%, #FFE38A 0%, #FF8B3D 35%, #C9203B 75%, #5B0024 100%);
+  border:3px solid #FFE38A; color:#fff;
+  box-shadow:0 0 40px 12px rgba(255,170,60,0.85), 0 0 90px 30px rgba(255,80,40,0.55), inset 0 0 30px rgba(255,255,255,0.40);
+  animation:superGlow 1.4s ease-in-out infinite alternate;
+  z-index:60;
+}
+.combine-tile.super .ct-icon{font-size:30px; filter:drop-shadow(0 0 8px #FFE38A)}
+.combine-tile.super .ct-label{font:900 16px/1 'Manrope'; color:#fff; text-shadow:0 0 8px rgba(255,140,40,0.8); letter-spacing:.06em}
+@keyframes superGlow{
+  0%   {box-shadow:0 0 30px 8px  rgba(255,170,60,0.85), 0 0 70px 20px rgba(255,80,40,0.55), inset 0 0 24px rgba(255,255,255,0.40); transform:scale(1)}
+  100% {box-shadow:0 0 60px 18px rgba(255,210,80,0.95), 0 0 120px 40px rgba(255,80,40,0.70), inset 0 0 40px rgba(255,255,255,0.55); transform:scale(1.06) rotate(-2deg)}
+}
+.combine-tile.super.vanishing{
+  animation:superVanish .7s ease-in forwards;
+}
+@keyframes superVanish{
+  0%   {opacity:1; transform:scale(1) rotate(0deg);   filter:blur(0px) brightness(1)}
+  60%  {opacity:1; transform:scale(1.4) rotate(8deg); filter:blur(2px) brightness(1.5)}
+  100% {opacity:0; transform:scale(0.2) rotate(-30deg); filter:blur(14px) brightness(0.4)}
+}
+@keyframes mergePop{0%{transform:scale(.5); opacity:0} 60%{transform:scale(1.12); opacity:1} 100%{transform:scale(1); opacity:1}}
+.combine-tile.spawned{animation:mergePop .35s ease-out}
+.combine-status{
+  margin-top:14px; padding:10px 14px; background:var(--bg);
+  border-radius:8px; font:600 13px/1.45 'Manrope'; color:var(--ink-2);
+  border-left:3px solid var(--lavender);
+}
+.combine-status.win{background:rgba(59,178,115,0.10); border-left-color:#3BB273; color:#1F4B2B}
+.combine-status.bad{background:rgba(232,155,60,0.10); border-left-color:#E89B3C}
+.combine-recipe{
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--border);
+  font:700 12px/1 'JetBrains Mono'; letter-spacing:.06em;
+}
+.combine-pill{
+  padding:6px 11px; border-radius:6px; color:#fff; text-transform:uppercase;
+}
+.combine-pill.model{background:#A6ACD4; color:var(--navy)}
+.combine-pill.tool{background:#E89B3C}
+.combine-pill.agent{background:#3BB273}
+.combine-pill.system{background:var(--navy)}
+.combine-plus, .combine-arrow{color:var(--muted); font-weight:800}
+.combine-arrow{color:var(--indigo)}
+.vs-text{font:600 16px/1.45 'Manrope'; color:var(--ink); margin:0}
+.vs-pick-hint{
+  display:inline-block; margin-left:8px; font:600 10px/1 'JetBrains Mono';
+  letter-spacing:.10em; text-transform:uppercase; color:var(--indigo); opacity:0.7;
+}
+.vs-card.active .vs-pick-hint{display:none}
+.vs-picked-pill{
+  display:none; position:absolute; top:14px; right:14px;
+  font:700 10px/1 'JetBrains Mono'; letter-spacing:.10em;
+  padding:6px 9px; border-radius:999px; background:#3BB273; color:#fff;
+}
+.vs-card.active .vs-picked-pill{display:inline-block; animation:pop .25s ease}
+@keyframes pop{0%{transform:scale(.7); opacity:0} 100%{transform:scale(1); opacity:1}}
+
+/* ============ VS SLIDER (self-rank) ============ */
+.vs-slider-wrap{
+  margin-top:28px; padding:22px 26px; background:var(--paper);
+  border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+  border-left:4px solid var(--indigo);
+}
+.vs-slider-head{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px}
+.vs-slider-q{margin:0; font:700 15px/1.4 'Manrope'; color:var(--ink); flex:1; min-width:200px}
+.vs-slider-row{
+  display:grid; grid-template-columns:auto 1fr auto; gap:14px;
+  align-items:center; padding:8px 4px;
+}
+.vs-end{
+  font:800 11px/1 'JetBrains Mono'; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--navy); padding:6px 10px; border-radius:6px; background:var(--bg-2);
+}
+.vs-end.right{background:var(--navy); color:#fff}
+input#vsSlider{
+  appearance:none; -webkit-appearance:none; width:100%; height:8px; border-radius:999px;
+  background:linear-gradient(90deg, var(--lavender) 0%, var(--indigo) 50%, var(--navy) 100%);
+  outline:none; cursor:pointer;
+}
+input#vsSlider::-webkit-slider-thumb{
+  appearance:none; -webkit-appearance:none; width:24px; height:24px; border-radius:50%;
+  background:#fff; border:3px solid var(--navy); box-shadow:0 4px 10px rgba(20,22,60,0.25); cursor:grab;
+}
+input#vsSlider::-moz-range-thumb{
+  width:24px; height:24px; border-radius:50%; background:#fff; border:3px solid var(--navy);
+  box-shadow:0 4px 10px rgba(20,22,60,0.25); cursor:grab;
+}
+.vs-feedback{
+  margin-top:14px; padding:14px 16px; border-radius:10px;
+  background:var(--bg); border:1px solid var(--border);
+  font:600 14.5px/1.5 'Manrope'; color:var(--ink); transition:all .25s ease;
+}
+.vs-feedback.user-side  {background:rgba(142,146,208,0.14); border-color:rgba(142,146,208,0.30)}
+.vs-feedback.middle     {background:rgba(63,68,147,0.10); border-color:rgba(63,68,147,0.25)}
+.vs-feedback.builder-side{background:rgba(37,40,97,0.10); border-color:rgba(37,40,97,0.30); color:var(--navy)}
+.vs-feedback strong{color:var(--navy)}
+.vs-feedback em{color:var(--indigo); font-style:normal; font-weight:700}
+
+.vs-discuss{display:flex; gap:18px; align-items:center; margin-top:28px; flex-wrap:wrap}
+.vs-dq{
+  flex:1; min-width:280px; padding:16px 20px; background:var(--paper);
+  border:1px solid var(--border); border-radius:12px; display:flex; gap:14px; align-items:flex-start;
+}
+.vs-dq-tag{
+  font:700 10px/1 'JetBrains Mono'; letter-spacing:.16em; color:#fff;
+  background:var(--indigo); padding:6px 9px; border-radius:5px; flex-shrink:0;
+}
+.vs-dq p{margin:0; font:600 14px/1.5 'Manrope'; color:var(--ink)}
+.vs-dq em{font-style:italic; color:var(--indigo)}
+
+.vs-grid{
+  display:grid; grid-template-columns:1fr; gap:14px; align-items:center;
+  margin-top:32px; max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .55s ease, opacity .4s ease, margin-top .4s;
+}
+.vs-grid.reveal{max-height:1200px; opacity:1; margin-top:32px}
+@media(min-width:820px){ .vs-grid{grid-template-columns:1fr auto 1fr} }
+.vs-col{
+  background:var(--paper); border:1px solid var(--border); border-radius:14px;
+  padding:24px 26px; box-shadow:var(--shadow);
+}
+.vs-col.user-col{background:#fff}
+.vs-col.builder-col{background:var(--navy); color:#fff; border-color:var(--navy)}
+.vs-col-head{margin-bottom:14px}
+.vs-col-eyebrow{font:700 10px/1 'Manrope'; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:6px}
+.vs-col.builder-col .vs-col-eyebrow{color:var(--lavender-2)}
+.vs-col h3{font:800 22px/1.1 'Manrope'; letter-spacing:-0.02em; color:var(--navy); margin:0}
+.vs-col.builder-col h3{color:#fff}
+.vs-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px}
+.vs-list li{
+  display:flex; gap:12px; align-items:flex-start; padding:10px 0;
+  font:500 14.5px/1.5 'Manrope'; color:var(--ink-2);
+  border-bottom:1px dashed var(--border);
+}
+.vs-list li:last-child{border-bottom:0}
+.vs-col.builder-col .vs-list li{color:rgba(255,255,255,0.88); border-bottom-color:rgba(255,255,255,0.12)}
+.vs-bullet{
+  flex-shrink:0; width:10px; height:10px; border-radius:50%; margin-top:8px;
+  background:var(--lavender);
+}
+.vs-bullet.b{background:#9CD89C}
+.vs-arrow{
+  font:700 28px/1 'Manrope'; color:var(--indigo); text-align:center;
+}
+@media(max-width:819px){ .vs-arrow{transform:rotate(90deg); padding:8px 0} }
+
+.vs-segue{
+  margin-top:28px; padding:22px 26px; background:var(--paper); border:1px solid var(--border);
+  border-radius:14px; display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .55s ease, margin-top .4s;
+}
+.vs-segue.reveal{opacity:1; max-height:300px; margin-top:28px}
+.vs-segue p{flex:1; min-width:280px; margin:0; font-size:16px; color:var(--ink)}
+.vs-segue strong{color:var(--navy)}
+
+/* ============ SCHEDULE AT A GLANCE (matrix) ============ */
+.sag-wrap{margin-top:36px}
+.sag-head{display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px}
+.sag-head > div:first-child{flex:1; min-width:260px}
+.sag-title{font:800 24px/1.15 'Manrope'; color:var(--navy); letter-spacing:-0.025em; margin:0 0 6px}
+.sag-sub{margin:0; font-size:15px; line-height:1.5; color:var(--ink-2); max-width:560px}
+.sag-halves{display:flex; gap:8px; flex-wrap:wrap}
+.sag-half-tab{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
+  background:var(--paper); border:1px solid var(--border); border-radius:8px;
+  font:700 11px/1 'JetBrains Mono'; letter-spacing:.08em; color:var(--ink-2);
+}
+.sag-half-tab.w1::before{content:''; width:10px; height:10px; border-radius:3px; background:var(--navy)}
+.sag-half-tab.w2::before{content:''; width:10px; height:10px; border-radius:3px; background:var(--lavender)}
+
+.sag-matrix{
+  display:grid; gap:0; overflow-x:auto; padding-bottom:6px;
+  border:1px solid var(--border); border-radius:14px; background:var(--paper);
+  box-shadow:var(--shadow);
+}
+.sag-row{
+  display:grid; grid-template-columns:160px repeat(5, minmax(160px, 1fr));
+  border-bottom:1px solid var(--border);
+}
+.sag-row:last-child{border-bottom:0}
+.sag-row.header .sag-row-label{background:transparent}
+.sag-row-label{
+  padding:12px 14px; background:var(--bg-2);
+  display:flex; flex-direction:column; gap:4px; justify-content:center;
+  border-right:1px solid var(--border); min-height:80px;
+}
+.sag-row-label .srl-cat{
+  font:700 10px/1.1 'JetBrains Mono'; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--indigo);
+}
+.sag-row-label .srl-desc{font:600 12px/1.35 'Manrope'; color:var(--ink-2)}
+.sag-row.header .sag-row-label .srl-cat{color:var(--muted)}
+
+.sag-cell{
+  padding:12px 14px; border-right:1px solid var(--border);
+  display:flex; align-items:center; min-height:80px;
+  cursor:pointer; transition:filter .15s ease, transform .15s ease;
+  position:relative;
+}
+.sag-row:not(.header) .sag-cell{font:600 12.5px/1.35 'Manrope'; color:var(--ink)}
+.sag-cell:hover{filter:brightness(1.04); transform:translateY(-1px)}
+.sag-cell:last-child{border-right:0}
+.sag-cell.active{box-shadow:inset 0 0 0 3px var(--navy); z-index:2}
+.sag-row.header .sag-cell{
+  background:transparent; cursor:default; min-height:auto; padding:10px 14px;
+}
+.sag-row.header .sag-cell:hover{background:transparent; filter:none; transform:none}
+.sag-row.header .sag-cell .sag-cell-day{font:700 10px/1 'JetBrains Mono'; letter-spacing:.14em; color:var(--muted); margin-bottom:4px}
+.sag-row.header .sag-cell .sag-cell-name{font:800 13px/1.2 'Manrope'; color:var(--navy); letter-spacing:-0.01em}
+
+/* Color-code cells by topic (row category) */
+.sag-row[data-cat="found"] .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* Foundations — indigo */
+.sag-row[data-cat="pipe"]  .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* AI Pipeline — same family */
+.sag-row[data-cat="hands"] .sag-cell:not(.header){background:rgba(232,155,60,0.14); border-color:rgba(232,155,60,0.22)}  /* Hands-on — warm amber */
+.sag-row[data-cat="build"] .sag-cell:not(.header){background:rgba(59,178,115,0.14); border-color:rgba(59,178,115,0.22)}  /* Notebooks / Build — green */
+.sag-row[data-cat="wks"]   .sag-cell:not(.header){background:rgba(166,91,184,0.14); border-color:rgba(166,91,184,0.22)}  /* Workshops — purple */
+
+/* Half header bar — separates first half / second half */
+.sag-half-divider{
+  display:grid; grid-template-columns:160px repeat(5, minmax(160px, 1fr));
+  background:linear-gradient(90deg, var(--navy) 0%, var(--indigo) 100%);
+  color:#fff;
+}
+.sag-half-divider.w2{background:linear-gradient(90deg, var(--lavender) 0%, var(--indigo) 100%)}
+.sag-half-divider > div{padding:10px 14px; font:800 11px/1 'JetBrains Mono'; letter-spacing:.16em; text-transform:uppercase}
+.sag-half-divider > div:first-child{border-right:1px solid rgba(255,255,255,0.18)}
+
+/* Component category colors on left labels */
+.sag-row[data-cat="found"] .srl-cat,
+.sag-row[data-cat="pipe"]  .srl-cat{color:var(--navy)}
+.sag-row[data-cat="hands"] .srl-cat{color:var(--indigo)}
+.sag-row[data-cat="build"] .srl-cat,
+.sag-row[data-cat="wks"]   .srl-cat{color:#A65BB8}
+
+@media(max-width:760px){
+  .sag-matrix{font-size:12px}
+  .sag-row, .sag-half-divider{grid-template-columns:120px repeat(5, minmax(120px, 1fr))}
+  .sag-row-label{padding:10px}
+  .sag-cell{padding:10px}
+}
+
+.sag-color-key{
+  display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px;
+  font:600 12px/1.3 'Manrope'; color:var(--ink-2);
+}
+.sag-key-item{display:inline-flex; align-items:center; gap:8px}
+.sk-swatch{width:14px; height:14px; border-radius:4px; flex-shrink:0; border:1px solid rgba(0,0,0,0.06)}
+.sk-swatch.found{background:rgba(63,68,147,0.32)}
+.sk-swatch.hands{background:rgba(232,155,60,0.38)}
+.sk-swatch.build{background:rgba(59,178,115,0.38)}
+.sk-swatch.wks{background:rgba(166,91,184,0.38)}
+
+/* ============ WHAT YOU'LL BUILD (outro) ============ */
+.build-grid{
+  display:grid; grid-template-columns:1fr; gap:14px; margin-top:32px;
+}
+@media(min-width:640px){ .build-grid{grid-template-columns:1fr 1fr} }
+@media(min-width:960px){ .build-grid{grid-template-columns:repeat(4, 1fr)} }
+.build-card{
+  background:var(--paper); border:1px solid var(--border); border-radius:14px;
+  padding:24px 22px; box-shadow:var(--shadow); position:relative; transition:all .22s ease;
+}
+.build-card:hover{transform:translateY(-4px); border-color:var(--lavender); box-shadow:0 12px 28px rgba(20,22,60,0.10)}
+.build-icon{
+  width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,var(--lavender) 0%, var(--indigo) 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+}
+.build-card[data-idx="0"] .build-icon{background:linear-gradient(135deg,#A6C1EE 0%, #3F4493 100%)}
+.build-card[data-idx="1"] .build-icon{background:linear-gradient(135deg,#84FAB0 0%, #028090 100%)}
+.build-card[data-idx="2"] .build-icon{background:linear-gradient(135deg,#FBC2EB 0%, #A65BB8 100%)}
+.build-card[data-idx="3"] .build-icon{background:linear-gradient(135deg,#FFD580 0%, #E89B3C 100%)}
+.build-tag{
+  font:700 10px/1 'JetBrains Mono'; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:6px;
+}
+.build-card h4{font:800 17px/1.2 'Manrope'; letter-spacing:-0.015em; color:var(--navy); margin:0 0 8px}
+.build-card p{margin:0; font-size:14px; line-height:1.55; color:var(--ink-2)}
+.build-card code{background:var(--bg-2); color:var(--indigo); padding:1px 5px; border-radius:4px; font-size:12.5px}
 </style>
 </head>
 <body>
@@ -538,6 +1173,8 @@ svg.terrain{width:100%; height:auto; display:block}
 
 <nav class="topnav" id="topnav">
   <button data-target="hero" class="active">Start</button>
+  <button data-target="welcome">Welcome</button>
+  <button data-target="mindset">Mindset</button>
   <button data-target="what">What is AI</button>
   <button data-target="timeline">Eras</button>
   <button data-target="blocks">Building Blocks</button>
@@ -549,17 +1186,189 @@ svg.terrain{width:100%; height:auto; display:block}
 <!-- ============ HERO ============ -->
 <section id="hero">
   <div class="container">
-    <div class="eyebrow">Inspirit AI Scholars · 2026</div>
+    <div class="eyebrow">Welcome · Inspirit AI Scholars · Summer 2026</div>
     <h1 class="hero-title">Your AI Builder's Map
       <em>Models, tools, agents, systems.</em>
     </h1>
-    <p class="hero-sub">A brief tour of the AI context and tools you'll use, and a preview of the ten sessions ahead.</p>
+    <p class="hero-sub">Welcome! Over the next 10 days you'll go from using AI to <em style="font-style:normal; color:var(--navy); font-weight:700;">building with AI</em>. This page is your interactive map for the journey.</p>
     <div class="cta-row">
-      <button class="btn" onclick="scrollToSec('what')">Begin the tour <span class="arr">→</span></button>
+      <button class="btn" onclick="scrollToSec('welcome')">Get started <span class="arr">→</span></button>
       <button class="btn ghost" onclick="scrollToSec('map')">Skip to the map</button>
     </div>
     <div class="hero-meta">
-      <span>7 stops</span><span class="dot"></span><span>~10 min</span>
+      <span>9 stops</span><span class="dot"></span><span>~12 min</span><span class="dot"></span><span>Walked through together</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WELCOME · INTRODUCTIONS + GOALS ============ -->
+<section id="welcome">
+  <div class="container">
+    <div class="eyebrow">Before we begin</div>
+    <h2>Welcome in 👋 — meet the room.</h2>
+    <p class="lead">You're about to spend 10 days building real AI with a room full of other curious people. Let's get to know each other first — then we'll look at where we're headed.</p>
+
+    <div class="welcome-grid">
+      <!-- Introductions card -->
+      <div class="wcard intros">
+        <div class="wcard-head">
+          <span class="wcard-badge">01</span>
+          <h3>Quick intros — your turn</h3>
+        </div>
+        <p class="wcard-sub">Share these three things.
+          <span class="zoom-hint" title="Out loud or in the chat — whichever feels right.">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            out loud or in the chat
+          </span>
+        </p>
+        <ol class="intro-prompts">
+          <li><span class="ip-num">1</span><div><strong>Your name</strong> <span class="ip-hint">(and what to call you)</span></div></li>
+          <li><span class="ip-num">2</span><div><strong>Where you're from</strong> <span class="ip-hint">(city, country, or vibe)</span></div></li>
+          <li><span class="ip-num">3</span><div><strong>One thing you'd love to build with AI</strong> <span class="ip-hint">(no wrong answers — dream big or weird)</span></div></li>
+        </ol>
+        <!-- Fun example to break the ice -->
+        <div class="intro-example">
+          <span class="ie-tag">Example</span>
+          <p>"Hi! I'm <strong>Maya</strong> from <strong>Toronto</strong> 🇨🇦 — I'd love to build an AI that <strong>roasts my outfits before I leave the house</strong>. 👗🔥"</p>
+        </div>
+        <button class="wcard-btn" id="ideaBtn">Stuck? Get an idea <span class="arr">→</span></button>
+        <div class="idea-pill" id="ideaPill">Click for inspiration ↑</div>
+      </div>
+
+      <!-- Today's Goals card -->
+      <div class="wcard goals">
+        <div class="wcard-head">
+          <span class="wcard-badge">02</span>
+          <h3>Today's goals</h3>
+        </div>
+        <p class="wcard-sub">By the end of today, you'll:</p>
+        <ul class="goal-list" id="goalList">
+          <li data-idx="0"><span class="goal-check"></span><div><strong>Understand the program.</strong> Schedule, components, and what to expect each day.</div></li>
+          <li data-idx="1"><span class="goal-check"></span><div><strong>See what you'll build.</strong> The projects, apps, and portfolio you'll leave with.</div></li>
+          <li data-idx="2"><span class="goal-check"></span><div><strong>Start exploring with Python.</strong> Open your first notebook and load a real dataset.</div></li>
+        </ul>
+        <div class="goal-progress"><span id="goalCount">0</span> of 3 · click each as you cover it</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MINDSET · AI USER vs AI BUILDER ============ -->
+<section id="mindset">
+  <div class="container">
+    <div class="eyebrow">Before the tour · The shift</div>
+    <h2>AI user, or AI builder?</h2>
+    <p class="lead">Two students. Same AI. Two very different relationships to it. <strong>Pick the one you'd rather do</strong> — then reveal what shifts.</p>
+
+    <div class="vs-examples">
+      <div class="vs-card" data-vs="A" role="button" tabindex="0" aria-pressed="false">
+        <div class="vs-tag">Example A <span class="vs-pick-hint">Click to pick</span></div>
+        <div class="vs-illus user-illus">
+          <!-- ChatGPT-style chat window -->
+          <div class="chat-mock">
+            <div class="chat-mock-head">
+              <span class="chat-mock-dot"></span><span class="chat-mock-dot"></span><span class="chat-mock-dot"></span>
+              <span class="chat-mock-title">chat.openai.com</span>
+            </div>
+            <div class="chat-mock-msg user">Explain the chain rule like I'm 12.</div>
+            <div class="chat-mock-msg bot">Sure! Imagine you're peeling an onion — each layer depends on the one below…<span class="chat-cursor"></span></div>
+          </div>
+        </div>
+        <p class="vs-text">A student asks ChatGPT to explain their calculus homework.</p>
+        <div class="vs-picked-pill">✓ You'd rather do this</div>
+      </div>
+      <div class="vs-card" data-vs="B" role="button" tabindex="0" aria-pressed="false">
+        <div class="vs-tag">Example B <span class="vs-pick-hint">Click to pick</span></div>
+        <div class="vs-illus builder-illus">
+          <!-- Custom AI tutor app with a face -->
+          <div class="tutor-mock">
+            <div class="tutor-mock-head">
+              <div class="tutor-avatar" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="38" height="38">
+                  <defs>
+                    <linearGradient id="tutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#A6C1EE"/>
+                      <stop offset="100%" stop-color="#3F4493"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="32" cy="32" r="30" fill="url(#tutGrad)"/>
+                  <circle cx="23" cy="28" r="3" fill="#fff"/>
+                  <circle cx="41" cy="28" r="3" fill="#fff"/>
+                  <path d="M22 40 Q32 47 42 40" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <line x1="32" y1="6" x2="32" y2="14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="32" cy="4" r="2.2" fill="#9CD89C"/>
+                </svg>
+              </div>
+              <div class="tutor-mock-name">DerivBot <span class="tutor-pulse"></span><span class="tutor-status">online</span></div>
+            </div>
+            <div class="chat-mock-msg bot">Hey! Ready for a quick derivative quiz? 🎯</div>
+            <div class="tutor-quiz">
+              <div class="tutor-q">d/dx [x³] = ?</div>
+              <div class="tutor-opts">
+                <span class="tutor-opt">3x²</span><span class="tutor-opt dim">x²</span><span class="tutor-opt dim">3x</span>
+              </div>
+            </div>
+          </div>
+          <div class="bi-tag">live · adaptive</div>
+        </div>
+        <p class="vs-text">A student builds and ships an AI tutor that quizzes classmates and adapts to each one.</p>
+        <div class="vs-picked-pill">✓ You'd rather do this</div>
+      </div>
+    </div>
+
+    <div class="vs-discuss" id="vsDiscuss">
+      <div class="vs-dq">
+        <span class="vs-dq-tag">Discuss</span>
+        <p><strong>Which would you rather do — A or B?</strong> &nbsp;<em>What distinguishes these two examples?</em></p>
+      </div>
+      <button class="btn" id="revealBuilderBtn">Reveal the mindset shift <span class="arr">→</span></button>
+    </div>
+
+    <!-- Self-ranking slider -->
+    <div class="vs-slider-wrap">
+      <div class="vs-slider-head">
+        <span class="dq-tag">Quick self-check</span>
+        <p class="vs-slider-q">Right now, where are you on this spectrum?</p>
+      </div>
+      <div class="vs-slider-row">
+        <span class="vs-end left">AI User</span>
+        <input id="vsSlider" type="range" min="0" max="100" value="50" />
+        <span class="vs-end right">AI Builder</span>
+      </div>
+      <div class="vs-feedback" id="vsSliderFeedback">Drag the slider to where you'd put yourself today.</div>
+    </div>
+
+    <div class="vs-grid" id="vsGrid">
+      <div class="vs-col user-col">
+        <div class="vs-col-head">
+          <div class="vs-col-eyebrow">Mindset</div>
+          <h3>AI User</h3>
+        </div>
+        <ul class="vs-list">
+          <li><span class="vs-bullet u"></span>Uses tools as they are</li>
+          <li><span class="vs-bullet u"></span>Gets frustrated when AI is wrong</li>
+          <li><span class="vs-bullet u"></span>"AI gave me an output"</li>
+          <li><span class="vs-bullet u"></span>Chooses from AI outputs</li>
+        </ul>
+      </div>
+      <div class="vs-arrow" aria-hidden="true">→</div>
+      <div class="vs-col builder-col">
+        <div class="vs-col-head">
+          <div class="vs-col-eyebrow">Mindset</div>
+          <h3>AI Builder</h3>
+        </div>
+        <ul class="vs-list">
+          <li><span class="vs-bullet b"></span>Builds new tools</li>
+          <li><span class="vs-bullet b"></span>Gets curious, treats errors as feedback</li>
+          <li><span class="vs-bullet b"></span>"A real person can use what I built"</li>
+          <li><span class="vs-bullet b"></span>Co-creates with AI</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="vs-segue" id="vsSegue">
+      <p><strong>Where are you now?</strong> Wherever you are, by Day 10 you'll have shipped something a real person could use. The rest of this page is the path to get there — let's tour what AI actually is first.</p>
+      <button class="btn ghost" onclick="scrollToSec('what')">Continue the tour <span class="arr">→</span></button>
     </div>
   </div>
 </section>
@@ -569,8 +1378,18 @@ svg.terrain{width:100%; height:auto; display:block}
   <div class="container">
     <div class="eyebrow">Stop 1 · What is AI, really?</div>
     <h2>What makes humans intelligent?</h2>
-    <p class="lead">Before we define AI, think about you. Click each ability humans have — and see the modern AI built to imitate it.</p>
-    <div class="intel-wrap">
+    <p class="lead">Before we define AI, think about <em>yourself</em>. What can a human mind do? Flip each card to see the modern AI built to imitate that ability.</p>
+
+    <!-- Instructor-led discussion prompt -->
+    <div class="discuss-prompt">
+      <span class="dq-tag">Discuss · 2 min</span>
+      <div class="dq-body">
+        <p><strong>Before clicking — talk it out.</strong> What do <em>you</em> think makes humans intelligent? Try to list at least three abilities together as a class.</p>
+        <button class="wcard-btn" id="revealAbilitiesBtn">Now reveal the six abilities <span class="arr">→</span></button>
+      </div>
+    </div>
+
+    <div class="intel-wrap" id="intelWrap" style="opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .6s ease, margin-top .4s">
       <div class="intel-grid" id="intelgrid"></div>
       <div class="intel-progress">
         <div class="dots" id="inteldots"></div>
@@ -578,6 +1397,23 @@ svg.terrain{width:100%; height:auto; display:block}
       </div>
       <div class="intel-segue">
         <p><strong>AI</strong> is the branch of computer science that builds machines to do these things — to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
+      </div>
+
+      <!-- Matching activity -->
+      <div class="match-game" id="matchGame">
+        <div class="match-head">
+          <div>
+            <div class="eyebrow" style="margin-bottom:6px">Quick activity · 3 min</div>
+            <h3 class="match-title">Match the example to the human ability.</h3>
+            <p class="match-sub">Drag (or click) each example to the human ability it most directly imitates.</p>
+          </div>
+          <button class="wcard-btn" id="matchResetBtn">Reset</button>
+        </div>
+        <div class="match-board">
+          <div class="match-examples" id="matchExamples"></div>
+          <div class="match-targets" id="matchTargets"></div>
+        </div>
+        <div class="match-status" id="matchStatus">0 of 6 matched</div>
       </div>
     </div>
   </div>
@@ -588,7 +1424,15 @@ svg.terrain{width:100%; height:auto; display:block}
   <div class="container">
     <div class="eyebrow">Stop 2 · How we got here</div>
     <h2>Seventy years of AI in five eras.</h2>
-    <p class="lead">Each era asked a question the previous one couldn't answer. Our work builds on these decades of progress!</p>
+    <p class="lead">Each era asked a question the previous one couldn't answer. Our work builds on these decades of progress.</p>
+
+    <!-- Instructor stepper: jump to any era + walk forward/back -->
+    <div class="era-stepper" id="eraStepper">
+      <button class="era-step-btn" data-step="prev">← Prev</button>
+      <div class="era-step-dots" id="eraStepDots"></div>
+      <button class="era-step-btn" data-step="next">Next →</button>
+    </div>
+
     <div class="eras" id="eras"></div>
   </div>
 </section>
@@ -598,8 +1442,43 @@ svg.terrain{width:100%; height:auto; display:block}
   <div class="container">
     <div class="eyebrow">Stop 3 · The builder's toolkit</div>
     <h2>Four parts in every AI product.</h2>
-    <p class="lead">Once you can name these four pieces, you can take apart almost any AI app you encounter. Click a card to expand it.</p>
+    <p class="lead">Once you can name these four pieces, you can take apart almost any AI app. Click a card to expand it.</p>
     <div class="blocks" id="blocks-grid"></div>
+
+    <!-- Matching activity: real products → block -->
+    <div class="match-game" id="bbMatchGame">
+      <div class="match-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Activity · 2 min</div>
+          <h3 class="match-title">Match the example to the block.</h3>
+          <p class="match-sub">Each real-world example is mostly one of the four blocks. Match them up.</p>
+        </div>
+        <button class="wcard-btn" id="bbMatchResetBtn">Reset</button>
+      </div>
+      <div class="match-board">
+        <div class="match-examples" id="bbExamples"></div>
+        <div class="match-targets" id="bbTargets"></div>
+      </div>
+      <div class="match-status" id="bbMatchStatus">0 of 4 matched</div>
+    </div>
+
+    <!-- Combine game: 2048-style — sandbox to discover the recipe -->
+    <div class="combine-game" id="combineGame">
+      <div class="combine-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Sandbox · 3 min</div>
+          <h3 class="combine-title">Try to create a System by combining the right blocks.</h3>
+          <p class="combine-sub">Think 2048. You have <strong>Models</strong> and <strong>Tools</strong> — drag them around and see what they make.</p>
+        </div>
+        <div class="combine-actions">
+          <button class="wcard-btn" id="combineSpawnModel"><span class="combine-pill model" style="margin-right:6px">Model</span>+</button>
+          <button class="wcard-btn" id="combineSpawnTool"><span class="combine-pill tool" style="margin-right:6px">Tool</span>+</button>
+          <button class="wcard-btn" id="combineReset">Reset</button>
+        </div>
+      </div>
+      <div class="combine-board" id="combineBoard"></div>
+      <div class="combine-status" id="combineStatus">Drag one tile onto another. Some pairs combine, others don't.</div>
+    </div>
   </div>
 </section>
 
@@ -624,6 +1503,29 @@ svg.terrain{width:100%; height:auto; display:block}
         <div id="simsteps"></div>
       </div>
     </div>
+
+    <!-- Understanding check -->
+    <div class="era-quiz" id="simQuiz" style="margin-top:24px; max-width:880px">
+      <div class="eq-head">
+        <span class="eq-tag">Understanding check</span>
+        <span class="eq-q">Why can't an LLM answer "What's the weather in Tokyo right now?" on its own?</span>
+      </div>
+      <div class="eq-options">
+        <button class="eq-opt" data-correct="0" data-idx="0">
+          <span class="eq-letter">A</span>
+          <span class="eq-text">LLMs aren't smart enough to understand weather questions</span>
+        </button>
+        <button class="eq-opt" data-correct="1" data-idx="1">
+          <span class="eq-letter">B</span>
+          <span class="eq-text">LLMs only know what was in their training data — they have no way to fetch live information without a tool</span>
+        </button>
+        <button class="eq-opt" data-correct="0" data-idx="2">
+          <span class="eq-letter">C</span>
+          <span class="eq-text">LLMs refuse to discuss weather for safety reasons</span>
+        </button>
+      </div>
+      <div class="eq-feedback" id="simQuizFb"></div>
+    </div>
   </div>
 </section>
 
@@ -632,7 +1534,7 @@ svg.terrain{width:100%; height:auto; display:block}
   <div class="container">
     <div class="eyebrow">Stop 5 · Your 10-day journey</div>
     <h2>Your AI Builder's Map.</h2>
-    <p class="lead">Each marker is one session. You'll ascend from data fundamentals to a deployed AI project of your own. Click a marker to see what's there.</p>
+    <p class="lead">This is your map for the program — <strong>each marker is one session</strong>, and clicking it shows what you'll learn, build, and use that day. You'll ascend from data fundamentals to a deployed AI project of your own.</p>
     <div class="map-card">
       <div class="map-header">
         <div class="map-legend">
@@ -646,6 +1548,28 @@ svg.terrain{width:100%; height:auto; display:block}
       </div>
       <div class="station-panel" id="spanel"></div>
     </div>
+
+    <!-- Schedule at a glance (matrix: rows = components, cols = sessions) -->
+    <div class="sag-wrap">
+      <div class="sag-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Schedule at a glance</div>
+          <h3 class="sag-title">Each session = three time blocks.</h3>
+          <p class="sag-sub">Every day mixes a concept block, a hands-on activity, and a build (or workshop) block. Click any cell to jump to that session on the map.</p>
+        </div>
+        <div class="sag-halves">
+          <span class="sag-half-tab w1">First Half · Sessions 1–5</span>
+          <span class="sag-half-tab w2">Second Half · Sessions 6–10</span>
+        </div>
+      </div>
+      <div class="sag-matrix" id="sagMatrix"></div>
+      <div class="sag-color-key">
+        <span class="sag-key-item"><span class="sk-swatch found"></span>Concept blocks (Foundations / Pipeline)</span>
+        <span class="sag-key-item"><span class="sk-swatch hands"></span>Hands-on activities</span>
+        <span class="sag-key-item"><span class="sk-swatch build"></span>Build with code (notebooks)</span>
+        <span class="sag-key-item"><span class="sk-swatch wks"></span>Interactive workshops</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -653,11 +1577,47 @@ svg.terrain{width:100%; height:auto; display:block}
 <section id="next">
   <div class="container">
     <div class="eyebrow">You're ready</div>
-    <h2>Next: your first dataset.</h2>
-    <p class="lead">Every AI system starts with data. In Notebook 1, you'll open Python, load a real dataset, and start exploring — the same first step every ML engineer takes.</p>
+    <h2>What you'll create by the end!</h2>
+    <p class="lead">Real, tangible outputs — not just lecture notes. By Day 10 you'll have built and shipped four things you can show off.</p>
+
+    <div class="build-grid" id="buildGrid">
+      <div class="build-card" data-idx="0">
+        <div class="build-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="build-tag">Foundations</div>
+        <h4>Python + ML foundations</h4>
+        <p>Notebooks that take you from your first <code>import pandas</code> to a trained model evaluated on real data.</p>
+      </div>
+      <div class="build-card" data-idx="1">
+        <div class="build-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="build-tag">Apps</div>
+        <h4>Live AI apps</h4>
+        <p>Prototypes you can hand to a friend — chatbots, classifiers, agents — running in the browser or a notebook.</p>
+      </div>
+      <div class="build-card" data-idx="2">
+        <div class="build-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="build-tag">Showcase</div>
+        <h4>Project portfolio</h4>
+        <p>A polished page, repo, and write-up positioned for college apps, internships, and the rest of your AI journey.</p>
+      </div>
+      <div class="build-card" data-idx="3">
+        <div class="build-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="build-tag">Capstone</div>
+        <h4>Mentor-led final project</h4>
+        <p>Your chosen AI project — scoped, built, and presented live to peers, instructors, and a college + career panel.</p>
+      </div>
+    </div>
+
     <div class="outro-card">
-      <h2>Open Notebook 1</h2>
-      <p>Python + dataset exploration. Load data, peek at the rows, plot a distribution, ask your first real question of a real dataset.</p>
+      <h2>Next: Open Notebook 1</h2>
+      <p>Python + dataset exploration. Load data, peek at the rows, plot a distribution, ask your first real question of a real dataset — the same first step every ML engineer takes.</p>
       <div class="outro-code">
         <span class="c"># NB1 · Day 1</span><br/>
         <span class="k">import</span> pandas <span class="k">as</span> pd<br/>
@@ -673,29 +1633,41 @@ svg.terrain{width:100%; height:auto; display:block}
 /* ============ DATA ============ */
 const humanAbilities = [
   {name:"Memory", icon:"memory",
+    diagram:"memory",
+    humanHint:"You remember a birthday from years ago.",
     aiName:"Retrieval & long-term memory",
     aiDesc:"Vector databases and retrieval-augmented generation let AI store and recall facts it never saw in training.",
     examples:["Perplexity","NotebookLM","ChatGPT memory"]},
   {name:"Language", icon:"language",
+    diagram:"language",
+    humanHint:"You read this sentence and understand it.",
     aiName:"Large Language Models",
     aiDesc:"LLMs predict text token by token. They read, write, translate, summarize — and increasingly, reason.",
     examples:["GPT-5","Claude Opus 4.7","Gemini 2.5"]},
   {name:"Sensing", icon:"sensing",
+    diagram:"sensing",
+    humanHint:"You recognize a friend in a crowd.",
     aiName:"Computer vision & speech",
     aiDesc:"Neural nets turn pixels and sound waves into meaning — recognizing faces, objects, words, music.",
     examples:["Face ID","Whisper","Tesla Vision"]},
   {name:"Creativity", icon:"creativity",
+    diagram:"creativity",
+    humanHint:"You imagine a dragon you've never seen.",
     aiName:"Generative AI",
     aiDesc:"Models that produce new images, video, music, and text from a prompt — never copying, always generating.",
     examples:["Sora","Midjourney","Suno","DALL·E"]},
   {name:"Logical reasoning", icon:"reasoning",
+    diagram:"reasoning",
+    humanHint:"You work through a math problem step by step.",
     aiName:"Reasoning models",
     aiDesc:"Newer models that \"think out loud\" before answering — solving math, code, and logic that earlier LLMs couldn't.",
     examples:["OpenAI o3","Claude extended thinking","DeepSeek-R1"]},
   {name:"Judgment", icon:"judgment",
+    diagram:"judgment",
+    humanHint:"You weigh pros and cons and decide.",
     aiName:"Decision systems",
     aiDesc:"AI that weighs evidence and picks an action — what to recommend, what to flag, when to brake.",
-    examples:["Tesla Autopilot","Fraud detection","Spotify recs"]},
+    examples:["Tesla Autopilot","Fraud detection","Hiring screening"]},
 ];
 
 const eras = [
@@ -715,7 +1687,15 @@ const eras = [
       {name:"Expert systems", anim:"rules",
         caption:"Expert systems chained hand-coded IF/THEN rules to diagnose diseases, configure computers, and approve loans."}
     ],
-    visualDark:true
+    visualDark:true,
+    quiz:{
+      q:"Deep Blue beat the world chess champion — but expert systems couldn't reliably diagnose a cold. Why did Symbolic AI succeed at one and stall on the other?",
+      options:[
+        {t:"Chess engines had better hardware than medical systems", correct:false, why:"Hardware helped, but doctors also had powerful machines. The real difference is the nature of the problem."},
+        {t:"Chess has fully observable, well-defined rules; real-world diagnosis is full of fuzzy, hidden, and contradictory signals", correct:true, why:"Right — symbolic systems shine in closed worlds with clear rules. Open-ended, ambiguous problems break them."},
+        {t:"Programmers prioritized chess over medicine", correct:false, why:"There was huge medical investment too — expert systems were *the* AI of the 80s. They just hit the ambiguity wall."}
+      ]
+    }
   },
   {
     year:"1990s — 2011",
@@ -732,7 +1712,15 @@ const eras = [
       {name:"PageRank", anim:"pagerank",
         caption:"Google's PageRank ranks pages by how many other pages link to them — and how trusted those linkers are."}
     ],
-    visualDark:false
+    visualDark:false,
+    quiz:{
+      q:"A spam filter and a Netflix recommender are both classic ML — what do they *actually* share under the hood?",
+      options:[
+        {t:"Both are trained on labeled examples and predict an outcome on new data they've never seen", correct:true, why:"Right — supervised learning. Past examples (spam/not-spam, watched/didn't-watch) teach the model patterns that generalize to new inputs."},
+        {t:"Both store every example and look up the closest match", correct:false, why:"That's nearest-neighbor — one ML algorithm, but neither spam filters nor Netflix work primarily that way at scale."},
+        {t:"Both use hand-coded rules written by domain experts", correct:false, why:"That would be Symbolic AI. The shift to ML was *learning* the rules from data instead."}
+      ]
+    }
   },
   {
     year:"2012 — 2016",
@@ -749,7 +1737,15 @@ const eras = [
       {name:"Siri (2011)", anim:"siri",
         caption:"Siri turned speech into text and text into action — putting a voice assistant in everyone's pocket."}
     ],
-    visualDark:true
+    visualDark:true,
+    quiz:{
+      q:"Neural networks existed since the 1950s. So why did deep learning suddenly explode in 2012, not earlier?",
+      options:[
+        {t:"Researchers finally figured out how to design neural net architectures", correct:false, why:"Architectures matter, but the math (backprop, convolutions) was mostly there by the late 80s — it just couldn't run."},
+        {t:"Three things landed at once: GPUs for parallel compute, internet-scale labeled data (ImageNet), and better training tricks like ReLU and dropout", correct:true, why:"Exactly — none alone was enough. The 2012 unlock was a *compounding* of hardware, data, and algorithmic refinements."},
+        {t:"Funding from tech companies finally made it possible", correct:false, why:"Money flowed *because* of the breakthroughs, not the other way around. The breakthroughs were technical."}
+      ]
+    }
   },
   {
     year:"2017 — 2022",
@@ -766,7 +1762,15 @@ const eras = [
       {name:"DALL·E (2021)", anim:"dalle",
         caption:"DALL·E turns a text prompt into novel images — visual ideas no human ever drew before."}
     ],
-    visualDark:false
+    visualDark:false,
+    quiz:{
+      q:"When you ask ChatGPT a question and it streams out a perfectly coherent paragraph, what is it *actually* doing at each visible moment?",
+      options:[
+        {t:"Drafting the full answer internally, then printing it word-by-word for dramatic effect", correct:false, why:"Plausible-sounding, but no — the streaming you see *is* the generation. It really is producing one token at a time."},
+        {t:"Looking up the most relevant passage from its training data and reformatting it", correct:false, why:"It's not retrieval. LLMs don't store passages — they store statistical patterns over tokens."},
+        {t:"Predicting the single most likely next token given everything written so far, then repeating", correct:true, why:"Yes — every visible token is one forward pass. The whole paragraph emerges from chained next-token predictions."}
+      ]
+    }
   },
   {
     year:"2023 — today",
@@ -783,7 +1787,15 @@ const eras = [
       {name:"Operator (2025)", anim:"operator",
         caption:"OpenAI's Operator drives a real browser — clicking buttons, filling forms, completing online tasks for you."}
     ],
-    visualDark:true
+    visualDark:true,
+    quiz:{
+      q:"Two products use the same underlying LLM. One is called a chatbot, the other an agent. What is the agent doing that the chatbot isn't?",
+      options:[
+        {t:"It uses a smarter, larger version of the same model", correct:false, why:"Often the model is identical. The difference isn't the model — it's the scaffolding around it."},
+        {t:"It keeps acting in a loop: plans, calls real-world tools, observes what happens, and adjusts — without you in the loop for every step", correct:true, why:"Exactly — agents bridge thinking and *doing*. The loop (and tool access) is the qualitative shift, not the model size."},
+        {t:"It's connected to the internet for live data", correct:false, why:"Lots of chatbots have search too — that's a tool. The agent's edge is autonomously *choosing and chaining* tools toward a goal."}
+      ]
+    }
   }
 ];
 
@@ -949,7 +1961,7 @@ function svgEl(tag, attrs={}){
 /* ============ NAV + PROGRESS ============ */
 const navBtns = $$('#topnav button');
 navBtns.forEach(b => b.addEventListener('click', ()=>scrollToSec(b.dataset.target)));
-const sectionsList = ['hero','what','timeline','blocks','sim','map','next'];
+const sectionsList = ['hero','welcome','mindset','what','timeline','blocks','sim','map','next'];
 window.addEventListener('scroll', ()=>{
   const sc = window.scrollY;
   const doc = document.documentElement.scrollHeight - window.innerHeight;
@@ -974,6 +1986,90 @@ function intelIcon(name){
   if(name==="judgment") return `<svg viewBox="0 0 24 24" ${s} width="38" height="38"><path d="M12 3v18M5 8h14M5 8l-3 7a4 4 0 0 0 6 0zM19 8l-3 7a4 4 0 0 0 6 0z"/></svg>`;
   return "";
 }
+
+/* Mini diagram per ability — illustrates the concept */
+function abilityDiagram(kind){
+  if(kind==="memory") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <rect x="6" y="14" width="38" height="42" rx="3" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <line x1="14" y1="22" x2="36" y2="22" stroke="#3F4493" stroke-width="1.3" opacity="0.7"/>
+      <line x1="14" y1="28" x2="32" y2="28" stroke="#3F4493" stroke-width="1.3" opacity="0.5"/>
+      <line x1="14" y1="34" x2="34" y2="34" stroke="#3F4493" stroke-width="1.3" opacity="0.5"/>
+      <line x1="14" y1="40" x2="30" y2="40" stroke="#3F4493" stroke-width="1.3" opacity="0.5"/>
+      <text x="60" y="38" font-family="JetBrains Mono" font-size="14" fill="#3F4493" font-weight="800">→</text>
+      <circle cx="96" cy="35" r="16" fill="#9CD89C" opacity="0.30"/>
+      <text x="96" y="40" font-family="Manrope" font-size="14" font-weight="800" fill="#1F4B2B" text-anchor="middle">🎂</text>
+    </svg>`;
+  if(kind==="language") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <rect x="6" y="12" width="50" height="22" rx="11" fill="#3F4493"/>
+      <text x="31" y="27" font-family="JetBrains Mono" font-size="10" fill="#fff" text-anchor="middle" font-weight="700">"hello"</text>
+      <path d="M58 23 L70 23 M68 19 L72 23 L68 27" stroke="#3F4493" stroke-width="1.5" fill="none"/>
+      <rect x="74" y="12" width="40" height="22" rx="11" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <text x="94" y="27" font-family="JetBrains Mono" font-size="10" fill="#3F4493" text-anchor="middle" font-weight="700">"hola"</text>
+      <rect x="6" y="40" width="50" height="22" rx="11" fill="#A6ACD4" opacity="0.7"/>
+      <text x="31" y="55" font-family="JetBrains Mono" font-size="10" fill="#1A1C42" text-anchor="middle" font-weight="700">"ciao"</text>
+      <rect x="64" y="40" width="50" height="22" rx="11" fill="#A6ACD4" opacity="0.7"/>
+      <text x="89" y="55" font-family="JetBrains Mono" font-size="10" fill="#1A1C42" text-anchor="middle" font-weight="700">"こんにちは"</text>
+    </svg>`;
+  if(kind==="sensing") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <!-- camera/eye on left -->
+      <ellipse cx="22" cy="35" rx="16" ry="11" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <circle cx="22" cy="35" r="6" fill="#3F4493"/>
+      <circle cx="24" cy="33" r="2" fill="#fff"/>
+      <!-- light beams -->
+      <path d="M40 28 L60 24 M40 35 L60 35 M40 42 L60 46" stroke="#8E92D0" stroke-width="1.3" stroke-dasharray="2 2"/>
+      <!-- recognized output -->
+      <rect x="64" y="20" width="50" height="30" rx="6" fill="#9CD89C" opacity="0.25" stroke="#3BB273" stroke-width="1.3"/>
+      <text x="89" y="34" font-family="Manrope" font-size="10" font-weight="800" fill="#1F4B2B" text-anchor="middle">face: Sara</text>
+      <text x="89" y="46" font-family="JetBrains Mono" font-size="8" fill="#1F4B2B" text-anchor="middle" opacity="0.7">98% ✓</text>
+    </svg>`;
+  if(kind==="creativity") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <!-- prompt -->
+      <rect x="4" y="22" width="44" height="26" rx="5" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <text x="26" y="34" font-family="Manrope" font-size="8" fill="#3F4493" text-anchor="middle" font-weight="700">"a dragon</text>
+      <text x="26" y="42" font-family="Manrope" font-size="8" fill="#3F4493" text-anchor="middle" font-weight="700">of clouds"</text>
+      <path d="M50 35 L60 35 M58 31 L62 35 L58 39" stroke="#3F4493" stroke-width="1.5" fill="none"/>
+      <!-- generated tiles -->
+      <rect x="66" y="14" width="22" height="22" rx="3" fill="url(#cgrad1)"/>
+      <rect x="92" y="14" width="22" height="22" rx="3" fill="url(#cgrad2)"/>
+      <rect x="66" y="40" width="22" height="22" rx="3" fill="url(#cgrad3)"/>
+      <rect x="92" y="40" width="22" height="22" rx="3" fill="url(#cgrad4)"/>
+      <defs>
+        <linearGradient id="cgrad1" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FFC371"/><stop offset="1" stop-color="#FF5F6D"/></linearGradient>
+        <linearGradient id="cgrad2" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#A8E6CF"/><stop offset="1" stop-color="#3F4493"/></linearGradient>
+        <linearGradient id="cgrad3" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FBC2EB"/><stop offset="1" stop-color="#A6C1EE"/></linearGradient>
+        <linearGradient id="cgrad4" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#84FAB0"/><stop offset="1" stop-color="#8FD3F4"/></linearGradient>
+      </defs>
+    </svg>`;
+  if(kind==="reasoning") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <!-- step-by-step boxes connected by arrows -->
+      <rect x="4" y="26" width="26" height="18" rx="3" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <text x="17" y="38" font-family="JetBrains Mono" font-size="9" fill="#3F4493" text-anchor="middle" font-weight="700">2x=10</text>
+      <path d="M32 35 L40 35 M38 31 L42 35 L38 39" stroke="#3F4493" stroke-width="1.5" fill="none"/>
+      <rect x="44" y="26" width="26" height="18" rx="3" fill="#EEF0F8" stroke="#3F4493" stroke-width="1.3"/>
+      <text x="57" y="38" font-family="JetBrains Mono" font-size="9" fill="#3F4493" text-anchor="middle" font-weight="700">÷2</text>
+      <path d="M72 35 L80 35 M78 31 L82 35 L78 39" stroke="#3F4493" stroke-width="1.5" fill="none"/>
+      <rect x="84" y="26" width="30" height="18" rx="3" fill="#9CD89C" opacity="0.35" stroke="#3BB273" stroke-width="1.3"/>
+      <text x="99" y="38" font-family="JetBrains Mono" font-size="9" fill="#1F4B2B" text-anchor="middle" font-weight="800">x=5 ✓</text>
+    </svg>`;
+  if(kind==="judgment") return `
+    <svg viewBox="0 0 120 70" width="100%" height="100%">
+      <!-- balance scale: pros vs cons -->
+      <line x1="60" y1="10" x2="60" y2="58" stroke="#3F4493" stroke-width="2"/>
+      <path d="M20 24 L60 18 L100 24" stroke="#3F4493" stroke-width="2" fill="none"/>
+      <rect x="6" y="24" width="28" height="14" rx="3" fill="#9CD89C" opacity="0.6"/>
+      <text x="20" y="34" font-family="Manrope" font-size="8" fill="#1F4B2B" text-anchor="middle" font-weight="700">PROS</text>
+      <rect x="86" y="30" width="28" height="14" rx="3" fill="#E89B3C" opacity="0.6"/>
+      <text x="100" y="40" font-family="Manrope" font-size="8" fill="#5A3A0F" text-anchor="middle" font-weight="700">CONS</text>
+      <polygon points="56,58 64,58 60,62" fill="#3F4493"/>
+      <circle cx="60" cy="65" r="3" fill="#3F4493"/>
+    </svg>`;
+  return '';
+}
 const intelgrid = $('#intelgrid');
 const inteldots = $('#inteldots');
 const intelcount = $('#intelcount');
@@ -985,8 +2081,14 @@ humanAbilities.forEach((a,i)=>{
   el.innerHTML = `
     <div class="intel-inner">
       <div class="intel-face intel-front">
-        ${intelIcon(a.icon)}
-        <div class="ic-name">${a.name}</div>
+        <div class="ic-top">
+          ${intelIcon(a.icon)}
+          <div class="ic-diagram">${abilityDiagram(a.diagram)}</div>
+        </div>
+        <div>
+          <div class="ic-name">${a.name}</div>
+          <div class="ic-human-hint">${a.humanHint || ''}</div>
+        </div>
         <div class="ic-tap">Tap to reveal AI →</div>
       </div>
       <div class="intel-face intel-back">
@@ -1010,6 +2112,125 @@ function updateProgress(){
   [...inteldots.children].forEach((d,i)=>d.classList.toggle('on', flipped.has(i)));
   intelcount.textContent = `${flipped.size} of 6 revealed`;
 }
+
+/* Reveal abilities (after instructor-led discussion) */
+const revealAbilitiesBtn = $('#revealAbilitiesBtn');
+const intelWrap = $('#intelWrap');
+if(revealAbilitiesBtn && intelWrap){
+  revealAbilitiesBtn.addEventListener('click', ()=>{
+    intelWrap.style.maxHeight = '4000px';
+    intelWrap.style.opacity = '1';
+    intelWrap.style.marginTop = '24px';
+    revealAbilitiesBtn.textContent = '✓ Revealed';
+    revealAbilitiesBtn.disabled = true;
+    revealAbilitiesBtn.style.opacity = '0.6';
+    setTimeout(()=>intelgrid.scrollIntoView({behavior:'smooth', block:'center'}), 200);
+  });
+}
+
+/* ============ MATCH GAME · examples → human abilities ============ */
+const matchPairs = [
+  {id:'memory',   icon:'⏳', label:'Memory',           example:'Notion AI surfaces a note you wrote 3 months ago when you ask a related question.'},
+  {id:'language', icon:'💬', label:'Language',         example:'ChatGPT translates your essay into Japanese in 2 seconds.'},
+  {id:'sensing',  icon:'👁️', label:'Sensing',          example:'Your phone unlocks the moment it sees your face.'},
+  {id:'creativity',icon:'🎨',label:'Creativity',       example:'Midjourney paints "a dragon made of clouds, sunrise" — no human ever drew it.'},
+  {id:'reasoning',icon:'🧠', label:'Logical reasoning',example:'Claude works through a multi-step word problem, showing its scratch work.'},
+  {id:'judgment', icon:'⚖️', label:'Judgment',         example:'A hiring tool scans 500 resumes and decides which 20 candidates to flag for interview.'},
+];
+
+const matchExamplesEl = $('#matchExamples');
+const matchTargetsEl  = $('#matchTargets');
+const matchStatusEl   = $('#matchStatus');
+let matchSelected = null;       // currently picked example id (click flow)
+const matchedSet = new Set();
+
+function renderMatchGame(){
+  if(!matchExamplesEl) return;
+  // shuffle examples so order doesn't give it away
+  const shuffled = [...matchPairs].sort(()=>Math.random()-0.5);
+  matchExamplesEl.innerHTML = `<div class="match-col-label">Real-world example</div>` +
+    shuffled.map(p => `
+      <div class="match-example" draggable="true" data-id="${p.id}">
+        <span class="match-ex-icon">${p.icon}</span>
+        <span>${p.example}</span>
+      </div>
+    `).join('');
+  matchTargetsEl.innerHTML = `<div class="match-col-label">Human ability</div>` +
+    matchPairs.map(p => `
+      <div class="match-target" data-id="${p.id}">
+        <span class="match-target-icon">${p.icon}</span>
+        <span class="match-target-label">${p.label}</span>
+        <span class="matched-pill">✓ matched</span>
+      </div>
+    `).join('');
+  bindMatchEvents();
+  matchedSet.clear();
+  matchSelected = null;
+  matchStatusEl.textContent = '0 of 6 matched';
+  matchStatusEl.classList.remove('complete');
+}
+
+function bindMatchEvents(){
+  // Drag + drop
+  $$('.match-example').forEach(ex => {
+    ex.addEventListener('dragstart', e=>{
+      if(ex.classList.contains('matched')){ e.preventDefault(); return; }
+      ex.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', ex.dataset.id);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    ex.addEventListener('dragend', ()=>ex.classList.remove('dragging'));
+    // Click flow (mobile / accessibility)
+    ex.addEventListener('click', ()=>{
+      if(ex.classList.contains('matched')) return;
+      $$('.match-example').forEach(e=>e.classList.remove('selected'));
+      if(matchSelected === ex.dataset.id){ matchSelected = null; return; }
+      ex.classList.add('selected');
+      matchSelected = ex.dataset.id;
+    });
+  });
+  $$('.match-target').forEach(t => {
+    t.addEventListener('dragover', e=>{ e.preventDefault(); t.classList.add('over'); });
+    t.addEventListener('dragleave', ()=>t.classList.remove('over'));
+    t.addEventListener('drop', e=>{
+      e.preventDefault();
+      t.classList.remove('over');
+      const id = e.dataTransfer.getData('text/plain');
+      tryMatch(id, t);
+    });
+    t.addEventListener('click', ()=>{
+      if(!matchSelected) return;
+      tryMatch(matchSelected, t);
+    });
+  });
+}
+
+function tryMatch(exampleId, targetEl){
+  const targetId = targetEl.dataset.id;
+  if(targetEl.classList.contains('matched')) return;
+  if(exampleId === targetId){
+    targetEl.classList.add('matched');
+    const exEl = document.querySelector(`.match-example[data-id="${exampleId}"]`);
+    if(exEl){
+      exEl.classList.add('matched');
+      exEl.classList.remove('selected');
+    }
+    matchedSet.add(exampleId);
+    matchSelected = null;
+    matchStatusEl.textContent = `${matchedSet.size} of 6 matched`;
+    if(matchedSet.size === matchPairs.length){
+      matchStatusEl.textContent = '🎉 All 6 matched — nice work!';
+      matchStatusEl.classList.add('complete');
+    }
+  } else {
+    targetEl.classList.add('wrong');
+    setTimeout(()=>targetEl.classList.remove('wrong'), 400);
+  }
+}
+
+renderMatchGame();
+const matchResetBtn = $('#matchResetBtn');
+if(matchResetBtn) matchResetBtn.addEventListener('click', renderMatchGame);
 
 /* ============ ERAS (vertical rows with image + animation) ============ */
 function eraAnim(type){
@@ -1233,6 +2454,23 @@ eras.forEach((e,i)=>{
     <button class="chip-btn key active" data-key="1"><span class="play-arrow">▸</span>${e.keyEx}</button>
     ${e.optional.map((o,oi)=>`<button class="chip-btn" data-opt="${oi}"><span class="play-arrow">▸</span>${o.name}</button>`).join('')}
   `;
+  const quizHTML = e.quiz ? `
+    <div class="era-quiz" data-era="${i}">
+      <div class="eq-head">
+        <span class="eq-tag">Quick check · ${i+1}/5</span>
+        <span class="eq-q">${e.quiz.q}</span>
+      </div>
+      <div class="eq-options">
+        ${e.quiz.options.map((o,oi)=>`
+          <button class="eq-opt" data-correct="${o.correct?'1':'0'}" data-idx="${oi}">
+            <span class="eq-letter">${String.fromCharCode(65+oi)}</span>
+            <span class="eq-text">${o.t}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="eq-feedback" id="eq-fb-${i}"></div>
+    </div>
+  ` : '';
   el.innerHTML = `
     <div class="era-visual ${e.visualDark?'dark':''}" data-era="${i}">
       <div class="visual-img" style="background-image:url('${e.img}')"></div>
@@ -1247,6 +2485,7 @@ eras.forEach((e,i)=>{
       <div class="e-ex-h">Examples <span class="opt-badge">click to explore</span></div>
       <div class="e-chips">${chipsHTML}</div>
       <button class="chip-reset">↺ Back to key moment</button>
+      ${quizHTML}
     </div>`;
   ergrid.appendChild(el);
 
@@ -1291,6 +2530,25 @@ eras.forEach((e,i)=>{
     el.querySelector('.chip-btn.key').classList.add('active');
   });
 
+  // Quiz wiring — allow re-clicking different answers
+  if(e.quiz){
+    const fb = el.querySelector(`#eq-fb-${i}`);
+    const opts = el.querySelectorAll('.eq-opt');
+    opts.forEach((o, oi) => {
+      o.addEventListener('click', ()=>{
+        const correct = o.dataset.correct === '1';
+        // Clear previous state on all options (let students retry)
+        opts.forEach(x => x.classList.remove('right','wrong','correct-answer','picked'));
+        o.classList.add(correct ? 'right' : 'wrong', 'picked');
+        fb.classList.remove('show','ok','no');
+        // Use a quick reflow to allow the transition to restart on rapid re-clicks
+        void fb.offsetWidth;
+        fb.innerHTML = `<span class="eq-fb-icon ${correct?'ok':'no'}">${correct?'✓':'×'}</span> ${e.quiz.options[oi].why}`;
+        fb.classList.add('show', correct ? 'ok' : 'no');
+      });
+    });
+  }
+
   // kickoff initial caption (show it for key moment too)
   if(e.keyCaption){ visual.classList.add('show-caption'); }
 
@@ -1299,6 +2557,49 @@ eras.forEach((e,i)=>{
   // hold the animation empty until the row scrolls into view (lazy trigger)
   animBox.innerHTML = '';
 });
+
+/* ============ ERA STEPPER (instructor walk-through) ============ */
+const eraStepDots = $('#eraStepDots');
+if(eraStepDots){
+  eras.forEach((e, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'era-dot';
+    dot.dataset.idx = i;
+    dot.innerHTML = `<span class="era-dot-n">${i+1}</span><span class="era-dot-name">${e.name}</span>`;
+    dot.addEventListener('click', ()=>jumpToEra(i));
+    eraStepDots.appendChild(dot);
+  });
+  $$('#eraStepper .era-step-btn').forEach(b => {
+    b.addEventListener('click', ()=>{
+      const cur = currentEraIdx();
+      const next = b.dataset.step === 'next' ? Math.min(eras.length-1, cur+1) : Math.max(0, cur-1);
+      jumpToEra(next);
+    });
+  });
+  function jumpToEra(i){
+    const row = document.querySelectorAll('.era-row')[i];
+    if(row) row.scrollIntoView({behavior:'smooth', block:'center'});
+    $$('.era-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+  }
+  function currentEraIdx(){
+    const rows = [...document.querySelectorAll('.era-row')];
+    let best = 0, bestDist = Infinity;
+    const vh = window.innerHeight;
+    rows.forEach((r, ri) => {
+      const c = r.getBoundingClientRect().top + r.getBoundingClientRect().height/2;
+      const d = Math.abs(c - vh/2);
+      if(d < bestDist){ bestDist = d; best = ri; }
+    });
+    return best;
+  }
+  // Update active dot on scroll
+  window.addEventListener('scroll', ()=>{
+    const tlSec = $('#timeline').getBoundingClientRect();
+    if(tlSec.bottom < 0 || tlSec.top > window.innerHeight) return;
+    const i = currentEraIdx();
+    $$('.era-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+  });
+}
 
 // IntersectionObserver — play each era's animation when it enters the viewport
 const eraObserver = new IntersectionObserver((entries)=>{
@@ -1484,6 +2785,216 @@ buildingBlocks.forEach(b=>{
   bg.appendChild(el);
 });
 
+/* ============ BUILDING BLOCKS · MATCHING ACTIVITY ============ */
+const bbPairs = [
+  // Target icons (right column) stay distinct; example icons (left column) are now contextual,
+  // not direct mirrors — students have to think instead of icon-matching.
+  {id:'model',  icon:'🧠', label:'Model',  exampleIcon:'📝', example:'GPT-5 generates a paragraph of text from your prompt.'},
+  {id:'tool',   icon:'🔧', label:'Tool',   exampleIcon:'🌤️', example:'A weather API returns "18°C, sunny in Tokyo" when called.'},
+  {id:'agent',  icon:'🤖', label:'Agent',  exampleIcon:'💻', example:'Claude Code reads your codebase, plans a fix, edits files, runs the tests.'},
+  {id:'system', icon:'🌐', label:'System', exampleIcon:'🎧', example:'A customer-support product: chat UI + retrieval + LLM + escalation to a human.'},
+];
+const bbExamplesEl = $('#bbExamples');
+const bbTargetsEl  = $('#bbTargets');
+const bbMatchStatusEl = $('#bbMatchStatus');
+let bbSelected = null;
+const bbMatched = new Set();
+
+function renderBbMatch(){
+  if(!bbExamplesEl) return;
+  const shuffled = [...bbPairs].sort(()=>Math.random()-0.5);
+  bbExamplesEl.innerHTML = `<div class="match-col-label">Real-world example</div>` +
+    shuffled.map(p => `<div class="match-example" draggable="true" data-id="${p.id}"><span class="match-ex-icon">${p.exampleIcon}</span><span>${p.example}</span></div>`).join('');
+  bbTargetsEl.innerHTML = `<div class="match-col-label">Block</div>` +
+    bbPairs.map(p => `<div class="match-target" data-id="${p.id}"><span class="match-target-icon">${p.icon}</span><span class="match-target-label">${p.label}</span><span class="matched-pill">✓ matched</span></div>`).join('');
+  bbMatched.clear();
+  bbSelected = null;
+  bbMatchStatusEl.textContent = '0 of 4 matched';
+  bbMatchStatusEl.classList.remove('complete');
+
+  // Wire events (scoped to bb only)
+  $$('.match-example', bbExamplesEl).forEach(ex => {
+    ex.addEventListener('dragstart', e=>{
+      if(ex.classList.contains('matched')){ e.preventDefault(); return; }
+      ex.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', 'bb:'+ex.dataset.id);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    ex.addEventListener('dragend', ()=>ex.classList.remove('dragging'));
+    ex.addEventListener('click', ()=>{
+      if(ex.classList.contains('matched')) return;
+      $$('.match-example', bbExamplesEl).forEach(e=>e.classList.remove('selected'));
+      if(bbSelected === ex.dataset.id){ bbSelected = null; return; }
+      ex.classList.add('selected');
+      bbSelected = ex.dataset.id;
+    });
+  });
+  $$('.match-target', bbTargetsEl).forEach(t => {
+    t.addEventListener('dragover', e=>{ e.preventDefault(); t.classList.add('over'); });
+    t.addEventListener('dragleave', ()=>t.classList.remove('over'));
+    t.addEventListener('drop', e=>{
+      e.preventDefault();
+      t.classList.remove('over');
+      const raw = e.dataTransfer.getData('text/plain');
+      if(!raw.startsWith('bb:')) return;
+      bbTry(raw.slice(3), t);
+    });
+    t.addEventListener('click', ()=>{ if(bbSelected) bbTry(bbSelected, t); });
+  });
+}
+function bbTry(exId, targetEl){
+  const tid = targetEl.dataset.id;
+  if(targetEl.classList.contains('matched')) return;
+  if(exId === tid){
+    targetEl.classList.add('matched');
+    const exEl = bbExamplesEl.querySelector(`.match-example[data-id="${exId}"]`);
+    if(exEl){ exEl.classList.add('matched'); exEl.classList.remove('selected'); }
+    bbMatched.add(exId);
+    bbSelected = null;
+    bbMatchStatusEl.textContent = `${bbMatched.size} of 4 matched`;
+    if(bbMatched.size === bbPairs.length){
+      bbMatchStatusEl.textContent = '🎉 All 4 matched — you can name the toolkit.';
+      bbMatchStatusEl.classList.add('complete');
+    }
+  } else {
+    targetEl.classList.add('wrong');
+    setTimeout(()=>targetEl.classList.remove('wrong'), 400);
+  }
+}
+renderBbMatch();
+const bbResetBtn = $('#bbMatchResetBtn');
+if(bbResetBtn) bbResetBtn.addEventListener('click', renderBbMatch);
+
+/* ============ COMBINE GAME (model+tool → agent → system) ============ */
+const combineBoard = $('#combineBoard');
+const combineStatus = $('#combineStatus');
+let combineTiles = []; // {id, kind, x, y}
+let combineNextId = 1;
+
+const COMBINE_RULES = {
+  'model+tool':'agent',
+  'tool+model':'agent',
+  'agent+agent':'system',
+  'system+system':'super',  // ✨ super saiyan moment
+};
+const COMBINE_META = {
+  model:  {icon:'🧠', label:'Model'},
+  tool:   {icon:'🔧', label:'Tool'},
+  agent:  {icon:'🤖', label:'Agent'},
+  system: {icon:'🌐', label:'System'},
+  super:  {icon:'🔥', label:'Super System'},
+};
+
+function renderCombine(){
+  if(!combineBoard) return;
+  combineBoard.innerHTML = '';
+  combineTiles.forEach(t => {
+    const el = document.createElement('div');
+    el.className = `combine-tile ${t.kind}${t._fresh?' spawned':''}`;
+    el.dataset.id = t.id;
+    el.draggable = true;
+    const meta = COMBINE_META[t.kind];
+    el.innerHTML = `<span class="ct-icon">${meta.icon}</span><span class="ct-label">${meta.label}</span>`;
+    el.style.left = t.x + 'px';
+    el.style.top = t.y + 'px';
+    el.addEventListener('dragstart', e=>{
+      el.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', 'cb:'+t.id);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', ()=>el.classList.remove('dragging'));
+    el.addEventListener('dragover', e=>{
+      const rawId = e.dataTransfer.types.length ? null : null; // can't read on dragover; just allow
+      e.preventDefault();
+      el.classList.add('over');
+    });
+    el.addEventListener('dragleave', ()=>el.classList.remove('over'));
+    el.addEventListener('drop', e=>{
+      e.preventDefault();
+      el.classList.remove('over');
+      const raw = e.dataTransfer.getData('text/plain');
+      if(!raw.startsWith('cb:')) return;
+      const draggedId = parseInt(raw.slice(3));
+      const targetId = t.id;
+      if(draggedId === targetId) return;
+      tryCombine(draggedId, targetId);
+    });
+    combineBoard.appendChild(el);
+    t._fresh = false;
+  });
+}
+
+function spawnTile(kind, opts={}){
+  const boardW = combineBoard.clientWidth || 600;
+  const boardH = combineBoard.clientHeight || 260;
+  const w = kind === 'system' ? 160 : 120;
+  const h = kind === 'system' ? 96 : 80;
+  const x = opts.x != null ? opts.x : Math.max(8, Math.min(boardW - w - 8, 20 + Math.random()*(boardW-w-40)));
+  const y = opts.y != null ? opts.y : Math.max(8, Math.min(boardH - h - 8, 20 + Math.random()*(boardH-h-40)));
+  combineTiles.push({id: combineNextId++, kind, x, y, _fresh: true});
+  renderCombine();
+}
+
+function tryCombine(draggedId, targetId){
+  const dragged = combineTiles.find(t => t.id === draggedId);
+  const target = combineTiles.find(t => t.id === targetId);
+  if(!dragged || !target) return;
+  const key = `${dragged.kind}+${target.kind}`;
+  const result = COMBINE_RULES[key];
+  if(result){
+    if(result === 'super'){
+      // Super Saiyan moment — vanish both systems with a glowing fire effect
+      const x = (dragged.x + target.x)/2, y = (dragged.y + target.y)/2;
+      combineTiles = combineTiles.filter(t => t.id !== draggedId && t.id !== targetId);
+      renderCombine();
+      // Spawn the super tile, glow, vanish
+      const superTile = document.createElement('div');
+      superTile.className = 'combine-tile super spawned';
+      superTile.style.left = x + 'px';
+      superTile.style.top = y + 'px';
+      superTile.innerHTML = `<span class="ct-icon">🔥</span><span class="ct-label">SUPER SYSTEM</span>`;
+      combineBoard.appendChild(superTile);
+      combineStatus.textContent = '⚡ SUPER SYSTEM achieved. Too powerful to exist on this board.';
+      combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
+      setTimeout(()=>{
+        superTile.classList.add('vanishing');
+        setTimeout(()=>superTile.remove(), 700);
+      }, 1400);
+      return;
+    }
+    // Standard combine: place new tile at target's position
+    const x = target.x, y = target.y;
+    combineTiles = combineTiles.filter(t => t.id !== draggedId && t.id !== targetId);
+    combineTiles.push({id: combineNextId++, kind: result, x, y, _fresh:true});
+    renderCombine();
+    if(result === 'agent'){
+      combineStatus.textContent = '🎉 You made an Agent. Can you make two of them?';
+      combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
+    } else if(result === 'system'){
+      combineStatus.textContent = '🏆 A System — a full AI product. (You\'ll build one by Day 10.) Curious what happens with two…';
+      combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
+    }
+  } else {
+    combineStatus.textContent = `Hmm — ${COMBINE_META[dragged.kind].label} + ${COMBINE_META[target.kind].label} doesn't combine. Try other pairs.`;
+    combineStatus.classList.remove('win'); combineStatus.classList.add('bad');
+  }
+}
+
+if(combineBoard){
+  // Make the board itself a drop target so users can drag back without merging
+  combineBoard.addEventListener('dragover', e=>e.preventDefault());
+  $('#combineSpawnModel').addEventListener('click', ()=>{ spawnTile('model'); combineStatus.textContent = 'Tip: drag a Model onto a Tool to make an Agent.'; combineStatus.classList.remove('win','bad'); });
+  $('#combineSpawnTool').addEventListener('click', ()=>{ spawnTile('tool'); combineStatus.textContent = 'Tip: drag a Model onto a Tool to make an Agent.'; combineStatus.classList.remove('win','bad'); });
+  $('#combineReset').addEventListener('click', ()=>{
+    combineTiles = []; renderCombine();
+    combineStatus.textContent = 'Tip: spawn a Model and a Tool, then drag one onto the other.';
+    combineStatus.classList.remove('win','bad');
+  });
+  // Spawn starter tiles
+  spawnTile('model', {x:30, y:30});
+  spawnTile('tool', {x:200, y:50});
+}
+
 /* ============ SIMULATOR ============ */
 let currentPrompt = simPrompts[0];
 const pwrap = $('#prompts');
@@ -1541,6 +3052,28 @@ async function runSim(){
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 $('#runsim').addEventListener('click', runSim);
 $('#resetsim').addEventListener('click', ()=>{ $('#simsteps').innerHTML=''; });
+
+/* Sim understanding-check quiz — clickable repeatedly */
+(function wireSimQuiz(){
+  const wraps = $$('#simQuiz .eq-opt');
+  const fb = $('#simQuizFb');
+  const whys = [
+    'Not quite — LLMs understand the question fine. The issue is they have no live access to current weather data.',
+    'Exactly — LLMs only know what they were trained on. Live or private data needs a Tool (an API call) to reach.',
+    'Not the reason — LLMs are happy to discuss weather. The issue is they can\'t fetch live data on their own.',
+  ];
+  wraps.forEach((o, oi) => {
+    o.addEventListener('click', ()=>{
+      const correct = o.dataset.correct === '1';
+      wraps.forEach(x => x.classList.remove('right','wrong'));
+      o.classList.add(correct ? 'right' : 'wrong');
+      fb.classList.remove('show','ok','no');
+      void fb.offsetWidth;
+      fb.innerHTML = `<span class="eq-fb-icon ${correct?'ok':'no'}">${correct?'✓':'×'}</span> ${whys[oi]}`;
+      fb.classList.add('show', correct ? 'ok' : 'no');
+    });
+  });
+})();
 
 /* ============ MOUNTAIN MAP — atmospheric layered landscape ============ */
 // New approach: depth via 4 receding atmospheric layers (the classic 3D trick that
@@ -1842,6 +3375,173 @@ function selectStation(idx){
   spanel.classList.add('show');
 }
 setTimeout(()=>selectStation(0), 400);
+
+/* ============ WELCOME · GOALS CHECKLIST ============ */
+const goalListEl = $('#goalList');
+const goalCountEl = $('#goalCount');
+if(goalListEl){
+  $$('li', goalListEl).forEach(li => {
+    li.addEventListener('click', ()=>{
+      li.classList.toggle('done');
+      goalCountEl.textContent = $$('.goal-list li.done').length;
+    });
+  });
+}
+
+/* ============ WELCOME · INTRO IDEAS PILL ============ */
+const ideaPool = [
+  "an AI tutor for the subject you hated most",
+  "a homework-procrastination-detector",
+  "a chatbot that writes in your own voice",
+  "an AI that grades your dog's photos",
+  "a recipe generator from whatever's in the fridge",
+  "an outfit recommender that learns your style",
+  "an AI that turns your notes into flashcards",
+  "a sports stats assistant for your favorite team",
+  "a music-mood-matcher for any moment",
+  "an AI co-pilot for your video edits",
+  "a college-essay brainstorming buddy",
+  "an AI that explains TikToks to your parents"
+];
+const ideaBtn = $('#ideaBtn');
+const ideaPill = $('#ideaPill');
+let ideaIdx = -1;
+if(ideaBtn){
+  ideaBtn.addEventListener('click', ()=>{
+    let next;
+    do { next = Math.floor(Math.random()*ideaPool.length); } while(next === ideaIdx && ideaPool.length > 1);
+    ideaIdx = next;
+    ideaPill.textContent = '💡  ' + ideaPool[next];
+    ideaPill.classList.add('show');
+  });
+}
+
+/* ============ MINDSET · USER vs BUILDER ============ */
+$$('.vs-card').forEach(card => {
+  const handler = ()=>{
+    $$('.vs-card').forEach(c => c.classList.toggle('active', c === card));
+    card.setAttribute('aria-pressed', 'true');
+    $$('.vs-card').forEach(c => { if(c !== card) c.setAttribute('aria-pressed','false'); });
+  };
+  card.addEventListener('click', handler);
+  card.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); handler(); } });
+});
+
+/* Self-rank slider feedback */
+const vsSlider = $('#vsSlider');
+const vsSliderFb = $('#vsSliderFeedback');
+if(vsSlider && vsSliderFb){
+  function vsSliderUpdate(){
+    const v = parseInt(vsSlider.value);
+    vsSliderFb.classList.remove('user-side', 'middle', 'builder-side');
+    let msg;
+    if(v <= 30){
+      vsSliderFb.classList.add('user-side');
+      msg = `<strong>Perfect starting point.</strong> Most people start as users. By Day 10 you'll have shipped something <em>others can use</em> — and that's a much bigger leap than it sounds.`;
+    } else if(v <= 70){
+      vsSliderFb.classList.add('middle');
+      msg = `<strong>You've started crossing over.</strong> You've poked around, maybe built a thing or two. Over the next 10 days you'll go from <em>experimenting</em> to <em>shipping</em>.`;
+    } else {
+      vsSliderFb.classList.add('builder-side');
+      msg = `<strong>Wow — already on the builder side.</strong> 🚀 You'll get to push way further: deeper systems, real users, sharper portfolio. We're going to build on what you already know.`;
+    }
+    vsSliderFb.innerHTML = msg;
+  }
+  vsSlider.addEventListener('input', vsSliderUpdate);
+  // Don't trigger automatically — wait for user input so the prompt text shows
+}
+const revealBtn = $('#revealBuilderBtn');
+const vsGrid = $('#vsGrid');
+const vsSegue = $('#vsSegue');
+if(revealBtn){
+  revealBtn.addEventListener('click', ()=>{
+    vsGrid.classList.add('reveal');
+    vsSegue.classList.add('reveal');
+    revealBtn.style.display = 'none';
+    setTimeout(()=>vsGrid.scrollIntoView({behavior:'smooth', block:'center'}), 100);
+  });
+}
+
+/* ============ SCHEDULE AT A GLANCE (matrix matching deck table) ============ */
+// Session names (columns)
+const sagSessions = [
+  {n:1,  week:1, name:"Orientation + AI Builder's Map"},
+  {n:2,  week:1, name:"Machine Learning Foundations"},
+  {n:3,  week:1, name:"Neural Network + Computer Vision"},
+  {n:4,  week:1, name:"Natural Language Processing"},
+  {n:5,  week:1, name:"AI Agents + Agentic Systems"},
+  {n:6,  week:2, name:"AI Ethics + Decision-Making"},
+  {n:7,  week:2, name:"Instructor Spotlights"},
+  {n:8,  week:2, name:"AI Research Workshop"},
+  {n:9,  week:2, name:"Positioning Your Project (GitHub, LinkedIn)"},
+  {n:10, week:2, name:"Final Project Presentations"},
+];
+// First-half rows
+const sagFirstHalf = [
+  {cat:'found', label:'AI Foundations',     desc:'Concept block',
+   cells:['Orientation + AI Builder\'s Map','Machine Learning Foundations','Neural Network + Computer Vision','Natural Language Processing','AI Agents + Agentic Systems']},
+  {cat:'hands', label:'Hands-on Activity',  desc:'Interactive demo / lab',
+   cells:['Mini Vibe Coding Hackathon','Training an Image Classifier','Interactive Neural Network','Prompt Engineering Challenge','AI Agent Demo + Deploy']},
+  {cat:'build', label:'Building with Code', desc:'Notebook + app prototype',
+   cells:['Python + Exploring Data','Classification + Bias Auditing','Build a Computer Vision App','Build an NLP App','Build + Deploy your Own Agent']},
+];
+// Second-half rows
+const sagSecondHalf = [
+  {cat:'pipe',  label:'AI Pipeline',        desc:'Concept block',
+   cells:['AI Ethics + Decision-Making','Instructor Spotlights','AI Research Workshop','Positioning Your Project','Final Project Presentations']},
+  {cat:'hands', label:'Hands-on Activity',  desc:'Skill-building block',
+   cells:['Data Exploration','AI Model Building','Evaluation + Iteration','App Deployment','College + Career Panel']},
+  {cat:'wks',   label:'Interactive Workshop', desc:'Mentor-led project work',
+   cells:['AI for Social Good · Project Intro','Mentor-Led Hands-on Project Work','Mentor-Led Hands-on Project Work','Mentor-Led Hands-on Project Work','Final Presentation Prep']},
+];
+
+const sagMatrix = $('#sagMatrix');
+function renderSagMatrix(){
+  if(!sagMatrix) return;
+  const headerCells = (offset) => sagSessions.slice(offset, offset+5).map(s => `
+    <div class="sag-cell" data-day="${s.n}">
+      <div>
+        <div class="sag-cell-day">Session ${s.n}</div>
+        <div class="sag-cell-name">${s.name}</div>
+      </div>
+    </div>
+  `).join('');
+  const rowHTML = (r, weekOffset) => `
+    <div class="sag-row" data-cat="${r.cat}">
+      <div class="sag-row-label">
+        <div class="srl-cat">${r.label}</div>
+        <div class="srl-desc">${r.desc}</div>
+      </div>
+      ${r.cells.map((c, i) => `<div class="sag-cell" data-day="${weekOffset + i + 1}">${c}</div>`).join('')}
+    </div>
+  `;
+  sagMatrix.innerHTML = `
+    <div class="sag-half-divider w1"><div>First Half · Program Components</div><div>Session 1</div><div>Session 2</div><div>Session 3</div><div>Session 4</div><div>Session 5</div></div>
+    <div class="sag-row header">
+      <div class="sag-row-label"><div class="srl-cat">Topic</div></div>
+      ${headerCells(0)}
+    </div>
+    ${sagFirstHalf.map(r => rowHTML(r, 0)).join('')}
+    <div class="sag-half-divider w2"><div>Second Half · Program Components</div><div>Session 6</div><div>Session 7</div><div>Session 8</div><div>Session 9</div><div>Session 10</div></div>
+    <div class="sag-row header">
+      <div class="sag-row-label"><div class="srl-cat">Topic</div></div>
+      ${headerCells(5)}
+    </div>
+    ${sagSecondHalf.map(r => rowHTML(r, 5)).join('')}
+  `;
+  // Wire cell clicks to jump to that day on the map
+  $$('.sag-cell', sagMatrix).forEach(cell => {
+    cell.addEventListener('click', ()=>{
+      const day = parseInt(cell.dataset.day);
+      if(!day) return;
+      selectStation(day - 1);
+      // Highlight column
+      $$('.sag-cell').forEach(c => c.classList.toggle('active', parseInt(c.dataset.day) === day));
+      $('#terrain').scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+}
+renderSagMatrix();
 
 </script>
 </body>
