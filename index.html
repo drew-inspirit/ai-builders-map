@@ -880,6 +880,12 @@ svg.terrain{width:100%; height:auto; display:block}
 .combine-tile.tool .ct-label{color:#7A4F0F}
 .combine-tile.agent{background:linear-gradient(135deg,#E3F4E9 0%, #BCE6CD 100%); border-color:#3BB273}
 .combine-tile.agent .ct-label{color:#1F4B2B}
+.combine-tile .ct-tools{
+  position:absolute; top:-8px; right:-8px;
+  font:800 10px/1 'JetBrains Mono'; letter-spacing:.04em;
+  padding:5px 8px; border-radius:999px; background:#E89B3C; color:#fff;
+  border:2px solid #fff; box-shadow:0 2px 6px rgba(20,22,60,0.18);
+}
 .combine-tile.system{background:linear-gradient(135deg, var(--navy) 0%, var(--indigo) 100%); border-color:var(--navy); color:#fff; width:160px; height:96px}
 .combine-tile.system .ct-label{color:#fff; font-size:15px}
 .combine-tile.system .ct-icon{color:#9CD89C}
@@ -2874,6 +2880,8 @@ let combineNextId = 1;
 const COMBINE_RULES = {
   'model+tool':'agent',
   'tool+model':'agent',
+  'agent+tool':'agent+',   // adds a tool to existing agent
+  'tool+agent':'agent+',
   'agent+agent':'system',
   'system+system':'super',  // ✨ super saiyan moment
 };
@@ -2894,7 +2902,10 @@ function renderCombine(){
     el.dataset.id = t.id;
     el.draggable = true;
     const meta = COMBINE_META[t.kind];
-    el.innerHTML = `<span class="ct-icon">${meta.icon}</span><span class="ct-label">${meta.label}</span>`;
+    // Show a tool-count badge on agents that have multiple tools
+    const toolBadge = (t.kind === 'agent' && t.tools && t.tools > 1)
+      ? `<span class="ct-tools">+${t.tools} tools</span>` : '';
+    el.innerHTML = `<span class="ct-icon">${meta.icon}</span><span class="ct-label">${meta.label}</span>${toolBadge}`;
     el.style.left = t.x + 'px';
     el.style.top = t.y + 'px';
     el.addEventListener('dragstart', e=>{
@@ -2942,6 +2953,18 @@ function tryCombine(draggedId, targetId){
   const key = `${dragged.kind}+${target.kind}`;
   const result = COMBINE_RULES[key];
   if(result){
+    if(result === 'agent+'){
+      // Add a tool to an existing agent (keep the agent, consume the tool)
+      const agent = dragged.kind === 'agent' ? dragged : target;
+      const tool  = dragged.kind === 'tool'  ? dragged : target;
+      agent.tools = (agent.tools || 1) + 1;
+      agent._fresh = true;
+      combineTiles = combineTiles.filter(t => t.id !== tool.id);
+      renderCombine();
+      combineStatus.textContent = `🔧 Agent now has ${agent.tools} tools. Real agents juggle many — search, code, files, APIs… Keep going, or pair it with another Agent.`;
+      combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
+      return;
+    }
     if(result === 'super'){
       // Super Saiyan moment — vanish both systems with a glowing fire effect
       const x = (dragged.x + target.x)/2, y = (dragged.y + target.y)/2;
@@ -2965,10 +2988,12 @@ function tryCombine(draggedId, targetId){
     // Standard combine: place new tile at target's position
     const x = target.x, y = target.y;
     combineTiles = combineTiles.filter(t => t.id !== draggedId && t.id !== targetId);
-    combineTiles.push({id: combineNextId++, kind: result, x, y, _fresh:true});
+    const newTile = {id: combineNextId++, kind: result, x, y, _fresh:true};
+    if(result === 'agent') newTile.tools = 1;
+    combineTiles.push(newTile);
     renderCombine();
     if(result === 'agent'){
-      combineStatus.textContent = '🎉 You made an Agent. Can you make two of them?';
+      combineStatus.textContent = '🎉 You made an Agent. Try giving it more tools, or pair it with another Agent.';
       combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
     } else if(result === 'system'){
       combineStatus.textContent = '🏆 A System — a full AI product. (You\'ll build one by Day 10.) Curious what happens with two…';
