@@ -46,9 +46,11 @@ code,.mono{font-family:'JetBrains Mono',monospace}
   mask-image: radial-gradient(ellipse at 95% 5%, black 0%, transparent 65%);
 }
 
-/* progress bar */
-.progress{position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:50}
-.progress > div{height:100%; width:0%; background:var(--navy); transition:width .25s ease}
+/* progress bar — segmented across sections (one filled bar per section) */
+.progress{position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:50; display:flex; gap:2px; padding:0 2px}
+.progress > div{height:100%; flex:1; background:rgba(37,40,97,0.12); border-radius:2px; transition:background .3s ease}
+.progress > div.done{background:var(--navy)}
+.progress > div.current{background:var(--indigo)}
 
 /* top nav */
 nav.topnav{
@@ -64,9 +66,49 @@ nav.topnav button{
 nav.topnav button:hover{color:var(--ink)}
 nav.topnav button.active{background:var(--navy); color:#fff}
 
+/* Click-through mode: only the current section is rendered at a time. */
 section{
-  position:relative; z-index:1; min-height:100vh; padding:120px 24px 80px;
-  display:flex; flex-direction:column; justify-content:center;
+  position:relative; z-index:1; min-height:100vh; padding:120px 24px 120px;
+  display:none; flex-direction:column; justify-content:center;
+}
+section.current{display:flex; animation:sectionEnter .35s cubic-bezier(.2,.7,.3,1)}
+@keyframes sectionEnter{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* ============ CLICK-THROUGH BOTTOM CONTROL ============ */
+.clickthru{
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:45;
+  background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border); border-radius:999px; padding:5px;
+  display:flex; align-items:center; gap:4px; box-shadow:0 8px 28px rgba(20,22,60,0.16);
+  max-width:calc(100vw - 32px);
+}
+.clickthru button{
+  background:transparent; border:0; color:var(--ink-2); cursor:pointer;
+  font:700 13px/1 'Manrope'; padding:10px 16px; border-radius:999px;
+  display:flex; align-items:center; gap:6px; transition:all .15s ease;
+}
+.clickthru button:hover:not(:disabled){background:var(--bg-2); color:var(--ink)}
+.clickthru button:disabled{opacity:0.35; cursor:not-allowed}
+.clickthru button.primary{background:var(--navy); color:#fff; padding:10px 18px}
+.clickthru button.primary:hover:not(:disabled){background:var(--navy-2)}
+.ct-label{
+  display:flex; align-items:center; gap:10px; padding:0 14px;
+  font:600 12.5px/1 'Manrope'; color:var(--ink); white-space:nowrap;
+  border-left:1px solid var(--border); border-right:1px solid var(--border);
+}
+.ct-counter{font:800 11px/1 'JetBrains Mono'; color:var(--muted); letter-spacing:.06em}
+.ct-name{color:var(--navy); font-weight:700; letter-spacing:-0.01em}
+.ct-hint{
+  position:fixed; bottom:78px; left:50%; transform:translateX(-50%); z-index:44;
+  font:600 11px/1 'JetBrains Mono'; letter-spacing:.10em; color:var(--muted);
+  background:rgba(255,255,255,0.7); padding:4px 10px; border-radius:999px; opacity:0;
+  transition:opacity .3s ease; pointer-events:none;
+}
+.ct-hint.show{opacity:1}
+@media(max-width:640px){
+  .ct-label{padding:0 8px; font-size:11px}
+  .ct-name{display:none}
+  .clickthru button{padding:9px 12px}
 }
 .container{max-width:1180px; width:100%; margin:0 auto}
 .eyebrow{font:700 11px/1 'Manrope',sans-serif; letter-spacing:.22em; text-transform:uppercase; color:var(--indigo); margin-bottom:18px}
@@ -1175,7 +1217,16 @@ input#vsSlider::-moz-range-thumb{
 
 <div class="halftone-tr"></div>
 
-<div class="progress"><div id="progressbar"></div></div>
+<div class="progress" id="progressBar"></div>
+<div class="ct-hint" id="ctHint">← → to navigate</div>
+<div class="clickthru" id="clickthru">
+  <button id="ctPrev" aria-label="Previous section">← Prev</button>
+  <div class="ct-label">
+    <span class="ct-counter" id="ctCounter">1 / 9</span>
+    <span class="ct-name" id="ctName">Start</span>
+  </div>
+  <button id="ctNext" class="primary" aria-label="Next section">Next →</button>
+</div>
 
 <nav class="topnav" id="topnav">
   <button data-target="hero" class="active">Start</button>
@@ -1957,29 +2008,83 @@ const sessions = [
 /* ============ HELPERS ============ */
 function $(s,r=document){return r.querySelector(s)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
-function scrollToSec(id){ $('#'+id).scrollIntoView({behavior:'smooth', block:'start'}) }
 function svgEl(tag, attrs={}){
   const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
   for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
   return el;
 }
 
-/* ============ NAV + PROGRESS ============ */
-const navBtns = $$('#topnav button');
-navBtns.forEach(b => b.addEventListener('click', ()=>scrollToSec(b.dataset.target)));
+/* ============ CLICK-THROUGH NAVIGATION ============ */
 const sectionsList = ['hero','welcome','mindset','what','timeline','blocks','sim','map','next'];
-window.addEventListener('scroll', ()=>{
-  const sc = window.scrollY;
-  const doc = document.documentElement.scrollHeight - window.innerHeight;
-  $('#progressbar').style.width = Math.min(100, (sc/doc)*100) + '%';
-  let cur = sectionsList[0];
-  for(const id of sectionsList){
-    const el = $('#'+id);
-    if(!el) continue;
-    if(el.getBoundingClientRect().top < window.innerHeight*0.45) cur = id;
-  }
-  navBtns.forEach(b=>b.classList.toggle('active', b.dataset.target===cur));
+const sectionLabels = {
+  hero:'Start', welcome:'Welcome', mindset:'Mindset',
+  what:'What is AI', timeline:'Eras', blocks:'Building Blocks',
+  sim:'How It Works', map:'10-Day Map', next:"What's next"
+};
+const navBtns = $$('#topnav button');
+const progressBar = $('#progressBar');
+const ctCounter = $('#ctCounter');
+const ctName = $('#ctName');
+const ctPrev = $('#ctPrev');
+const ctNext = $('#ctNext');
+const ctHint = $('#ctHint');
+
+// Build the segmented progress bar (one stripe per section)
+sectionsList.forEach(()=>progressBar.appendChild(document.createElement('div')));
+const progressSegs = $$('#progressBar > div');
+
+let currentSectionIdx = 0;
+
+function navigateToSection(id, opts={}){
+  const idx = sectionsList.indexOf(id);
+  if(idx === -1) return;
+  currentSectionIdx = idx;
+  sectionsList.forEach(sid => $('#'+sid).classList.toggle('current', sid === id));
+  navBtns.forEach(b => b.classList.toggle('active', b.dataset.target === id));
+  progressSegs.forEach((seg, i) => {
+    seg.classList.toggle('done', i < idx);
+    seg.classList.toggle('current', i === idx);
+  });
+  ctCounter.textContent = `${idx + 1} / ${sectionsList.length}`;
+  ctName.textContent = sectionLabels[id] || id;
+  ctPrev.disabled = idx === 0;
+  ctNext.disabled = idx === sectionsList.length - 1;
+  ctNext.textContent = idx === sectionsList.length - 1 ? '✓ Done' : 'Next →';
+  if(!opts.skipScroll) window.scrollTo({top:0, behavior:'instant'});
+  if(opts.updateHash !== false) history.replaceState(null, '', '#'+id);
+}
+
+// scrollToSec retained for backwards compat — now switches sections.
+function scrollToSec(id){ navigateToSection(id); }
+
+navBtns.forEach(b => b.addEventListener('click', ()=>navigateToSection(b.dataset.target)));
+ctPrev.addEventListener('click', ()=>{
+  if(currentSectionIdx > 0) navigateToSection(sectionsList[currentSectionIdx - 1]);
 });
+ctNext.addEventListener('click', ()=>{
+  if(currentSectionIdx < sectionsList.length - 1) navigateToSection(sectionsList[currentSectionIdx + 1]);
+});
+
+// Keyboard nav — Left/Right arrows. Ignore when typing in inputs.
+window.addEventListener('keydown', e => {
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  const t = e.target;
+  if(t && t.nodeType === 1 && typeof t.matches === 'function'){
+    if(t.matches('input, textarea, select, [contenteditable="true"]')) return;
+  }
+  if(e.key === 'ArrowRight' && currentSectionIdx < sectionsList.length - 1){
+    navigateToSection(sectionsList[currentSectionIdx + 1]);
+  } else if(e.key === 'ArrowLeft' && currentSectionIdx > 0){
+    navigateToSection(sectionsList[currentSectionIdx - 1]);
+  }
+});
+
+// Initialize from URL hash, or fall back to first section
+const initHash = location.hash.slice(1);
+navigateToSection(sectionsList.includes(initHash) ? initHash : 'hero', {updateHash:false});
+
+// Show the keyboard hint briefly on first load
+setTimeout(()=>{ ctHint.classList.add('show'); setTimeout(()=>ctHint.classList.remove('show'), 3500); }, 800);
 
 /* ============ HUMAN INTELLIGENCE FLIP CARDS ============ */
 function intelIcon(name){
