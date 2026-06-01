@@ -110,7 +110,8 @@ section.current{display:flex; animation:sectionEnter .35s cubic-bezier(.2,.7,.3,
   .ct-name{display:none}
   .clickthru button{padding:9px 12px}
 }
-.container{max-width:1180px; width:100%; margin:0 auto}
+/* Container scales with the viewport — 1180px floor on laptops, grows to 1640 on big monitors / projectors. */
+.container{max-width: min(1640px, calc(100vw - 96px)); width:100%; margin:0 auto}
 .eyebrow{font:700 11px/1 'Manrope',sans-serif; letter-spacing:.22em; text-transform:uppercase; color:var(--indigo); margin-bottom:18px}
 h1,h2,h3{margin:0; color:var(--ink); letter-spacing:-0.025em}
 h1{font-weight:800; font-size:clamp(44px,7vw,92px); line-height:0.98}
@@ -132,7 +133,7 @@ p{color:var(--ink-2); line-height:1.6; font-size:16px}
 
 /* ============ HERO ============ */
 #hero{padding-top:140px}
-#hero .container{display:flex; flex-direction:column; align-items:flex-start; max-width:1000px}
+#hero .container{display:flex; flex-direction:column; align-items:flex-start; max-width: min(1300px, calc(100vw - 96px))}
 .hero-title{font-weight:800; font-size:clamp(48px,7.5vw,104px); line-height:0.96; color:var(--navy); letter-spacing:-0.03em}
 .hero-title em{font-style:normal; color:var(--navy); font-weight:300; display:block; font-size:0.55em; letter-spacing:0.02em; color:var(--ink-2); margin-top:14px}
 .hero-sub{margin-top:28px; font-size:19px; color:var(--ink-2); max-width:580px; line-height:1.55}
@@ -2398,7 +2399,13 @@ function eraAnim(type){
       for(let c=0;c<8;c++){
         const dark = (r+c)%2===1;
         const hl = (r===6 && c===4) || (r===4 && c===4);
-        const piece = (r===6 && c===4) ? '♙' : (r===0 && c===4) ? '♚' : (r===1 && c===3) ? '♟' : (r===0 && c===3) ? '♛' : '';
+        const piece =
+          (r===6 && c===4) ? '♙' :  // white pawn (about to move)
+          (r===7 && c===4) ? '♔' :  // white king on e1
+          (r===0 && c===4) ? '♚' :  // black king
+          (r===1 && c===3) ? '♟' :  // black pawn
+          (r===0 && c===3) ? '♛' :  // black queen
+          '';
         html += `<div class="chess-sq ${dark?'dark':'light'} ${hl?'chess-hl':''}"><div class="chess-piece">${piece}</div></div>`;
       }
     }
