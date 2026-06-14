@@ -233,6 +233,15 @@ p{color:var(--ink-2); line-height:1.6; font-size:16px}
 .chess-sq.dark{background:#9AA2CC}
 .chess-sq.light{background:#F1F2F7}
 .chess-piece{display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--navy)}
+.chess-piece.white{
+  color:#fff;
+  /* 4-direction text-shadow gives a crisp navy outline on the white fill */
+  text-shadow:
+    -1px -1px 0 var(--navy),
+     1px -1px 0 var(--navy),
+    -1px  1px 0 var(--navy),
+     1px  1px 0 var(--navy);
+}
 .chess-hl{box-shadow:inset 0 0 0 3px #E89B3C; animation:hlpulse 2.4s ease-in-out infinite}
 @keyframes hlpulse{0%,100%{box-shadow:inset 0 0 0 3px rgba(232,155,60,0.0)} 50%{box-shadow:inset 0 0 0 3px #E89B3C}}
 
@@ -652,19 +661,6 @@ svg.terrain{width:100%; height:auto; display:block}
 }
 .intro-prompts li strong{font-weight:700; color:var(--ink); font-size:15px}
 .intro-prompts li .ip-hint{display:block; color:var(--muted); font-size:13px; margin-top:3px; font-weight:500}
-.intro-example{
-  margin-top:16px; padding:14px 16px; border-radius:10px;
-  background:linear-gradient(135deg, rgba(156,216,156,0.18) 0%, rgba(63,68,147,0.10) 100%);
-  border:1px dashed rgba(63,68,147,0.30);
-  display:flex; gap:12px; align-items:flex-start;
-}
-.intro-example .ie-tag{
-  flex-shrink:0; font:700 9px/1 'JetBrains Mono'; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--indigo); background:rgba(255,255,255,0.7);
-  padding:5px 8px; border-radius:5px; margin-top:1px;
-}
-.intro-example p{margin:0; font:500 13.5px/1.5 'Manrope'; color:var(--ink)}
-.intro-example strong{color:var(--navy); font-weight:700}
 .wcard-btn{
   display:inline-flex; align-items:center; gap:8px; margin-top:18px;
   background:transparent; color:var(--navy); border:1.5px solid var(--border);
@@ -673,13 +669,6 @@ svg.terrain{width:100%; height:auto; display:block}
 .wcard-btn:hover{border-color:var(--navy); background:var(--navy); color:#fff}
 .wcard-btn .arr{transition:transform .2s}
 .wcard-btn:hover .arr{transform:translateX(3px)}
-.idea-pill{
-  display:inline-block; margin-top:14px; margin-left:12px;
-  font:600 13px/1.4 'Manrope'; color:var(--indigo); padding:8px 12px;
-  background:rgba(63,68,147,0.08); border-radius:8px; max-width:340px; opacity:0;
-  transition:opacity .25s, transform .25s; transform:translateY(4px);
-}
-.idea-pill.show{opacity:1; transform:none}
 
 .goal-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px}
 .goal-list li{
@@ -754,35 +743,278 @@ svg.terrain{width:100%; height:auto; display:block}
 .chat-mock-msg.bot{align-self:flex-start; color:var(--ink-2); margin:4px 10px 12px; padding:8px 12px; line-height:1.45}
 .chat-cursor{display:inline-block; width:2px; height:12px; background:var(--navy); vertical-align:middle; animation:blink 1s infinite; margin-left:1px}
 
-/* Custom AI tutor mock (Example B) */
-.tutor-mock{
-  width:88%; max-width:280px; background:#fff; border-radius:14px;
+/* ClassNotes mock (Example B): lecture-audio search with socratic prompt baked in */
+.notes-mock{
+  width:88%; max-width:300px; background:#fff; border-radius:14px;
   box-shadow:0 10px 26px rgba(0,0,0,0.30); overflow:hidden;
   display:flex; flex-direction:column;
 }
-.tutor-mock-head{
+.notes-head{
   display:flex; align-items:center; gap:10px; padding:10px 14px;
-  background:linear-gradient(90deg,#F6F7FB 0%, #ECEEF8 100%);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg, var(--navy) 0%, var(--indigo) 100%);
+  color:#fff;
 }
-.tutor-avatar{flex-shrink:0; border-radius:50%; overflow:hidden; box-shadow:0 2px 6px rgba(63,68,147,0.30)}
-.tutor-mock-name{font:800 13px/1 'Manrope'; color:var(--navy); display:flex; align-items:center; gap:6px; letter-spacing:-0.01em}
-.tutor-pulse{
-  display:inline-block; width:7px; height:7px; border-radius:50%;
-  background:#3BB273; box-shadow:0 0 0 0 rgba(59,178,115,0.6);
-  animation:tutorPulse 2s infinite;
+.notes-icon{flex-shrink:0; width:30px; height:30px; border-radius:8px; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center}
+.notes-mock-name{font:800 13px/1 'Manrope'; color:#fff; display:flex; flex-direction:column; gap:3px; letter-spacing:-0.01em}
+.notes-status-pill{font:600 9px/1 'JetBrains Mono'; color:#9CD89C; letter-spacing:.04em}
+.notes-search{
+  display:flex; align-items:center; gap:8px; margin:10px 12px 0;
+  padding:7px 10px; background:#F1F2F7; border-radius:7px;
+  font:600 12px/1 'Manrope'; color:var(--ink);
 }
-@keyframes tutorPulse{0%{box-shadow:0 0 0 0 rgba(59,178,115,0.55)} 70%{box-shadow:0 0 0 8px rgba(59,178,115,0)} 100%{box-shadow:0 0 0 0 rgba(59,178,115,0)}}
-.tutor-status{font:600 10px/1 'JetBrains Mono'; color:#3BB273; letter-spacing:.06em}
-.tutor-mock .chat-mock-msg.bot{margin:8px 12px 6px; padding:8px 11px; background:#F1F2F7; border-radius:10px 10px 10px 2px; color:var(--ink)}
-.tutor-quiz{padding:4px 14px 12px}
-.tutor-q{font:700 12px/1.3 'JetBrains Mono'; color:var(--navy); margin-bottom:6px}
-.tutor-opts{display:flex; gap:5px; flex-wrap:wrap}
-.tutor-opt{
-  font:700 11px/1 'JetBrains Mono'; padding:5px 8px; border-radius:5px;
-  background:var(--indigo); color:#fff;
+.ns-icon{font-size:11px}
+.ns-q{color:var(--navy)}
+.notes-socratic{
+  margin:8px 12px 6px; padding:8px 10px; background:rgba(63,68,147,0.08);
+  border-left:3px solid var(--indigo); border-radius:0 6px 6px 0;
+  display:flex; flex-direction:column; gap:3px;
 }
-.tutor-opt.dim{background:var(--bg-2); color:var(--muted)}
+.ns-think{font:700 9px/1 'JetBrains Mono'; letter-spacing:.10em; color:var(--indigo); text-transform:uppercase}
+.ns-prompt{font:600 11.5px/1.35 'Manrope'; color:var(--ink); font-style:italic}
+.notes-results{margin:4px 12px 12px; display:flex; flex-direction:column; gap:4px}
+.nr-item{
+  display:flex; gap:8px; align-items:flex-start; padding:5px 8px;
+  background:#F8F9FC; border-radius:6px; font:500 10.5px/1.35 'Manrope'; color:var(--ink-2);
+}
+.nr-time{flex-shrink:0; font:700 9px/1 'JetBrains Mono'; color:var(--indigo); padding-top:1px}
+.nr-text{flex:1}
+
+/* ============ REVEAL GATE (hide content until instructor unlocks) ============ */
+.reveal-gate{
+  margin-top:24px; padding:22px 26px; background:var(--paper);
+  border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+  display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  border-left:4px solid var(--indigo); max-width:860px;
+}
+.rg-text{flex:1; min-width:240px; margin:0; font:600 14.5px/1.5 'Manrope'; color:var(--ink-2)}
+.eras-content{
+  opacity:0; max-height:0; overflow:hidden;
+  transition:opacity .4s ease, max-height .6s ease, margin-top .4s;
+}
+.eras-content.revealed{opacity:1; max-height:5000px; margin-top:24px}
+
+/* ============ ERAS · HORIZONTAL TIMELINE ============ */
+.timeline-wrap{margin-top:32px}
+.timeline-track{
+  position:relative; display:flex; justify-content:space-between; align-items:flex-start;
+  padding:30px 24px 50px; margin-bottom:24px;
+  background:var(--paper); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+}
+.timeline-track::before{
+  content:''; position:absolute; left:48px; right:48px; top:60px; height:3px;
+  background:linear-gradient(90deg, var(--lavender) 0%, var(--indigo) 50%, var(--navy) 100%);
+  border-radius:2px; z-index:0;
+}
+.timeline-node{
+  position:relative; z-index:2; flex:1; display:flex; flex-direction:column; align-items:center;
+  cursor:pointer; padding:0 6px;
+}
+.tn-year{
+  font:700 11px/1 'JetBrains Mono'; letter-spacing:.10em; color:var(--muted);
+  margin-bottom:14px; text-align:center; transition:color .2s;
+}
+.tn-dot{
+  width:24px; height:24px; border-radius:50%; background:#fff;
+  border:3px solid var(--indigo); box-shadow:0 4px 10px rgba(63,68,147,0.20);
+  transition:all .25s ease; position:relative;
+}
+.tn-dot::after{
+  content:''; position:absolute; inset:-6px; border-radius:50%;
+  border:2px solid var(--indigo); opacity:0; transform:scale(0.8); transition:all .3s;
+}
+.timeline-node:hover .tn-dot{transform:scale(1.15); box-shadow:0 6px 16px rgba(63,68,147,0.35)}
+.timeline-node.active .tn-dot{background:var(--navy); border-color:var(--navy); transform:scale(1.2)}
+.timeline-node.active .tn-dot::after{opacity:1; transform:scale(1)}
+.tn-name{
+  margin-top:14px; font:800 13px/1.2 'Manrope'; letter-spacing:-0.01em;
+  color:var(--ink); text-align:center; max-width:140px;
+}
+.timeline-node.active .tn-year, .timeline-node.active .tn-name{color:var(--navy)}
+@media(max-width:760px){
+  .timeline-track{flex-direction:column; gap:18px; padding:24px}
+  .timeline-track::before{display:none}
+  .timeline-node{flex-direction:row; gap:14px; align-items:center; width:100%; padding:0}
+  .tn-year{margin-bottom:0; min-width:90px}
+  .tn-name{margin-top:0; text-align:left}
+}
+
+.timeline-detail{
+  background:var(--paper); border:1px solid var(--border); border-radius:14px;
+  box-shadow:var(--shadow); padding:28px 30px;
+  border-left:5px solid var(--indigo);
+  min-height:200px;
+}
+.td-head{display:flex; gap:14px; align-items:baseline; flex-wrap:wrap; margin-bottom:12px}
+.td-year{font:700 11px/1 'JetBrains Mono'; letter-spacing:.16em; color:var(--indigo)}
+.td-name{font:800 28px/1.1 'Manrope'; color:var(--navy); letter-spacing:-0.025em; margin:0}
+.td-theme{font:500 15.5px/1.55 'Manrope'; color:var(--ink-2); margin:0 0 14px}
+.td-question{
+  font:600 14px/1.4 'Manrope'; color:var(--navy);
+  padding:12px 14px; background:var(--bg-2);
+  border-left:3px solid var(--indigo); border-radius:0 8px 8px 0; font-style:italic;
+  margin-bottom:14px;
+}
+.td-key{
+  display:flex; gap:12px; align-items:flex-start; padding:14px 16px;
+  background:rgba(63,68,147,0.06); border-radius:10px;
+}
+.td-key-label{
+  flex-shrink:0; font:800 9px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:#fff; background:var(--navy);
+  padding:6px 9px; border-radius:5px;
+}
+.td-key-text{flex:1; margin:0; font:500 14px/1.5 'Manrope'; color:var(--ink)}
+.td-key-text strong{color:var(--navy); font-weight:800}
+
+/* Illustration inside the detail card */
+.td-illus{
+  margin-top:18px; padding:18px 20px; border-radius:10px;
+  background:var(--bg-2);
+  display:flex; align-items:center; justify-content:center;
+  min-height:200px; overflow:hidden;
+}
+
+/* Prev / Next era navigation at the bottom of the detail card */
+.td-nav{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-top:22px; padding-top:18px; border-top:1px solid var(--border);
+}
+.td-nav-btn{
+  background:transparent; border:1.5px solid var(--border); color:var(--ink);
+  font:700 13px/1 'Manrope'; padding:10px 16px; border-radius:8px;
+  cursor:pointer; transition:all .15s ease;
+}
+.td-nav-btn:hover:not(:disabled){border-color:var(--navy); background:var(--navy); color:#fff}
+.td-nav-btn:disabled{opacity:0.4; cursor:default}
+.td-nav-btn.primary{background:var(--navy); color:#fff; border-color:var(--navy)}
+.td-nav-btn.primary:hover:not(:disabled){background:var(--navy-2); border-color:var(--navy-2)}
+.td-nav-count{font:700 12px/1 'JetBrains Mono'; letter-spacing:.10em; color:var(--muted)}
+
+/* ============ AI RISKS (predict-then-reveal cases) ============ */
+.risk-cases{display:grid; grid-template-columns:1fr; gap:22px; margin-top:32px}
+@media(min-width:880px){ .risk-cases{grid-template-columns:1fr 1fr; gap:24px} }
+.risk-card{
+  background:var(--paper); border:1px solid var(--border); border-radius:14px;
+  box-shadow:var(--shadow); padding:0 0 22px;
+  display:flex; flex-direction:column; gap:14px;
+  border-top:4px solid #E89B3C;
+  overflow:hidden;
+}
+.rc-illus{
+  height:120px; background:#FFF3DF; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.rc-illus svg{display:block; width:100%; height:100%}
+.rc-card-pad{padding:0 24px}
+.risk-card .rc-head,
+.risk-card .rc-setup,
+.risk-card .rc-predict-btn,
+.risk-card .rc-reveal{margin-left:24px; margin-right:24px}
+.risk-card .rc-head{margin-top:18px}
+.rc-q{
+  margin-top:10px; padding:10px 12px; background:rgba(63,68,147,0.06);
+  border-left:3px solid var(--indigo); border-radius:0 8px 8px 0;
+  font:500 13.5px/1.5 'Manrope'; color:var(--ink);
+}
+.rc-q strong{color:var(--navy)}
+.rc-q em{font-style:italic; color:var(--indigo); font-weight:600}
+.rc-head{display:flex; flex-direction:column; gap:4px}
+.rc-year{font:800 14px/1.2 'JetBrains Mono'; letter-spacing:.12em; color:var(--navy); text-transform:uppercase}
+.rc-title{font:800 18px/1.2 'Manrope'; color:var(--navy); letter-spacing:-0.015em}
+.rc-setup p{margin:0; font:500 14px/1.55 'Manrope'; color:var(--ink-2)}
+.rc-setup strong{color:var(--navy); font-weight:700}
+.rc-predict-btn{
+  display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+  padding:14px 16px; background:rgba(232,155,60,0.10);
+  border:1.5px dashed rgba(232,155,60,0.45); border-radius:10px;
+  cursor:pointer; transition:all .18s ease; text-align:left;
+  font:600 13.5px/1.4 'Manrope'; color:var(--ink);
+}
+.rc-predict-btn:hover{background:rgba(232,155,60,0.18); border-style:solid}
+.rc-think{font:800 10px/1 'JetBrains Mono'; letter-spacing:.14em; color:#7A4F0F; text-transform:uppercase}
+.risk-card.revealed .rc-predict-btn{display:none}
+.rc-reveal{display:none; flex-direction:column; gap:14px; animation:fadeInUp .35s ease}
+.risk-card.revealed .rc-reveal{display:flex}
+@keyframes fadeInUp{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+.rc-outcome, .rc-missed{padding:14px 16px; border-radius:10px}
+.rc-outcome{background:rgba(232,155,60,0.08); border-left:3px solid #E89B3C}
+.rc-missed{background:rgba(63,68,147,0.08); border-left:3px solid var(--indigo)}
+.rc-label{
+  display:inline-block; margin-bottom:6px;
+  font:800 10px/1 'JetBrains Mono'; letter-spacing:.16em; text-transform:uppercase;
+}
+.rc-outcome .rc-label{color:#7A4F0F}
+.rc-missed .rc-label{color:var(--indigo)}
+.rc-outcome p, .rc-missed p{margin:0; font:500 13.5px/1.55 'Manrope'; color:var(--ink)}
+.rc-outcome strong{color:#7A4F0F; font-weight:800}
+.rc-missed strong{color:var(--navy)}
+.rc-missed em{font-style:italic; color:var(--indigo); font-weight:700}
+
+.risks-segue{
+  margin-top:30px; padding:22px 26px; background:var(--paper);
+  border:1px solid var(--border); border-radius:14px;
+  display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  border-left:4px solid var(--indigo);
+}
+.risks-segue p{flex:1; min-width:280px; margin:0; font:500 15px/1.55 'Manrope'; color:var(--ink)}
+.risks-segue strong{color:var(--navy)}
+.risks-segue em{color:var(--indigo); font-style:italic; font-weight:700}
+
+/* ============ ASK THE ROOM (show-of-hands prompt) ============ */
+.ask-room{
+  display:flex; gap:14px; align-items:flex-start;
+  margin-top:24px; padding:16px 20px;
+  background:linear-gradient(135deg, rgba(156,216,156,0.18) 0%, rgba(63,68,147,0.10) 100%);
+  border:1px solid rgba(63,68,147,0.20);
+  border-radius:12px; max-width:860px;
+}
+.ar-tag{
+  flex-shrink:0; font:800 10px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--navy); background:rgba(255,255,255,0.7);
+  padding:7px 10px; border-radius:6px;
+}
+.ar-text{flex:1; margin:0; font:600 15px/1.5 'Manrope'; color:var(--ink)}
+.ar-text strong{color:var(--navy)}
+
+/* ============ CRITICAL THINKING CHECK card ============ */
+.crit-check{
+  display:flex; gap:14px; align-items:flex-start;
+  margin-top:24px; padding:16px 20px;
+  background:#FFF8EE; border:1px solid rgba(232,155,60,0.30);
+  border-left:4px solid #E89B3C; border-radius:10px; max-width:860px;
+}
+.cc-tag{
+  flex-shrink:0; font:800 10px/1 'JetBrains Mono'; letter-spacing:.14em;
+  text-transform:uppercase; color:#7A4F0F; background:rgba(232,155,60,0.18);
+  padding:7px 10px; border-radius:6px;
+}
+.cc-text{flex:1; margin:0; font:600 14.5px/1.5 'Manrope'; color:var(--ink)}
+.cc-text strong{color:#7A4F0F}
+
+/* CTC variant: reveal an example */
+.crit-check--reveal .cc-body{flex:1; display:flex; flex-direction:column; gap:12px}
+.cc-reveal-btn{
+  align-self:flex-start; display:inline-flex; align-items:center; gap:8px;
+  padding:8px 14px; background:#fff; color:#7A4F0F;
+  border:1.5px solid rgba(232,155,60,0.45); border-radius:8px;
+  font:700 12.5px/1 'Manrope'; cursor:pointer; transition:all .18s ease;
+}
+.cc-reveal-btn:hover{background:#FFEFD6; border-color:#E89B3C}
+.cc-reveal-btn .arr{transition:transform .2s}
+.cc-reveal-btn:hover .arr{transform:translateX(3px)}
+.cc-example{
+  display:none; padding:14px 16px; background:#fff;
+  border-radius:10px; border-left:3px solid #E89B3C;
+  animation:fadeInUp .3s ease;
+}
+.crit-check.revealed .cc-example{display:block}
+.crit-check.revealed .cc-reveal-btn{display:none}
+.cc-ex-tag{
+  display:inline-block; font:800 9px/1 'JetBrains Mono'; letter-spacing:.16em;
+  text-transform:uppercase; color:#7A4F0F; margin-bottom:8px;
+}
+.cc-example p{margin:0; font:500 13.5px/1.55 'Manrope'; color:var(--ink)}
 
 /* ============ DISCUSSION PROMPT (instructor-led) ============ */
 .discuss-prompt{
@@ -1125,6 +1357,29 @@ input#vsSlider::-moz-range-thumb{
 
 /* ============ SCHEDULE AT A GLANCE (matrix) ============ */
 .sag-wrap{margin-top:36px}
+/* Collapsible toggle header */
+.sag-toggle{
+  width:100%; display:flex; gap:24px; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; padding:22px 26px; margin:0;
+  background:var(--paper); border:1px solid var(--border); border-radius:14px;
+  cursor:pointer; text-align:left; transition:border-color .18s ease, box-shadow .18s ease;
+  box-shadow:var(--shadow);
+}
+.sag-toggle:hover{border-color:var(--lavender); box-shadow:0 8px 22px rgba(20,22,60,0.10)}
+.sag-toggle-text{flex:1; min-width:260px}
+.sag-toggle-cta{
+  display:inline-flex; align-items:center; gap:10px;
+  font:700 13px/1 'Manrope'; color:#fff; background:var(--navy);
+  padding:12px 18px; border-radius:8px; transition:background .15s ease;
+}
+.sag-toggle:hover .sag-toggle-cta{background:var(--navy-2)}
+.sag-chevron{display:inline-block; transition:transform .25s ease; font-size:14px}
+.sag-toggle[aria-expanded="true"] .sag-chevron{transform:rotate(180deg)}
+.sag-collapse{
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .55s ease, opacity .35s ease, margin-top .35s ease;
+}
+.sag-collapse.open{max-height:6000px; opacity:1; margin-top:20px}
 .sag-head{display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px}
 .sag-head > div:first-child{flex:1; min-width:260px}
 .sag-title{font:800 24px/1.15 'Manrope'; color:var(--navy); letter-spacing:-0.025em; margin:0 0 6px}
@@ -1179,11 +1434,11 @@ input#vsSlider::-moz-range-thumb{
 .sag-row.header .sag-cell .sag-cell-name{font:800 13px/1.2 'Manrope'; color:var(--navy); letter-spacing:-0.01em}
 
 /* Color-code cells by topic (row category) */
-.sag-row[data-cat="found"] .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* Foundations — indigo */
-.sag-row[data-cat="pipe"]  .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* AI Pipeline — same family */
-.sag-row[data-cat="hands"] .sag-cell:not(.header){background:rgba(232,155,60,0.14); border-color:rgba(232,155,60,0.22)}  /* Hands-on — warm amber */
-.sag-row[data-cat="build"] .sag-cell:not(.header){background:rgba(59,178,115,0.14); border-color:rgba(59,178,115,0.22)}  /* Notebooks / Build — green */
-.sag-row[data-cat="wks"]   .sag-cell:not(.header){background:rgba(166,91,184,0.14); border-color:rgba(166,91,184,0.22)}  /* Workshops — purple */
+.sag-row[data-cat="found"] .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* Foundations, indigo */
+.sag-row[data-cat="pipe"]  .sag-cell:not(.header){background:rgba(63,68,147,0.12); border-color:rgba(63,68,147,0.18)}  /* AI Pipeline, same family */
+.sag-row[data-cat="hands"] .sag-cell:not(.header){background:rgba(232,155,60,0.14); border-color:rgba(232,155,60,0.22)}  /* Hands-on, warm amber */
+.sag-row[data-cat="build"] .sag-cell:not(.header){background:rgba(59,178,115,0.14); border-color:rgba(59,178,115,0.22)}  /* Notebooks / Build, green */
+.sag-row[data-cat="wks"]   .sag-cell:not(.header){background:rgba(166,91,184,0.14); border-color:rgba(166,91,184,0.22)}  /* Workshops, purple */
 
 /* Half header bar — separates first half / second half */
 .sag-half-divider{
@@ -1267,10 +1522,10 @@ input#vsSlider::-moz-range-thumb{
   <button data-target="hero" class="active">Start</button>
   <button data-target="welcome">Welcome</button>
   <button data-target="mindset">Mindset</button>
+  <button data-target="risks">AI Risks</button>
   <button data-target="what">What is AI</button>
   <button data-target="timeline">Eras</button>
   <button data-target="blocks">Building Blocks</button>
-  <button data-target="sim">How It Works</button>
   <button data-target="map">10-Day Map</button>
   <button data-target="next">Next</button>
 </nav>
@@ -1297,34 +1552,32 @@ input#vsSlider::-moz-range-thumb{
 <section id="welcome">
   <div class="container">
     <div class="eyebrow">Before we begin</div>
-    <h2>Welcome in 👋 — meet the room.</h2>
-    <p class="lead">You're about to spend 10 days building real AI with a room full of other curious people. Let's get to know each other first — then we'll look at where we're headed.</p>
+    <h2>Welcome in 👋, meet the room.</h2>
+    <p class="lead">You're about to spend 10 days building real AI with a room full of other curious people. Let's get to know each other first, then we'll look at where we're headed.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop one word in chat: <strong>how are you feeling about the next 10 days?</strong>"</p>
+    </div>
 
     <div class="welcome-grid">
       <!-- Introductions card -->
       <div class="wcard intros">
         <div class="wcard-head">
           <span class="wcard-badge">01</span>
-          <h3>Quick intros — your turn</h3>
+          <h3>Quick intros, your turn</h3>
         </div>
         <p class="wcard-sub">Share these three things.
-          <span class="zoom-hint" title="Out loud or in the chat — whichever feels right.">
+          <span class="zoom-hint" title="Out loud or in the chat, whichever feels right.">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             out loud or in the chat
           </span>
         </p>
         <ol class="intro-prompts">
-          <li><span class="ip-num">1</span><div><strong>Your name</strong> <span class="ip-hint">(and what to call you)</span></div></li>
-          <li><span class="ip-num">2</span><div><strong>Where you're from</strong> <span class="ip-hint">(city, country, or vibe)</span></div></li>
-          <li><span class="ip-num">3</span><div><strong>One thing you'd love to build with AI</strong> <span class="ip-hint">(no wrong answers — dream big or weird)</span></div></li>
+          <li><span class="ip-num">1</span><div><strong>Your name</strong></div></li>
+          <li><span class="ip-num">2</span><div><strong>Where you're from</strong></div></li>
+          <li><span class="ip-num">3</span><div><strong>Chosen superpower?</strong></div></li>
         </ol>
-        <!-- Fun example to break the ice -->
-        <div class="intro-example">
-          <span class="ie-tag">Example</span>
-          <p>"Hi! I'm <strong>Maya</strong> from <strong>Toronto</strong> 🇨🇦 — I'd love to build an AI that <strong>roasts my outfits before I leave the house</strong>. 👗🔥"</p>
-        </div>
-        <button class="wcard-btn" id="ideaBtn">Stuck? Get an idea <span class="arr">→</span></button>
-        <div class="idea-pill" id="ideaPill">Click for inspiration ↑</div>
       </div>
 
       <!-- Today's Goals card -->
@@ -1350,7 +1603,12 @@ input#vsSlider::-moz-range-thumb{
   <div class="container">
     <div class="eyebrow">Before the tour · The shift</div>
     <h2>AI user, or AI builder?</h2>
-    <p class="lead">Two students. Same AI. Two very different relationships to it. <strong>Pick the one you'd rather do</strong> — then reveal what shifts.</p>
+    <p class="lead">From the examples below, pick the one you'd rather do.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Raise hand ✋ if you'd rather do <strong>A</strong>. Thumbs up 👍 if you'd rather do <strong>B</strong>. Anyone want to share why?"</p>
+    </div>
 
     <div class="vs-examples">
       <div class="vs-card" data-vs="A" role="button" tabindex="0" aria-pressed="false">
@@ -1362,48 +1620,44 @@ input#vsSlider::-moz-range-thumb{
               <span class="chat-mock-dot"></span><span class="chat-mock-dot"></span><span class="chat-mock-dot"></span>
               <span class="chat-mock-title">chat.openai.com</span>
             </div>
-            <div class="chat-mock-msg user">Explain the chain rule like I'm 12.</div>
-            <div class="chat-mock-msg bot">Sure! Imagine you're peeling an onion — each layer depends on the one below…<span class="chat-cursor"></span></div>
+            <div class="chat-mock-msg user">Write me a 500-word essay on the French Revolution.</div>
+            <div class="chat-mock-msg bot">Sure! The French Revolution, beginning in 1789, was a period of radical political and societal change in France...<span class="chat-cursor"></span></div>
           </div>
         </div>
-        <p class="vs-text">A student asks ChatGPT to explain their calculus homework.</p>
+        <p class="vs-text">A student asks ChatGPT to write their history essay for them.</p>
         <div class="vs-picked-pill">✓ You'd rather do this</div>
       </div>
       <div class="vs-card" data-vs="B" role="button" tabindex="0" aria-pressed="false">
         <div class="vs-tag">Example B <span class="vs-pick-hint">Click to pick</span></div>
         <div class="vs-illus builder-illus">
-          <!-- Custom AI tutor app with a face -->
-          <div class="tutor-mock">
-            <div class="tutor-mock-head">
-              <div class="tutor-avatar" aria-hidden="true">
-                <svg viewBox="0 0 64 64" width="38" height="38">
-                  <defs>
-                    <linearGradient id="tutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#A6C1EE"/>
-                      <stop offset="100%" stop-color="#3F4493"/>
-                    </linearGradient>
-                  </defs>
-                  <circle cx="32" cy="32" r="30" fill="url(#tutGrad)"/>
-                  <circle cx="23" cy="28" r="3" fill="#fff"/>
-                  <circle cx="41" cy="28" r="3" fill="#fff"/>
-                  <path d="M22 40 Q32 47 42 40" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                  <line x1="32" y1="6" x2="32" y2="14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="32" cy="4" r="2.2" fill="#9CD89C"/>
+          <!-- ClassNotes app: lecture-audio search with socratic prompting built in -->
+          <div class="notes-mock">
+            <div class="notes-head">
+              <div class="notes-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 5h16a2 2 0 0 1 2 2v18l-5-3-5 3-5-3-5 3V7a2 2 0 0 1 2-2z"/>
+                  <line x1="10" y1="10" x2="20" y2="10"/>
+                  <line x1="10" y1="14" x2="18" y2="14"/>
+                  <line x1="10" y1="18" x2="16" y2="18"/>
                 </svg>
               </div>
-              <div class="tutor-mock-name">DerivBot <span class="tutor-pulse"></span><span class="tutor-status">online</span></div>
+              <div class="notes-mock-name">ClassNotes <span class="notes-status-pill">14 friends studying</span></div>
             </div>
-            <div class="chat-mock-msg bot">Hey! Ready for a quick derivative quiz? 🎯</div>
-            <div class="tutor-quiz">
-              <div class="tutor-q">d/dx [x³] = ?</div>
-              <div class="tutor-opts">
-                <span class="tutor-opt">3x²</span><span class="tutor-opt dim">x²</span><span class="tutor-opt dim">3x</span>
-              </div>
+            <div class="notes-search">
+              <span class="ns-icon">🔍</span><span class="ns-q">french revolution</span>
+            </div>
+            <!-- Socratic prompt: built-in to make users think before AI feeds them -->
+            <div class="notes-socratic">
+              <span class="ns-think">🤔 Before reading:</span>
+              <span class="ns-prompt">"What conditions usually lead to a revolution?"</span>
+            </div>
+            <div class="notes-results">
+              <div class="nr-item"><span class="nr-time">L7 · 14:22</span><span class="nr-text">"…bread prices doubled by 1788…"</span></div>
+              <div class="nr-item"><span class="nr-time">L7 · 21:05</span><span class="nr-text">"…the Bastille fell on July 14…"</span></div>
             </div>
           </div>
-          <div class="bi-tag">live · adaptive</div>
         </div>
-        <p class="vs-text">A student builds and ships an AI tutor that quizzes classmates and adapts to each one.</p>
+        <p class="vs-text">A student builds ClassNotes: lecture audio turned into searchable notes that <strong>ask questions back</strong> before showing the answer.</p>
         <div class="vs-picked-pill">✓ You'd rather do this</div>
       </div>
     </div>
@@ -1411,23 +1665,9 @@ input#vsSlider::-moz-range-thumb{
     <div class="vs-discuss" id="vsDiscuss">
       <div class="vs-dq">
         <span class="vs-dq-tag">Discuss</span>
-        <p><strong>Which would you rather do — A or B?</strong> &nbsp;<em>What distinguishes these two examples?</em></p>
+        <p><strong>Which would you rather do, A or B?</strong> &nbsp;<em>What distinguishes these two examples?</em></p>
       </div>
       <button class="btn" id="revealBuilderBtn">Reveal the mindset shift <span class="arr">→</span></button>
-    </div>
-
-    <!-- Self-ranking slider -->
-    <div class="vs-slider-wrap">
-      <div class="vs-slider-head">
-        <span class="dq-tag">Quick self-check</span>
-        <p class="vs-slider-q">Right now, where are you on this spectrum?</p>
-      </div>
-      <div class="vs-slider-row">
-        <span class="vs-end left">AI User</span>
-        <input id="vsSlider" type="range" min="0" max="100" value="50" />
-        <span class="vs-end right">AI Builder</span>
-      </div>
-      <div class="vs-feedback" id="vsSliderFeedback">Drag the slider to where you'd put yourself today.</div>
     </div>
 
     <div class="vs-grid" id="vsGrid">
@@ -1459,8 +1699,214 @@ input#vsSlider::-moz-range-thumb{
     </div>
 
     <div class="vs-segue" id="vsSegue">
-      <p><strong>Where are you now?</strong> Wherever you are, by Day 10 you'll have shipped something a real person could use. The rest of this page is the path to get there — let's tour what AI actually is first.</p>
-      <button class="btn ghost" onclick="scrollToSec('what')">Continue the tour <span class="arr">→</span></button>
+      <p><strong>Where are you now?</strong> Wherever you are, by Day 10 you'll have shipped something a real person could use. But before we tour what AI is, here's the part most builders skip.</p>
+      <button class="btn ghost" onclick="scrollToSec('risks')">Continue the tour <span class="arr">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI RISKS · WHEN AI GETS IT WRONG ============ -->
+<section id="risks">
+  <div class="container">
+    <div class="eyebrow">Before the tour · Critical Thinking Check</div>
+    <h2>When AI gets it wrong.</h2>
+    <p class="lead">Two real cases. Each with smart people, capable AI, but caused real harm. <strong>Predict what went wrong</strong>, then reveal what actually happened, and what the builders missed.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop one example in chat: <strong>a time AI got something really wrong.</strong> Anything counts."</p>
+    </div>
+
+    <div class="risk-cases" id="riskCases">
+      <!-- Case 1: Amazon -->
+      <div class="risk-card" data-case="0">
+        <div class="rc-illus rc-illus-resume" aria-hidden="true">
+          <svg viewBox="0 0 460 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="rcResumeBg" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#FFF7E8"/><stop offset="1" stop-color="#FCE2B4"/>
+              </linearGradient>
+              <linearGradient id="rcAiBox" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#F2AC4E"/><stop offset="1" stop-color="#D97B27"/>
+              </linearGradient>
+              <filter id="rcSoft" x="-25%" y="-25%" width="150%" height="150%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2.4" flood-color="#7A4F0F" flood-opacity="0.22"/>
+              </filter>
+            </defs>
+            <rect width="460" height="100" fill="url(#rcResumeBg)"/>
+
+            <!-- Resume stack (depth via rotated cards) -->
+            <g filter="url(#rcSoft)">
+              <rect x="62" y="20" width="58" height="74" rx="6" fill="#fff" opacity="0.45" transform="rotate(6 91 57)"/>
+              <rect x="46" y="16" width="58" height="74" rx="6" fill="#fff" opacity="0.75" transform="rotate(3 75 53)"/>
+              <rect x="26" y="14" width="58" height="74" rx="6" fill="#fff" stroke="#E8BE7A" stroke-width="1"/>
+            </g>
+            <!-- front resume content: avatar + lines -->
+            <circle cx="41" cy="29" r="6.5" fill="#E89B3C"/>
+            <rect x="52" y="25" width="26" height="3.6" rx="1.8" fill="#7A4F0F" opacity="0.8"/>
+            <rect x="52" y="31" width="17" height="3" rx="1.5" fill="#C9A05A" opacity="0.75"/>
+            <line x1="33" y1="44" x2="77" y2="44" stroke="#D9B27A" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="33" y1="52" x2="70" y2="52" stroke="#E7CA98" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="33" y1="60" x2="74" y2="60" stroke="#E7CA98" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="33" y1="68" x2="63" y2="68" stroke="#E7CA98" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="33" y1="76" x2="71" y2="76" stroke="#E7CA98" stroke-width="2.2" stroke-linecap="round"/>
+
+            <!-- arrow into AI -->
+            <path d="M134 51 L168 51" stroke="#C98A3A" stroke-width="3" stroke-linecap="round"/>
+            <path d="M162 45 L172 51 L162 57" stroke="#C98A3A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- AI ranker engine -->
+            <g filter="url(#rcSoft)">
+              <rect x="184" y="28" width="76" height="46" rx="11" fill="url(#rcAiBox)" stroke="#B5651A" stroke-width="1.5"/>
+            </g>
+            <text x="222" y="50" font-family="Manrope" font-size="17" font-weight="800" fill="#fff" text-anchor="middle">AI</text>
+            <text x="222" y="64" font-family="JetBrains Mono" font-size="7" font-weight="700" fill="#FFE9C9" text-anchor="middle" letter-spacing="1">RANKER</text>
+            <path d="M251 32 l1.7 3.6 3.6 1.7 -3.6 1.7 -1.7 3.6 -1.7 -3.6 -3.6 -1.7 3.6 -1.7 Z" fill="#FFF1D6"/>
+
+            <!-- arrow into ranking -->
+            <path d="M268 51 L302 51" stroke="#C98A3A" stroke-width="3" stroke-linecap="round"/>
+            <path d="M296 45 L306 51 L296 57" stroke="#C98A3A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- ranked output list -->
+            <g filter="url(#rcSoft)">
+              <rect x="318" y="22" width="126" height="20" rx="6" fill="#3BB273"/>
+              <rect x="318" y="46" width="126" height="20" rx="6" fill="#fff" stroke="#E8BE7A" stroke-width="1"/>
+              <rect x="318" y="70" width="126" height="20" rx="6" fill="#fff" stroke="#E8BE7A" stroke-width="1" opacity="0.9"/>
+            </g>
+            <text x="328" y="36" font-family="JetBrains Mono" font-size="11" font-weight="800" fill="#fff">#1</text>
+            <circle cx="354" cy="32" r="5" fill="#fff" opacity="0.92"/>
+            <rect x="364" y="29.5" width="58" height="5" rx="2.5" fill="#fff" opacity="0.85"/>
+            <path d="M432 28 l2.4 2.4 4.6 -5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="328" y="60" font-family="JetBrains Mono" font-size="11" font-weight="800" fill="#C98A3A">#2</text>
+            <circle cx="354" cy="56" r="5" fill="#EAD9BC"/>
+            <rect x="364" y="53.5" width="52" height="5" rx="2.5" fill="#E7CA98"/>
+            <text x="328" y="84" font-family="JetBrains Mono" font-size="11" font-weight="800" fill="#C98A3A">#3</text>
+            <circle cx="354" cy="80" r="5" fill="#EAD9BC"/>
+            <rect x="364" y="77.5" width="46" height="5" rx="2.5" fill="#E7CA98"/>
+          </svg>
+        </div>
+        <div class="rc-head">
+          <div class="rc-year">Amazon (2014–2017)</div>
+          <div class="rc-title">An AI that ranks job applicants for you.</div>
+        </div>
+        <div class="rc-setup">
+          <p><strong>The problem they were solving:</strong> One job gets thousands of resumes. The pitch: AI ranks them, so humans only review the top few.</p>
+          <p class="rc-q"><strong>For students:</strong> Sounds useful, right? <em>What could go wrong if the AI learned "good resumes" from years of past Amazon hires?</em></p>
+        </div>
+        <button class="rc-predict-btn" data-case="0">
+          <span class="rc-think">🤔 Predict first:</span>
+          <span>What went wrong? Click to reveal.</span>
+        </button>
+        <div class="rc-reveal">
+          <div class="rc-outcome">
+            <span class="rc-label">What happened</span>
+            <p>Past hires were mostly men, so the model learned "good = looks like a man's resume." It downgraded resumes mentioning <em>"women's"</em> (like "women's chess club captain") and graduates of women's colleges.</p>
+          </div>
+          <div class="rc-missed">
+            <span class="rc-label">What the builders missed</span>
+            <p>AI models aren't neutral, they're influenced by training data. The model learned the company's hiring bias from past data and amplified it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case 2: NYC MyCity -->
+      <div class="risk-card" data-case="1">
+        <div class="rc-illus rc-illus-mycity" aria-hidden="true">
+          <svg viewBox="0 0 460 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="rcCityBg" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#C9D2EE"/><stop offset="0.62" stop-color="#E3E7F4"/><stop offset="1" stop-color="#F1F2F7"/>
+              </linearGradient>
+              <linearGradient id="rcCityBack" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#5A5FA6"/><stop offset="1" stop-color="#474C8E"/>
+              </linearGradient>
+              <linearGradient id="rcCityFront" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#2E327A"/><stop offset="1" stop-color="#21255C"/>
+              </linearGradient>
+              <filter id="rcBubble" x="-25%" y="-25%" width="150%" height="150%">
+                <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#21255C" flood-opacity="0.28"/>
+              </filter>
+            </defs>
+            <rect width="460" height="100" fill="url(#rcCityBg)"/>
+
+            <!-- soft sun -->
+            <circle cx="64" cy="28" r="16" fill="#FBE7C4" opacity="0.65"/>
+
+            <!-- back skyline layer -->
+            <g fill="url(#rcCityBack)" opacity="0.9">
+              <rect x="8" y="52" width="26" height="48"/>
+              <rect x="38" y="44" width="30" height="56"/>
+              <rect x="72" y="58" width="22" height="42"/>
+              <rect x="98" y="48" width="28" height="52"/>
+              <rect x="130" y="40" width="24" height="60"/>
+              <rect x="158" y="56" width="26" height="44"/>
+              <rect x="188" y="50" width="26" height="50"/>
+            </g>
+            <!-- front skyline layer -->
+            <g fill="url(#rcCityFront)">
+              <rect x="18" y="62" width="30" height="38"/>
+              <rect x="54" y="50" width="34" height="50"/>
+              <polygon points="88,50 105,30 122,50 122,100 88,100"/>
+              <rect x="126" y="56" width="26" height="44"/>
+              <rect x="158" y="44" width="34" height="56"/>
+              <polygon points="192,44 203,28 214,44 214,100 192,100"/>
+              <rect x="218" y="60" width="28" height="40"/>
+            </g>
+            <!-- lit windows -->
+            <g fill="#FBD56B" opacity="0.85">
+              <rect x="62" y="58" width="3" height="4"/><rect x="70" y="58" width="3" height="4"/><rect x="78" y="58" width="3" height="4"/>
+              <rect x="62" y="68" width="3" height="4"/><rect x="78" y="68" width="3" height="4"/>
+              <rect x="166" y="52" width="3" height="4"/><rect x="174" y="52" width="3" height="4"/><rect x="182" y="52" width="3" height="4"/>
+              <rect x="166" y="62" width="3" height="4"/><rect x="182" y="62" width="3" height="4"/>
+              <rect x="98" y="40" width="3" height="4"/><rect x="106" y="40" width="3" height="4"/>
+            </g>
+
+            <!-- MyCity chat card -->
+            <g filter="url(#rcBubble)">
+              <rect x="282" y="14" width="162" height="72" rx="12" fill="#fff"/>
+              <path d="M300 86 L309 96 L318 86 Z" fill="#fff"/>
+            </g>
+            <circle cx="301" cy="32" r="9" fill="#3F4493"/>
+            <text x="301" y="35.5" font-family="Manrope" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">AI</text>
+            <text x="316" y="30" font-family="Manrope" font-size="11" font-weight="800" fill="#21255C">MyCity</text>
+            <circle cx="319" cy="39" r="2.6" fill="#3BB273"/>
+            <text x="326" y="41.5" font-family="JetBrains Mono" font-size="6.5" font-weight="700" fill="#3BB273">official city bot</text>
+            <line x1="294" y1="47" x2="432" y2="47" stroke="#E1E4EF" stroke-width="1.2"/>
+            <text x="294" y="61" font-family="Manrope" font-size="9.5" fill="#21255C">"Can I fire workers who</text>
+            <text x="294" y="73" font-family="Manrope" font-size="9.5" fill="#21255C">report harassment?"</text>
+            <circle cx="299" cy="81.5" r="2.7" fill="#A7ABD0"/>
+            <circle cx="308" cy="81.5" r="2.7" fill="#A7ABD0"/>
+            <circle cx="317" cy="81.5" r="2.7" fill="#A7ABD0"/>
+          </svg>
+        </div>
+        <div class="rc-head">
+          <div class="rc-year">NYC Mayor's Office (2024)</div>
+          <div class="rc-title">An AI that helps small businesses follow the law.</div>
+        </div>
+        <div class="rc-setup">
+          <p><strong>The problem they were solving:</strong> NYC has thousands of small-business rules and most owners can't afford a lawyer. The Mayor's office launched an official AI chatbot to explain them in plain English.</p>
+          <p class="rc-q"><strong>For students:</strong> Helpful, right? <em>What's the risk when an LLM gives legal advice on a government site?</em></p>
+        </div>
+        <button class="rc-predict-btn" data-case="1">
+          <span class="rc-think">🤔 Predict first:</span>
+          <span>What went wrong? Click to reveal.</span>
+        </button>
+        <div class="rc-reveal">
+          <div class="rc-outcome">
+            <span class="rc-label">What happened</span>
+            <p>The bot confidently told owners they could fire workers for reporting harassment, take staff tips, and serve food bitten by rats. All illegal. It stayed live for months.</p>
+          </div>
+          <div class="rc-missed">
+            <span class="rc-label">What the builders missed</span>
+            <p>LLMs sound confident even when wrong. Shipping one as legal advice, with no citations or human review, puts real people at risk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risks-segue">
+      <p><strong>The pattern.</strong> In both cases, smart builders shipped real AI, fast. They missed something a good critic would have caught. So the question for the next 10 days isn't just "can I build it?" but "<em>should I, and how do I check?</em>"</p>
+      <button class="btn ghost" onclick="scrollToSec('what')">Now let's tour what AI is <span class="arr">→</span></button>
     </div>
   </div>
 </section>
@@ -1472,11 +1918,16 @@ input#vsSlider::-moz-range-thumb{
     <h2>What makes humans intelligent?</h2>
     <p class="lead">Before we define AI, think about <em>yourself</em>. What can a human mind do? Flip each card to see the modern AI built to imitate that ability.</p>
 
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop one word in chat: <strong>what makes humans intelligent?</strong> Go."</p>
+    </div>
+
     <!-- Instructor-led discussion prompt -->
     <div class="discuss-prompt">
       <span class="dq-tag">Discuss · 2 min</span>
       <div class="dq-body">
-        <p><strong>Before clicking — talk it out.</strong> What do <em>you</em> think makes humans intelligent? Try to list at least three abilities together as a class.</p>
+        <p><strong>Before clicking, talk it out.</strong> What do <em>you</em> think makes humans intelligent? Try to list at least three abilities together as a class.</p>
         <button class="wcard-btn" id="revealAbilitiesBtn">Now reveal the six abilities <span class="arr">→</span></button>
       </div>
     </div>
@@ -1488,7 +1939,7 @@ input#vsSlider::-moz-range-thumb{
         <span id="intelcount">0 of 6 revealed</span>
       </div>
       <div class="intel-segue">
-        <p><strong>AI</strong> is the branch of computer science that builds machines to do these things — to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
+        <p><strong>AI</strong> is the branch of computer science that builds machines to do these things: to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
       </div>
 
       <!-- Matching activity -->
@@ -1505,7 +1956,7 @@ input#vsSlider::-moz-range-thumb{
           <div class="match-examples" id="matchExamples"></div>
           <div class="match-targets" id="matchTargets"></div>
         </div>
-        <div class="match-status" id="matchStatus">0 of 6 matched</div>
+        <div class="match-status" id="matchStatus">0 of 4 matched</div>
       </div>
     </div>
   </div>
@@ -1516,16 +1967,26 @@ input#vsSlider::-moz-range-thumb{
   <div class="container">
     <div class="eyebrow">Stop 2 · How we got here</div>
     <h2>Seventy years of AI in five eras.</h2>
-    <p class="lead">Each era asked a question the previous one couldn't answer. Our work builds on these decades of progress.</p>
+    <p class="lead">Each era asked a question the previous one couldn't answer.</p>
 
-    <!-- Instructor stepper: jump to any era + walk forward/back -->
-    <div class="era-stepper" id="eraStepper">
-      <button class="era-step-btn" data-step="prev">← Prev</button>
-      <div class="era-step-dots" id="eraStepDots"></div>
-      <button class="era-step-btn" data-step="next">Next →</button>
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop your guess in chat: <strong>what year was the first AI invented?</strong> No peeking. Go."</p>
     </div>
 
-    <div class="eras" id="eras"></div>
+    <div class="reveal-gate" id="erasGate">
+      <p class="rg-text">Collect answers first, then reveal the real timeline below.</p>
+      <button class="btn" id="erasRevealBtn">Reveal the timeline <span class="arr">→</span></button>
+    </div>
+
+    <div class="eras-content" id="erasContent">
+      <!-- Horizontal timeline -->
+      <div class="timeline-wrap">
+        <div class="timeline-track" id="timelineTrack"></div>
+        <div class="timeline-detail" id="timelineDetail"></div>
+      </div>
+
+    </div><!-- /.eras-content -->
   </div>
 </section>
 
@@ -1535,6 +1996,11 @@ input#vsSlider::-moz-range-thumb{
     <div class="eyebrow">Stop 3 · The builder's toolkit</div>
     <h2>Four parts in every AI product.</h2>
     <p class="lead">Once you can name these four pieces, you can take apart almost any AI app. Click a card to expand it.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop your favorite AI tool in chat (one word). We'll come back to it."</p>
+    </div>
     <div class="blocks" id="blocks-grid"></div>
 
     <!-- Matching activity: real products → block -->
@@ -1554,13 +2020,13 @@ input#vsSlider::-moz-range-thumb{
       <div class="match-status" id="bbMatchStatus">0 of 4 matched</div>
     </div>
 
-    <!-- Combine game: 2048-style — sandbox to discover the recipe -->
+    <!-- Combine game: 2048-style, sandbox to discover the recipe -->
     <div class="combine-game" id="combineGame">
       <div class="combine-head">
         <div>
-          <div class="eyebrow" style="margin-bottom:6px">Sandbox · 3 min</div>
+          <div class="eyebrow" style="margin-bottom:6px">Sandbox · 1 min</div>
           <h3 class="combine-title">Try to create a System by combining the right blocks.</h3>
-          <p class="combine-sub">Think 2048. You have <strong>Models</strong> and <strong>Tools</strong> — drag them around and see what they make.</p>
+          <p class="combine-sub">Think 2048. You have <strong>Models</strong> and <strong>Tools</strong>, drag them around and see what they make.</p>
         </div>
         <div class="combine-actions">
           <button class="wcard-btn" id="combineSpawnModel"><span class="combine-pill model" style="margin-right:6px">Model</span>+</button>
@@ -1574,59 +2040,17 @@ input#vsSlider::-moz-range-thumb{
   </div>
 </section>
 
-<!-- ============ SIMULATOR ============ -->
-<section id="sim">
-  <div class="container">
-    <div class="eyebrow">Stop 4 · How a modern AI app actually answers you</div>
-    <h2>Prompt → LLM → Tool → API → Answer.</h2>
-    <p class="lead">An LLM on its own can't check the weather, the score, or the time. It needs <em>tools</em>. Pick a prompt and watch what happens behind the scenes.</p>
-    <div class="sim">
-      <div class="sim-left">
-        <h4>Pick a prompt</h4>
-        <div class="sub">You'll explore tools and agents like this yourself in Notebook 5.</div>
-        <div class="prompt-options" id="prompts"></div>
-        <div class="sim-controls">
-          <button class="btn" id="runsim">Run it <span class="arr">→</span></button>
-          <button class="btn ghost" id="resetsim">Reset</button>
-        </div>
-      </div>
-      <div class="sim-right">
-        <h4>Behind the scenes</h4>
-        <div id="simsteps"></div>
-      </div>
-    </div>
-
-    <!-- Understanding check -->
-    <div class="era-quiz" id="simQuiz" style="margin-top:24px; max-width:880px">
-      <div class="eq-head">
-        <span class="eq-tag">Understanding check</span>
-        <span class="eq-q">Why can't an LLM answer "What's the weather in Tokyo right now?" on its own?</span>
-      </div>
-      <div class="eq-options">
-        <button class="eq-opt" data-correct="0" data-idx="0">
-          <span class="eq-letter">A</span>
-          <span class="eq-text">LLMs aren't smart enough to understand weather questions</span>
-        </button>
-        <button class="eq-opt" data-correct="1" data-idx="1">
-          <span class="eq-letter">B</span>
-          <span class="eq-text">LLMs only know what was in their training data — they have no way to fetch live information without a tool</span>
-        </button>
-        <button class="eq-opt" data-correct="0" data-idx="2">
-          <span class="eq-letter">C</span>
-          <span class="eq-text">LLMs refuse to discuss weather for safety reasons</span>
-        </button>
-      </div>
-      <div class="eq-feedback" id="simQuizFb"></div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ MAP ============ -->
 <section id="map">
   <div class="container">
-    <div class="eyebrow">Stop 5 · Your 10-day journey</div>
+    <div class="eyebrow">Stop 4 · Your 10-day journey</div>
     <h2>Your AI Builder's Map.</h2>
-    <p class="lead">This is your map for the program — <strong>each marker is one session</strong>, and clicking it shows what you'll learn, build, and use that day. You'll ascend from data fundamentals to a deployed AI project of your own.</p>
+    <p class="lead">This is your map for the program. <strong>Each marker is one session</strong>, and clicking it shows what you'll learn, build, and use that day. You'll ascend from data fundamentals to a deployed AI project of your own.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Which session are you <strong>most excited about</strong>? Drop the day number in chat."</p>
+    </div>
     <div class="map-card">
       <div class="map-header">
         <div class="map-legend">
@@ -1641,25 +2065,28 @@ input#vsSlider::-moz-range-thumb{
       <div class="station-panel" id="spanel"></div>
     </div>
 
-    <!-- Schedule at a glance (matrix: rows = components, cols = sessions) -->
+    <!-- Schedule at a glance (collapsed by default) -->
     <div class="sag-wrap">
-      <div class="sag-head">
-        <div>
+      <button class="sag-toggle" id="sagToggle" aria-expanded="false">
+        <div class="sag-toggle-text">
           <div class="eyebrow" style="margin-bottom:6px">Schedule at a glance</div>
           <h3 class="sag-title">Each session = three time blocks.</h3>
-          <p class="sag-sub">Every day mixes a concept block, a hands-on activity, and a build (or workshop) block. Click any cell to jump to that session on the map.</p>
+          <p class="sag-sub">Every day mixes a concept block, a hands-on activity, and a build (or workshop) block.</p>
         </div>
+        <span class="sag-toggle-cta"><span class="sag-cta-text">View full schedule</span><span class="sag-chevron">▾</span></span>
+      </button>
+      <div class="sag-collapse" id="sagCollapse">
         <div class="sag-halves">
           <span class="sag-half-tab w1">First Half · Sessions 1–5</span>
           <span class="sag-half-tab w2">Second Half · Sessions 6–10</span>
         </div>
-      </div>
-      <div class="sag-matrix" id="sagMatrix"></div>
-      <div class="sag-color-key">
-        <span class="sag-key-item"><span class="sk-swatch found"></span>Concept blocks (Foundations / Pipeline)</span>
-        <span class="sag-key-item"><span class="sk-swatch hands"></span>Hands-on activities</span>
-        <span class="sag-key-item"><span class="sk-swatch build"></span>Build with code (notebooks)</span>
-        <span class="sag-key-item"><span class="sk-swatch wks"></span>Interactive workshops</span>
+        <div class="sag-matrix" id="sagMatrix"></div>
+        <div class="sag-color-key">
+          <span class="sag-key-item"><span class="sk-swatch found"></span>Concept blocks (Foundations / Pipeline)</span>
+          <span class="sag-key-item"><span class="sk-swatch hands"></span>Hands-on activities</span>
+          <span class="sag-key-item"><span class="sk-swatch build"></span>Build with code (notebooks)</span>
+          <span class="sag-key-item"><span class="sk-swatch wks"></span>Interactive workshops</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1670,7 +2097,7 @@ input#vsSlider::-moz-range-thumb{
   <div class="container">
     <div class="eyebrow">You're ready</div>
     <h2>What you'll create by the end!</h2>
-    <p class="lead">Real, tangible outputs — not just lecture notes. By Day 10 you'll have built and shipped four things you can show off.</p>
+    <p class="lead">By Day 10 you'll have built the following:</p>
 
     <div class="build-grid" id="buildGrid">
       <div class="build-card" data-idx="0">
@@ -1687,7 +2114,7 @@ input#vsSlider::-moz-range-thumb{
         </div>
         <div class="build-tag">Apps</div>
         <h4>Live AI apps</h4>
-        <p>Prototypes you can hand to a friend — chatbots, classifiers, agents — running in the browser or a notebook.</p>
+        <p>Prototypes you can hand to a friend, chatbots, classifiers, agents, running in the browser or a notebook.</p>
       </div>
       <div class="build-card" data-idx="2">
         <div class="build-icon">
@@ -1703,14 +2130,14 @@ input#vsSlider::-moz-range-thumb{
         </div>
         <div class="build-tag">Capstone</div>
         <h4>Mentor-led final project</h4>
-        <p>Your chosen AI project — scoped, built, and presented live to peers, instructors, and a college + career panel.</p>
+        <p>Your chosen AI project: scoped, built, and presented live to peers, instructors, and a college + career panel.</p>
       </div>
     </div>
 
     <div class="outro-card">
       <div class="vibe-tag">Next up · Day 1</div>
       <h2>The Vibe Coding Nano-Hackathon ⚡</h2>
-      <p>Your first taste of building. <strong>5 minutes</strong> to learn vibe coding, then <strong>10 minutes</strong> to ship any AI game you can dream up — solo, in <a href="https://lovable.dev" target="_blank" rel="noopener" style="color:#9CD89C; text-decoration:underline">Lovable</a>. No rules. The weirder, the better.</p>
+      <p>Your first taste of building. <strong>5 minutes</strong> to learn vibe coding, then <strong>10 minutes</strong> to ship any AI game you can dream up, solo, in <a href="https://lovable.dev" target="_blank" rel="noopener" style="color:#9CD89C; text-decoration:underline">Lovable</a>. No rules. The weirder, the better.</p>
 
       <div class="vibe-flow">
         <div class="vf-step"><span class="vf-time">5 min</span><span class="vf-label">Brief intro to vibe coding</span></div>
@@ -1746,65 +2173,65 @@ const humanAbilities = [
     diagram:"language",
     humanHint:"You read this sentence and understand it.",
     aiName:"Large Language Models",
-    aiDesc:"LLMs predict text token by token. They read, write, translate, summarize — and increasingly, reason.",
+    aiDesc:"LLMs predict text token by token. They read, write, translate, summarize. And increasingly, reason.",
     examples:["GPT-5","Claude Opus 4.7","Gemini 2.5"]},
   {name:"Sensing", icon:"sensing",
     diagram:"sensing",
     humanHint:"You recognize a friend in a crowd.",
     aiName:"Computer vision & speech",
-    aiDesc:"Neural nets turn pixels and sound waves into meaning — recognizing faces, objects, words, music.",
+    aiDesc:"Neural nets turn pixels and sound waves into meaning, recognizing faces, objects, words, music.",
     examples:["Face ID","Whisper","Tesla Vision"]},
   {name:"Creativity", icon:"creativity",
     diagram:"creativity",
     humanHint:"You imagine a dragon you've never seen.",
     aiName:"Generative AI",
-    aiDesc:"Models that produce new images, video, music, and text from a prompt — never copying, always generating.",
+    aiDesc:"Models that produce new images, video, music, and text from a prompt, never copying, always generating.",
     examples:["Sora","Midjourney","Suno","DALL·E"]},
   {name:"Logical reasoning", icon:"reasoning",
     diagram:"reasoning",
     humanHint:"You work through a math problem step by step.",
     aiName:"Reasoning models",
-    aiDesc:"Newer models that \"think out loud\" before answering — solving math, code, and logic that earlier LLMs couldn't.",
+    aiDesc:"Newer models that \"think out loud\" before answering, solving math, code, and logic that earlier LLMs couldn't.",
     examples:["OpenAI o3","Claude extended thinking","DeepSeek-R1"]},
   {name:"Judgment", icon:"judgment",
     diagram:"judgment",
     humanHint:"You weigh pros and cons and decide.",
     aiName:"Decision systems",
-    aiDesc:"AI that weighs evidence and picks an action — what to recommend, what to flag, when to brake.",
+    aiDesc:"AI that weighs evidence and picks an action, what to recommend, what to flag, when to brake.",
     examples:["Tesla Autopilot","Fraud detection","Hiring screening"]},
 ];
 
 const eras = [
   {
     style:"dark",
-    year:"1950 — 1980s",
+    year:"1950 to 1980s",
     name:"Symbolic AI",
     theme:"Hand-crafted rules and logic. If humans could write down their reasoning, maybe a computer could follow it.",
     question:"\"What if we just wrote down every rule?\"",
-    keyEx:"Deep Blue defeats Kasparov · 1997",
-    keyCaption:"Deep Blue searches 200 million chess positions per second, then picks the move with the best score.",
+    keyEx:"ELIZA, the first chatbot · 1966",
+    keyCaption:"ELIZA used simple IF/THEN rules to mimic a therapist. People opened up to it. The chatbot was born.",
     img:"https://upload.wikimedia.org/wikipedia/commons/b/be/Deep_Blue.jpg",
-    anim:"chess",
+    anim:"eliza",
     optional:[
-      {name:"ELIZA (1966)", anim:"eliza",
-        caption:"ELIZA used pattern matching to mimic a Rogerian therapist. Users opened up to it — and the chatbot was born."},
+      {name:"Deep Blue (1997)", anim:"chess",
+        caption:"Deep Blue searches 200 million chess positions per second, then picks the move with the best score."},
       {name:"Expert systems", anim:"rules",
         caption:"Expert systems chained hand-coded IF/THEN rules to diagnose diseases, configure computers, and approve loans."}
     ],
     visualDark:true,
     quiz:{
-      q:"Deep Blue beat the world chess champion — but expert systems couldn't reliably diagnose a cold. Why did Symbolic AI succeed at one and stall on the other?",
+      q:"ELIZA fooled people into thinking they were talking to a real therapist. Why couldn't the same approach handle an open-ended conversation?",
       options:[
-        {t:"Chess engines had better hardware than medical systems", correct:false, why:"Hardware helped, but doctors also had powerful machines. The real difference is the nature of the problem."},
-        {t:"Chess has fully observable, well-defined rules; real-world diagnosis is full of fuzzy, hidden, and contradictory signals", correct:true, why:"Right — symbolic systems shine in closed worlds with clear rules. Open-ended, ambiguous problems break them."},
-        {t:"Programmers prioritized chess over medicine", correct:false, why:"There was huge medical investment too — expert systems were *the* AI of the 80s. They just hit the ambiguity wall."}
+        {t:"Computers were too slow at the time", correct:false, why:"Speed wasn't the issue. ELIZA's rule book just couldn't grow fast enough to cover real language."},
+        {t:"Real conversations have endless variations that can't be captured in fixed IF/THEN rules", correct:true, why:"Right. Symbolic systems shine in closed worlds with clear rules. Open-ended language breaks them."},
+        {t:"People stopped wanting to talk to chatbots", correct:false, why:"They didn't. Modern LLMs are still chatbots. The shift was *how* they learned, not whether people wanted them."}
       ]
     }
   },
   {
-    year:"1990s — 2011",
+    year:"1990s to 2011",
     name:"Machine Learning",
-    theme:"Stop writing rules — let the computer learn them from data. Statistics meets computing.",
+    theme:"Stop writing rules, let the computer learn them from data. Statistics meets computing.",
     question:"\"What if data could teach the rules?\"",
     keyEx:"Netflix Prize · 2006–2009",
     keyCaption:"Netflix offered $1M to improve its recommender by 10%. Teams used data, not rules, to predict what you'd love.",
@@ -1812,92 +2239,92 @@ const eras = [
     anim:"scatter",
     optional:[
       {name:"Spam filters", anim:"spam",
-        caption:"A trained model reads every word in an email and learns the patterns that mean \"spam\" — no hand-coded rules needed."},
+        caption:"A trained model reads every word in an email and learns the patterns that mean \"spam\". No hand-coded rules needed."},
       {name:"PageRank", anim:"pagerank",
-        caption:"Google's PageRank ranks pages by how many other pages link to them — and how trusted those linkers are."}
+        caption:"Google's PageRank ranks pages by how many other pages link to them. And how trusted those linkers are."}
     ],
     visualDark:false,
     quiz:{
-      q:"A spam filter and a Netflix recommender are both classic ML — what do they *actually* share under the hood?",
+      q:"Spam filters and Netflix recommendations are both classic ML. What do they share under the hood?",
       options:[
-        {t:"Both are trained on labeled examples and predict an outcome on new data they've never seen", correct:true, why:"Right — supervised learning. Past examples (spam/not-spam, watched/didn't-watch) teach the model patterns that generalize to new inputs."},
-        {t:"Both store every example and look up the closest match", correct:false, why:"That's nearest-neighbor — one ML algorithm, but neither spam filters nor Netflix work primarily that way at scale."},
+        {t:"Both are trained on labeled examples and predict an outcome on new data they've never seen", correct:true, why:"Right. Supervised learning. Past examples (spam/not-spam, watched/didn't-watch) teach the model patterns that generalize to new inputs."},
+        {t:"Both store every example and look up the closest match", correct:false, why:"That's nearest-neighbor, one ML algorithm, but neither spam filters nor Netflix work primarily that way at scale."},
         {t:"Both use hand-coded rules written by domain experts", correct:false, why:"That would be Symbolic AI. The shift to ML was *learning* the rules from data instead."}
       ]
     }
   },
   {
-    year:"2012 — 2016",
+    year:"2012 to 2016",
     name:"Deep Learning",
     theme:"Layered neural networks plus GPUs unlock perception. Computers begin to see and hear.",
     question:"\"Can a machine learn to see?\"",
     keyEx:"AlphaGo defeats Lee Sedol · 2016",
-    keyCaption:"AlphaGo combines deep neural nets with self-play search to master Go — a game once thought decades out of reach.",
+    keyCaption:"AlphaGo combines deep neural nets with self-play search to master Go, a game once thought decades out of reach.",
     img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/AlphaGo_logo_Reversed.svg",
     anim:"network",
     optional:[
       {name:"AlexNet (2012)", anim:"alex",
         caption:"AlexNet halved the error rate on ImageNet, proving deep neural nets + GPUs were the future of computer vision."},
       {name:"Siri (2011)", anim:"siri",
-        caption:"Siri turned speech into text and text into action — putting a voice assistant in everyone's pocket."}
+        caption:"Siri turned speech into text and text into action, putting a voice assistant in everyone's pocket."}
     ],
     visualDark:true,
     quiz:{
-      q:"Neural networks existed since the 1950s. So why did deep learning suddenly explode in 2012, not earlier?",
+      q:"Neural networks existed since the 1950s. Why did deep learning explode in 2012, not earlier?",
       options:[
-        {t:"Researchers finally figured out how to design neural net architectures", correct:false, why:"Architectures matter, but the math (backprop, convolutions) was mostly there by the late 80s — it just couldn't run."},
-        {t:"Three things landed at once: GPUs for parallel compute, internet-scale labeled data (ImageNet), and better training tricks like ReLU and dropout", correct:true, why:"Exactly — none alone was enough. The 2012 unlock was a *compounding* of hardware, data, and algorithmic refinements."},
+        {t:"Researchers finally figured out how to design neural net architectures", correct:false, why:"Architectures matter, but the math (backprop, convolutions) was mostly there by the late 80s. It just couldn't run."},
+        {t:"Three things landed at once: GPUs for parallel compute, internet-scale labeled data (ImageNet), and better training tricks like ReLU and dropout", correct:true, why:"Exactly. None alone was enough. The 2012 unlock was a *compounding* of hardware, data, and algorithmic refinements."},
         {t:"Funding from tech companies finally made it possible", correct:false, why:"Money flowed *because* of the breakthroughs, not the other way around. The breakthroughs were technical."}
       ]
     }
   },
   {
-    year:"2017 — 2022",
+    year:"2017 to 2022",
     name:"Generative AI",
     theme:"Transformers + massive scale + the entire internet as training data. Models start to create, not just classify.",
     question:"\"Can a machine create?\"",
     keyEx:"ChatGPT launches · Nov 2022",
-    keyCaption:"ChatGPT reaches 100 million users in two months — the fastest-adopted consumer product in history.",
+    keyCaption:"ChatGPT reaches 100 million users in two months, the fastest-adopted consumer product in history.",
     img:"https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
     anim:"gen",
     optional:[
       {name:"GPT-3 (2020)", anim:"gpt",
         caption:"GPT-3 generates text one token at a time, predicting the most likely next word given everything before it."},
       {name:"DALL·E (2021)", anim:"dalle",
-        caption:"DALL·E turns a text prompt into novel images — visual ideas no human ever drew before."}
+        caption:"DALL·E turns a text prompt into novel images, visual ideas no human ever drew before."}
     ],
     visualDark:false,
     quiz:{
-      q:"When you ask ChatGPT a question and it streams out a perfectly coherent paragraph, what is it *actually* doing at each visible moment?",
+      q:"When ChatGPT streams out a paragraph, what is it actually doing at each visible moment?",
       options:[
-        {t:"Drafting the full answer internally, then printing it word-by-word for dramatic effect", correct:false, why:"Plausible-sounding, but no — the streaming you see *is* the generation. It really is producing one token at a time."},
-        {t:"Looking up the most relevant passage from its training data and reformatting it", correct:false, why:"It's not retrieval. LLMs don't store passages — they store statistical patterns over tokens."},
-        {t:"Predicting the single most likely next token given everything written so far, then repeating", correct:true, why:"Yes — every visible token is one forward pass. The whole paragraph emerges from chained next-token predictions."}
+        {t:"Drafting the full answer internally, then printing it word-by-word for dramatic effect", correct:false, why:"Plausible-sounding, but no. The streaming you see *is* the generation. It really is producing one token at a time."},
+        {t:"Looking up the most relevant passage from its training data and reformatting it", correct:false, why:"It's not retrieval. LLMs don't store passages, they store statistical patterns over tokens."},
+        {t:"Predicting the single most likely next token given everything written so far, then repeating", correct:true, why:"Yes. Every visible token is one forward pass. The whole paragraph emerges from chained next-token predictions."}
       ]
     }
   },
   {
-    year:"2023 — today",
+    year:"2023 to today",
     name:"Agentic AI",
-    theme:"Give an LLM tools, memory, and a goal — and it can act. Browse, code, plan, finish multi-step work.",
+    theme:"Give an LLM tools, memory, and a goal. And it can act. Browse, code, plan, finish multi-step work.",
     question:"\"Can a machine take action?\"",
     keyEx:"Claude Code & Cursor reshape software · 2024",
-    keyCaption:"Agents plan, call tools, run code, and check their own work — turning LLMs from advisors into collaborators.",
+    keyCaption:"Agents plan, call tools, run code, and check their own work, turning LLMs from advisors into collaborators.",
     img:"https://upload.wikimedia.org/wikipedia/commons/1/14/Anthropic.png",
     anim:"agent",
     optional:[
       {name:"Cursor", anim:"cursor",
-        caption:"Cursor edits your codebase alongside you — suggesting, refactoring, and writing whole features on request."},
+        caption:"Cursor edits your codebase alongside you, suggesting, refactoring, and writing whole features on request."},
       {name:"Operator (2025)", anim:"operator",
-        caption:"OpenAI's Operator drives a real browser — clicking buttons, filling forms, completing online tasks for you."}
+        caption:"OpenAI's Operator drives a real browser, clicking buttons, filling forms, completing online tasks for you."}
     ],
     visualDark:true,
     quiz:{
-      q:"Two products use the same underlying LLM. One is called a chatbot, the other an agent. What is the agent doing that the chatbot isn't?",
+      q:"Same LLM, two products. One is a chatbot, the other an agent. What's the agent doing that the chatbot isn't?",
       options:[
-        {t:"It uses a smarter, larger version of the same model", correct:false, why:"Often the model is identical. The difference isn't the model — it's the scaffolding around it."},
-        {t:"It keeps acting in a loop: plans, calls real-world tools, observes what happens, and adjusts — without you in the loop for every step", correct:true, why:"Exactly — agents bridge thinking and *doing*. The loop (and tool access) is the qualitative shift, not the model size."},
-        {t:"It's connected to the internet for live data", correct:false, why:"Lots of chatbots have search too — that's a tool. The agent's edge is autonomously *choosing and chaining* tools toward a goal."}
+        {t:"It uses a smarter, larger version of the same model", correct:false, why:"Often the model is identical. The difference isn't the model, it's the scaffolding around it."},
+        {t:"It keeps acting in a loop: plans, calls real-world tools, observes what happens, and adjusts, without you in the loop for every step", correct:true, why:"Exactly. Agents bridge thinking and *doing*. The loop (and tool access) is the qualitative shift, not the model size."},
+        {t:"It's connected to the internet for live data", correct:false, why:"Lots of chatbots have search too, that's a tool. The agent's edge is autonomously *choosing and chaining* tools toward a goal."}
       ]
     }
   }
@@ -1909,30 +2336,17 @@ const buildingBlocks = [
    demo:`<span class="bd-pre">"The cat sat on the…"</span><span class="bd-arrow">→</span><span class="bd-next">mat</span><span class="bd-prob">89%</span>`,
    examples:["GPT-5","Claude Opus 4.7","Gemini 2.5 Pro","Llama 4","Stable Diffusion","Whisper"]},
   {num:"02", name:"Tool",   role:"The hands", icon:"tool",
-   desc:"An external capability the model can call — a web search, a calculator, any API. Tools let a model do what it can't do on its own.",
+   desc:"An external capability the model can call, a web search, a calculator, any API. Tools let a model do what it can't do on its own.",
    demo:`<span class="bd-call">get_weather("Tokyo")</span><span class="bd-arrow">→</span><span class="bd-result">{ 18°C, sunny }</span>`,
    examples:["Web search","Weather API","Code interpreter","File reader","Image generator","Database query"]},
   {num:"03", name:"Agent",  role:"The planner", icon:"agent",
-   desc:"A model that decides — on its own — which tools to call, in what order, to finish a multi-step task. Plans, acts, observes, repeats.",
+   desc:"A model that decides, on its own, which tools to call, in what order, to finish a multi-step task. Plans, acts, observes, repeats.",
    demo:`<span class="bd-step">1. Read</span><span class="bd-arrow">→</span><span class="bd-step">2. Search</span><span class="bd-arrow">→</span><span class="bd-step">3. Edit</span>`,
    examples:["Claude Code","Cursor","Devin","ChatGPT Operator","Manus","Computer Use"]},
   {num:"04", name:"System", role:"The full product", icon:"system",
    desc:"Everything together: model + tools + agent + a user interface, plus the business logic that ties it to real users.",
    demo:`<span class="bd-step">Model</span><span class="bd-plus">+</span><span class="bd-step">Tools</span><span class="bd-plus">+</span><span class="bd-step">Agent</span><span class="bd-plus">+</span><span class="bd-step">UI</span><span class="bd-eq">=</span><span class="bd-product">ChatGPT</span>`,
    examples:["ChatGPT","Perplexity","Notion AI","GitHub Copilot","Granola","Cluely"]},
-];
-
-const simPrompts = [
-  {text:"What's the weather in Tokyo right now?", needsTool:true, tool:"get_weather",
-    args:'{"city":"Tokyo","units":"celsius"}',
-    apiResp:'{"city":"Tokyo","temp_c":18,"condition":"partly cloudy","humidity":62}',
-    finalAns:"It's 18°C and partly cloudy in Tokyo right now, with humidity around 62%."},
-  {text:"What's the score of the latest Lakers game?", needsTool:true, tool:"get_sports_score",
-    args:'{"team":"Los Angeles Lakers","sport":"NBA"}',
-    apiResp:'{"home":"Lakers","away":"Warriors","score":"112-108","status":"final","date":"2026-05-12"}',
-    finalAns:"The Lakers won their last game 112–108 against the Warriors (final, May 12)."},
-  {text:"What's the capital of France?", needsTool:false,
-    finalAns:"The capital of France is Paris. I knew this one from training — no tool needed."}
 ];
 
 const sessions = [
@@ -1975,7 +2389,7 @@ const sessions = [
   {n:4, line:"w1", title:"NLP + LLMs", short:"NLP + LLMs", day:"Session 4",
     learn:[
       "Natural language processing fundamentals",
-      "How LLMs work — prompt design and model behavior",
+      "How LLMs work, prompt design and model behavior",
       "Turning unstructured text into useful insights"
     ],
     build:[
@@ -2062,11 +2476,11 @@ function svgEl(tag, attrs={}){
 }
 
 /* ============ CLICK-THROUGH NAVIGATION ============ */
-const sectionsList = ['hero','welcome','mindset','what','timeline','blocks','sim','map','next'];
+const sectionsList = ['hero','welcome','mindset','risks','what','timeline','blocks','map','next'];
 const sectionLabels = {
   hero:'Start', welcome:'Welcome', mindset:'Mindset',
   what:'What is AI', timeline:'Eras', blocks:'Building Blocks',
-  sim:'How It Works', map:'10-Day Map', next:"What's next"
+  map:'10-Day Map', next:"What's next"
 };
 const navBtns = $$('#topnav button');
 const progressBar = $('#progressBar');
@@ -2286,14 +2700,28 @@ if(revealAbilitiesBtn && intelWrap){
   });
 }
 
+/* ============ AI RISKS · predict then reveal ============ */
+$$('.rc-predict-btn').forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    const card = btn.closest('.risk-card');
+    if(card) card.classList.add('revealed');
+  });
+});
+
+/* Critical Thinking Check · click-to-reveal example */
+$$('.cc-reveal-btn').forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    const card = btn.closest('.crit-check');
+    if(card) card.classList.add('revealed');
+  });
+});
+
 /* ============ MATCH GAME · examples → human abilities ============ */
 const matchPairs = [
-  {id:'memory',   icon:'⏳', label:'Memory',           example:'Notion AI surfaces a note you wrote 3 months ago when you ask a related question.'},
   {id:'language', icon:'💬', label:'Language',         example:'ChatGPT translates your essay into Japanese in 2 seconds.'},
   {id:'sensing',  icon:'👁️', label:'Sensing',          example:'Your phone unlocks the moment it sees your face.'},
-  {id:'creativity',icon:'🎨',label:'Creativity',       example:'Midjourney paints "a dragon made of clouds, sunrise" — no human ever drew it.'},
+  {id:'creativity',icon:'🎨',label:'Creativity',       example:'Midjourney paints "a dragon made of clouds, sunrise", no human ever drew it.'},
   {id:'reasoning',icon:'🧠', label:'Logical reasoning',example:'Claude works through a multi-step word problem, showing its scratch work.'},
-  {id:'judgment', icon:'⚖️', label:'Judgment',         example:'A hiring tool scans 500 resumes and decides which 20 candidates to flag for interview.'},
 ];
 
 const matchExamplesEl = $('#matchExamples');
@@ -2309,7 +2737,7 @@ function renderMatchGame(){
   matchExamplesEl.innerHTML = `<div class="match-col-label">Real-world example</div>` +
     shuffled.map(p => `
       <div class="match-example" draggable="true" data-id="${p.id}">
-        <span class="match-ex-icon">${p.icon}</span>
+        <span class="match-ex-icon">?</span>
         <span>${p.example}</span>
       </div>
     `).join('');
@@ -2324,7 +2752,7 @@ function renderMatchGame(){
   bindMatchEvents();
   matchedSet.clear();
   matchSelected = null;
-  matchStatusEl.textContent = '0 of 6 matched';
+  matchStatusEl.textContent = `0 of ${matchPairs.length} matched`;
   matchStatusEl.classList.remove('complete');
 }
 
@@ -2375,9 +2803,9 @@ function tryMatch(exampleId, targetEl){
     }
     matchedSet.add(exampleId);
     matchSelected = null;
-    matchStatusEl.textContent = `${matchedSet.size} of 6 matched`;
+    matchStatusEl.textContent = `${matchedSet.size} of ${matchPairs.length} matched`;
     if(matchedSet.size === matchPairs.length){
-      matchStatusEl.textContent = '🎉 All 6 matched — nice work!';
+      matchStatusEl.textContent = `🎉 All ${matchPairs.length} matched, nice work!`;
       matchStatusEl.classList.add('complete');
     }
   } else {
@@ -2399,14 +2827,14 @@ function eraAnim(type){
       for(let c=0;c<8;c++){
         const dark = (r+c)%2===1;
         const hl = (r===6 && c===4) || (r===4 && c===4);
-        const piece =
-          (r===6 && c===4) ? '♙' :  // white pawn (about to move)
-          (r===7 && c===4) ? '♔' :  // white king on e1
-          (r===0 && c===4) ? '♚' :  // black king
-          (r===1 && c===3) ? '♟' :  // black pawn
-          (r===0 && c===3) ? '♛' :  // black queen
-          '';
-        html += `<div class="chess-sq ${dark?'dark':'light'} ${hl?'chess-hl':''}"><div class="chess-piece">${piece}</div></div>`;
+        // Use solid glyphs for both sides; "white" class flips fill to white with a navy outline.
+        let piece = '', isWhite = false;
+        if(r===6 && c===4){ piece = '♟'; isWhite = true; }  // white pawn (about to move)
+        else if(r===7 && c===4){ piece = '♚'; isWhite = true; }  // white king on e1
+        else if(r===0 && c===4){ piece = '♚'; }  // black king
+        else if(r===1 && c===3){ piece = '♟'; }  // black pawn
+        else if(r===0 && c===3){ piece = '♛'; }  // black queen
+        html += `<div class="chess-sq ${dark?'dark':'light'} ${hl?'chess-hl':''}"><div class="chess-piece ${isWhite?'white':''}">${piece}</div></div>`;
       }
     }
     html += `</div>`;
@@ -2553,7 +2981,7 @@ function eraAnim(type){
           <div class="bar"><span class="name">snow leopard</span><div class="track"><div class="fill" data-pct="1"></div></div><span class="pct">1%</span></div>
         </div>
       </div>
-      <div class="alex-foot">AlexNet halved the error rate on the <strong>ImageNet</strong> benchmark — and kicked off the deep learning era.</div>
+      <div class="alex-foot">AlexNet halved the error rate on the <strong>ImageNet</strong> benchmark. And kicked off the deep learning era.</div>
     </div>`;
   }
   if(type==="siri"){
@@ -2609,178 +3037,208 @@ function eraAnim(type){
   return "";
 }
 
-const ergrid = $('#eras');
-eras.forEach((e,i)=>{
-  const el = document.createElement('div');
-  el.className = 'era-row' + (i%2===1 ? ' flip' : '');
-  // Build chip list: key example + 2 optional
-  const chipsHTML = `
-    <button class="chip-btn key active" data-key="1"><span class="play-arrow">▸</span>${e.keyEx}</button>
-    ${e.optional.map((o,oi)=>`<button class="chip-btn" data-opt="${oi}"><span class="play-arrow">▸</span>${o.name}</button>`).join('')}
-  `;
+/* ============ ERAS · HORIZONTAL TIMELINE ============ */
+const timelineTrack = $('#timelineTrack');
+const timelineDetail = $('#timelineDetail');
+let activeEra = 0;
+
+function renderTimelineNodes(){
+  timelineTrack.innerHTML = eras.map((e, i) => `
+    <div class="timeline-node ${i === activeEra ? 'active' : ''}" data-idx="${i}">
+      <div class="tn-year">${e.year}</div>
+      <div class="tn-dot"></div>
+      <div class="tn-name">${e.name}</div>
+    </div>
+  `).join('');
+  $$('.timeline-node', timelineTrack).forEach(node => {
+    node.addEventListener('click', () => {
+      activeEra = parseInt(node.dataset.idx);
+      renderTimelineNodes();
+      renderTimelineDetail();
+    });
+  });
+}
+
+function renderTimelineDetail(){
+  const e = eras[activeEra];
+  const total = eras.length;
   const quizHTML = e.quiz ? `
-    <div class="era-quiz" data-era="${i}">
+    <div class="era-quiz" data-era="${activeEra}">
       <div class="eq-head">
-        <span class="eq-tag">Quick check · ${i+1}/5</span>
+        <span class="eq-tag">Quick check · ${activeEra+1}/${total}</span>
         <span class="eq-q">${e.quiz.q}</span>
       </div>
       <div class="eq-options">
-        ${e.quiz.options.map((o,oi)=>`
+        ${e.quiz.options.map((o, oi) => `
           <button class="eq-opt" data-correct="${o.correct?'1':'0'}" data-idx="${oi}">
             <span class="eq-letter">${String.fromCharCode(65+oi)}</span>
             <span class="eq-text">${o.t}</span>
           </button>
         `).join('')}
       </div>
-      <div class="eq-feedback" id="eq-fb-${i}"></div>
+      <div class="eq-feedback" id="eq-fb-${activeEra}"></div>
     </div>
   ` : '';
-  el.innerHTML = `
-    <div class="era-visual ${e.visualDark?'dark':''}" data-era="${i}">
-      <div class="visual-img" style="background-image:url('${e.img}')"></div>
-      <div class="anim" data-anim="${e.anim}">${eraAnim(e.anim)}</div>
-      <div class="anim-caption">${e.keyCaption||''}</div>
+  timelineDetail.innerHTML = `
+    <div class="td-head">
+      <span class="td-year">${e.year}</span>
+      <h3 class="td-name">${e.name}</h3>
     </div>
-    <div class="era-content">
-      <div class="e-year">${e.year}</div>
-      <div class="e-name">${e.name}</div>
-      <div class="e-theme">${e.theme}</div>
-      <div class="e-q">${e.question}</div>
-      <div class="e-ex-h">Examples <span class="opt-badge">click to explore</span></div>
-      <div class="e-chips">${chipsHTML}</div>
-      <button class="chip-reset">↺ Back to key moment</button>
-      ${quizHTML}
-    </div>`;
-  ergrid.appendChild(el);
-
-  // wire up chips
-  const visual = el.querySelector('.era-visual');
-  const animBox = el.querySelector('.anim');
-  const captionEl = el.querySelector('.anim-caption');
-  const resetBtn = el.querySelector('.chip-reset');
-  const chipBtns = el.querySelectorAll('.chip-btn');
-
-  function swapTo(animType, caption, isKey){
-    chipBtns.forEach(b=>b.classList.toggle('active',
-      isKey ? b.classList.contains('key') : b.dataset.opt!==undefined && parseInt(b.dataset.opt)===animType.optIdx
-    ));
-    animBox.dataset.anim = animType.anim;
-    animBox.innerHTML = eraAnim(animType.anim);
-    captionEl.textContent = caption || '';
-    visual.classList.toggle('show-caption', !!caption);
-    resetBtn.classList.toggle('show', !isKey);
-    // mark the row as played so the IntersectionObserver doesn't override the user's choice
-    el.dataset.played = '1';
-    kickoffAnim(animBox, animType.anim);
-  }
-
-  chipBtns.forEach((btn)=>{
-    btn.addEventListener('click', ()=>{
-      if(btn.classList.contains('key')){
-        swapTo({anim:e.anim, optIdx:-1}, e.keyCaption||'', true);
-      } else {
-        const oi = parseInt(btn.dataset.opt);
-        const opt = e.optional[oi];
-        swapTo({anim:opt.anim, optIdx:oi}, opt.caption||'', false);
-        // mark active explicitly
-        chipBtns.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-    });
+    <p class="td-theme">${e.theme}</p>
+    <div class="td-question">${e.question}</div>
+    <div class="td-key">
+      <span class="td-key-label">Landmark moment</span>
+      <p class="td-key-text"><strong>${e.keyEx}.</strong> ${e.keyCaption || ''}</p>
+    </div>
+    <div class="td-illus" data-anim="${e.anim}">${eraAnim(e.anim)}</div>
+    ${quizHTML}
+    <div class="td-nav">
+      <button class="td-nav-btn" id="eraPrev" ${activeEra === 0 ? 'disabled' : ''}>← Prev era</button>
+      <span class="td-nav-count">${activeEra+1} / ${total}</span>
+      <button class="td-nav-btn primary" id="eraNext" ${activeEra === total-1 ? 'disabled' : ''}>Next era →</button>
+    </div>
+  `;
+  // Wire Prev / Next
+  const prev = $('#eraPrev'), next = $('#eraNext');
+  if(prev) prev.addEventListener('click', ()=>{
+    if(activeEra > 0){ activeEra--; renderTimelineNodes(); renderTimelineDetail(); }
   });
-  resetBtn.addEventListener('click', ()=>{
-    swapTo({anim:e.anim, optIdx:-1}, e.keyCaption||'', true);
-    chipBtns.forEach(b=>b.classList.remove('active'));
-    el.querySelector('.chip-btn.key').classList.add('active');
+  if(next) next.addEventListener('click', ()=>{
+    if(activeEra < total-1){ activeEra++; renderTimelineNodes(); renderTimelineDetail(); }
   });
-
-  // Quiz wiring — allow re-clicking different answers
+  // Wire quiz (retry-friendly)
   if(e.quiz){
-    const fb = el.querySelector(`#eq-fb-${i}`);
-    const opts = el.querySelectorAll('.eq-opt');
+    const fb = $(`#eq-fb-${activeEra}`);
+    const opts = $$('.eq-opt', timelineDetail);
     opts.forEach((o, oi) => {
       o.addEventListener('click', ()=>{
         const correct = o.dataset.correct === '1';
-        // Clear previous state on all options (let students retry)
         opts.forEach(x => x.classList.remove('right','wrong','correct-answer','picked'));
         o.classList.add(correct ? 'right' : 'wrong', 'picked');
         fb.classList.remove('show','ok','no');
-        // Use a quick reflow to allow the transition to restart on rapid re-clicks
         void fb.offsetWidth;
         fb.innerHTML = `<span class="eq-fb-icon ${correct?'ok':'no'}">${correct?'✓':'×'}</span> ${e.quiz.options[oi].why}`;
         fb.classList.add('show', correct ? 'ok' : 'no');
       });
     });
   }
+  // Kick off the animation
+  const anim = timelineDetail.querySelector('.td-illus');
+  if(anim) kickoffAnim(anim, e.anim);
+}
 
-  // kickoff initial caption (show it for key moment too)
-  if(e.keyCaption){ visual.classList.add('show-caption'); }
+renderTimelineNodes();
+renderTimelineDetail();
 
-  // store the era reference for the observer to use
-  el.dataset.eraIdx = i;
-  // hold the animation empty until the row scrolls into view (lazy trigger)
-  animBox.innerHTML = '';
-});
-
-/* ============ ERA STEPPER (instructor walk-through) ============ */
-const eraStepDots = $('#eraStepDots');
-if(eraStepDots){
-  eras.forEach((e, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'era-dot';
-    dot.dataset.idx = i;
-    dot.innerHTML = `<span class="era-dot-n">${i+1}</span><span class="era-dot-name">${e.name}</span>`;
-    dot.addEventListener('click', ()=>jumpToEra(i));
-    eraStepDots.appendChild(dot);
-  });
-  $$('#eraStepper .era-step-btn').forEach(b => {
-    b.addEventListener('click', ()=>{
-      const cur = currentEraIdx();
-      const next = b.dataset.step === 'next' ? Math.min(eras.length-1, cur+1) : Math.max(0, cur-1);
-      jumpToEra(next);
-    });
-  });
-  function jumpToEra(i){
-    const row = document.querySelectorAll('.era-row')[i];
-    if(row) row.scrollIntoView({behavior:'smooth', block:'center'});
-    $$('.era-dot').forEach((d, di) => d.classList.toggle('active', di === i));
-  }
-  function currentEraIdx(){
-    const rows = [...document.querySelectorAll('.era-row')];
-    let best = 0, bestDist = Infinity;
-    const vh = window.innerHeight;
-    rows.forEach((r, ri) => {
-      const c = r.getBoundingClientRect().top + r.getBoundingClientRect().height/2;
-      const d = Math.abs(c - vh/2);
-      if(d < bestDist){ bestDist = d; best = ri; }
-    });
-    return best;
-  }
-  // Update active dot on scroll
-  window.addEventListener('scroll', ()=>{
-    const tlSec = $('#timeline').getBoundingClientRect();
-    if(tlSec.bottom < 0 || tlSec.top > window.innerHeight) return;
-    const i = currentEraIdx();
-    $$('.era-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+/* Eras reveal gate: unlock the timeline + match game after the chat-storm */
+const erasGate = $('#erasGate');
+const erasContent = $('#erasContent');
+const erasRevealBtn = $('#erasRevealBtn');
+if(erasRevealBtn && erasContent){
+  erasRevealBtn.addEventListener('click', ()=>{
+    erasContent.classList.add('revealed');
+    if(erasGate) erasGate.style.display = 'none';
+    setTimeout(()=>{
+      const track = $('#timelineTrack');
+      if(track) track.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 100);
   });
 }
 
-// IntersectionObserver — play each era's animation when it enters the viewport
-const eraObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting) return;
-    const row = entry.target;
-    if(row.dataset.played==='1') return;
-    row.dataset.played='1';
-    const idx = parseInt(row.dataset.eraIdx);
-    const era = eras[idx];
-    const animBox = row.querySelector('.anim');
-    animBox.innerHTML = eraAnim(era.anim);
-    kickoffAnim(animBox, era.anim);
-    eraObserver.unobserve(row);
+/* ============ ERA MATCH QUIZ · milestones → eras ============ */
+const eraMilestones = [
+  {era: 0, label: 'Deep Blue beats Kasparov at chess'},
+  {era: 2, label: 'AlphaGo beats Lee Sedol at Go'},
+  {era: 3, label: 'ChatGPT hits 100M users in 2 months'},
+];
+const eraMatchExamplesEl = $('#eraMatchExamples');
+const eraMatchTargetsEl  = $('#eraMatchTargets');
+const eraMatchStatusEl   = $('#eraMatchStatus');
+let eraMatchSelected = null;
+const eraMatched = new Set();
+
+function renderEraMatch(){
+  if(!eraMatchExamplesEl) return;
+  const shuffled = [...eraMilestones].sort(()=>Math.random()-0.5);
+  eraMatchExamplesEl.innerHTML = `<div class="match-col-label">Milestone</div>` +
+    shuffled.map(m => `
+      <div class="match-example" draggable="true" data-era="${m.era}">
+        <span class="match-ex-icon">📌</span><span>${m.label}</span>
+      </div>
+    `).join('');
+  eraMatchTargetsEl.innerHTML = `<div class="match-col-label">Era</div>` +
+    eras.map((e, i) => `
+      <div class="match-target" data-era="${i}">
+        <span class="match-target-icon">${i+1}</span>
+        <span class="match-target-label">${e.name}</span>
+        <span class="matched-pill">✓ matched</span>
+      </div>
+    `).join('');
+  eraMatched.clear();
+  eraMatchSelected = null;
+  eraMatchStatusEl.textContent = `0 of ${eraMilestones.length} matched`;
+  eraMatchStatusEl.classList.remove('complete');
+  bindEraMatchEvents();
+}
+
+function bindEraMatchEvents(){
+  $$('.match-example', eraMatchExamplesEl).forEach(ex => {
+    ex.addEventListener('dragstart', e => {
+      if(ex.classList.contains('matched')){ e.preventDefault(); return; }
+      ex.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', 'era:' + ex.dataset.era);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    ex.addEventListener('dragend', ()=>ex.classList.remove('dragging'));
+    ex.addEventListener('click', ()=>{
+      if(ex.classList.contains('matched')) return;
+      $$('.match-example', eraMatchExamplesEl).forEach(e=>e.classList.remove('selected'));
+      if(eraMatchSelected === ex.dataset.era){ eraMatchSelected = null; return; }
+      ex.classList.add('selected');
+      eraMatchSelected = ex.dataset.era;
+    });
   });
-}, {threshold:0.25, rootMargin:'0px 0px -10% 0px'});
-ergrid.querySelectorAll('.era-row').forEach(row => eraObserver.observe(row));
+  $$('.match-target', eraMatchTargetsEl).forEach(t => {
+    t.addEventListener('dragover', e=>{ e.preventDefault(); t.classList.add('over'); });
+    t.addEventListener('dragleave', ()=>t.classList.remove('over'));
+    t.addEventListener('drop', e=>{
+      e.preventDefault();
+      t.classList.remove('over');
+      const raw = e.dataTransfer.getData('text/plain');
+      if(!raw.startsWith('era:')) return;
+      tryEraMatch(raw.slice(4), t);
+    });
+    t.addEventListener('click', ()=>{ if(eraMatchSelected) tryEraMatch(eraMatchSelected, t); });
+  });
+}
+
+function tryEraMatch(eraId, targetEl){
+  const tid = targetEl.dataset.era;
+  if(targetEl.classList.contains('matched')) return;
+  if(eraId === tid){
+    targetEl.classList.add('matched');
+    // Find any matching example (one might not be unique by era — they are here, but defensive)
+    const exEl = eraMatchExamplesEl.querySelector(`.match-example[data-era="${eraId}"]:not(.matched)`);
+    if(exEl){
+      exEl.classList.add('matched');
+      exEl.classList.remove('selected');
+    }
+    eraMatched.add(eraId);
+    eraMatchSelected = null;
+    eraMatchStatusEl.textContent = `${eraMatched.size} of ${eraMilestones.length} matched`;
+    if(eraMatched.size === eraMilestones.length){
+      eraMatchStatusEl.textContent = `🎉 All ${eraMilestones.length} matched. Now you can sketch 70 years of AI on a napkin.`;
+      eraMatchStatusEl.classList.add('complete');
+    }
+  } else {
+    targetEl.classList.add('wrong');
+    setTimeout(()=>targetEl.classList.remove('wrong'), 400);
+  }
+}
+
+renderEraMatch();
+const eraMatchResetBtn = $('#eraMatchResetBtn');
+if(eraMatchResetBtn) eraMatchResetBtn.addEventListener('click', renderEraMatch);
 
 /* ============ ANIMATION KICKOFFS (per-instance, safe to restart) ============ */
 function kickoffAnim(container, type){
@@ -2798,8 +3256,8 @@ function kickoffAnim(container, type){
 
 async function runGenLoop(container){
   const haikus = [
-    "Endless blue horizon —\nwaves return to the shore,\nthe moon listens close.",
-    "Salt wind on my face,\nfoam writes and unwrites itself —\nthe tide keeps the time.",
+    "Endless blue horizon,\nwaves return to the shore,\nthe moon listens close.",
+    "Salt wind on my face,\nfoam writes and unwrites itself,\nthe tide keeps the time.",
     "Below, a slow drift;\nabove, gulls scribble the sky.\nThe sea breathes again."
   ];
   let idx = 0;
@@ -3017,7 +3475,7 @@ function bbTry(exId, targetEl){
     bbSelected = null;
     bbMatchStatusEl.textContent = `${bbMatched.size} of 4 matched`;
     if(bbMatched.size === bbPairs.length){
-      bbMatchStatusEl.textContent = '🎉 All 4 matched — you can name the toolkit.';
+      bbMatchStatusEl.textContent = '🎉 All 4 matched, you can name the toolkit.';
       bbMatchStatusEl.classList.add('complete');
     }
   } else {
@@ -3119,7 +3577,7 @@ function tryCombine(draggedId, targetId){
       agent._fresh = true;
       combineTiles = combineTiles.filter(t => t.id !== tool.id);
       renderCombine();
-      combineStatus.textContent = `🔧 Agent now has ${agent.tools} tools. Real agents juggle many — search, code, files, APIs… Keep going, or pair it with another Agent.`;
+      combineStatus.textContent = `🔧 Agent now has ${agent.tools} tools. Real agents juggle many, search, code, files, APIs… Keep going, or pair it with another Agent.`;
       combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
       return;
     }
@@ -3154,11 +3612,11 @@ function tryCombine(draggedId, targetId){
       combineStatus.textContent = '🎉 You made an Agent. Try giving it more tools, or pair it with another Agent.';
       combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
     } else if(result === 'system'){
-      combineStatus.textContent = '🏆 A System — a full AI product. (You\'ll build one by Day 10.) Curious what happens with two…';
+      combineStatus.textContent = '🏆 A System, a full AI product. (You\'ll build one by Day 10.) Curious what happens with two…';
       combineStatus.classList.remove('bad'); combineStatus.classList.add('win');
     }
   } else {
-    combineStatus.textContent = `Hmm — ${COMBINE_META[dragged.kind].label} + ${COMBINE_META[target.kind].label} doesn't combine. Try other pairs.`;
+    combineStatus.textContent = `Hmm, ${COMBINE_META[dragged.kind].label} + ${COMBINE_META[target.kind].label} doesn't combine. Try other pairs.`;
     combineStatus.classList.remove('win'); combineStatus.classList.add('bad');
   }
 }
@@ -3168,95 +3626,24 @@ if(combineBoard){
   combineBoard.addEventListener('dragover', e=>e.preventDefault());
   $('#combineSpawnModel').addEventListener('click', ()=>{ spawnTile('model'); combineStatus.textContent = 'Tip: drag a Model onto a Tool to make an Agent.'; combineStatus.classList.remove('win','bad'); });
   $('#combineSpawnTool').addEventListener('click', ()=>{ spawnTile('tool'); combineStatus.textContent = 'Tip: drag a Model onto a Tool to make an Agent.'; combineStatus.classList.remove('win','bad'); });
+  function prespawnTiles(){
+    spawnTile('model', {x:20,  y:30});
+    spawnTile('model', {x:160, y:30});
+    spawnTile('tool',  {x:20,  y:140});
+    spawnTile('tool',  {x:160, y:140});
+  }
   $('#combineReset').addEventListener('click', ()=>{
     combineTiles = []; renderCombine();
-    combineStatus.textContent = 'Tip: spawn a Model and a Tool, then drag one onto the other.';
+    prespawnTiles();
+    combineStatus.textContent = 'Drag a Model onto a Tool to combine them.';
     combineStatus.classList.remove('win','bad');
   });
-  // Spawn starter tiles
-  spawnTile('model', {x:30, y:30});
-  spawnTile('tool', {x:200, y:50});
+  // Pre-spawn 2 Models + 2 Tools so the first merge and the Agent+Agent merge are one step away.
+  prespawnTiles();
 }
 
-/* ============ SIMULATOR ============ */
-let currentPrompt = simPrompts[0];
-const pwrap = $('#prompts');
-simPrompts.forEach((p,i)=>{
-  const b = document.createElement('button');
-  b.textContent = p.text;
-  if(i===0) b.classList.add('selected');
-  b.addEventListener('click', ()=>{
-    currentPrompt = simPrompts[i];
-    $$('#prompts button').forEach(x=>x.classList.remove('selected'));
-    b.classList.add('selected');
-  });
-  pwrap.appendChild(b);
-});
-
-function stepHTML(cls, n, headText, body){
-  return `<div class="step ${cls}"><div class="step-head"><span class="step-num">${n}</span>${headText}</div><div class="body">${body}</div></div>`;
-}
-async function runSim(){
-  const p = currentPrompt;
-  if(!p) return;
-  const root = $('#simsteps');
-  root.innerHTML = '';
-  const steps = [];
-  steps.push(stepHTML('user','1','User asks', `"${p.text}"`));
-  if(p.needsTool){
-    steps.push(stepHTML('think','2','LLM decides', `<em>"I don't have live data for this. I'll need to call a tool."</em>`));
-    steps.push(stepHTML('tool','3','Tool call', `<span style="color:#D89BE0">${p.tool}</span>(<span style="color:#9CD89C">${p.args}</span>)`));
-    steps.push(stepHTML('api','4','API response', `<span style="color:#9CD89C">${p.apiResp}</span>`));
-    steps.push(stepHTML('final','5','LLM responds', `<span id="finaltype"></span><span class="cursor"></span>`));
-  } else {
-    steps.push(stepHTML('think','2','LLM decides', `<em>"General knowledge. No tool needed."</em>`));
-    steps.push(stepHTML('final','3','LLM responds', `<span id="finaltype"></span><span class="cursor"></span>`));
-  }
-  for(let i=0;i<steps.length;i++){
-    const div = document.createElement('div');
-    div.innerHTML = steps[i];
-    const node = div.firstChild;
-    root.appendChild(node);
-    await wait(80);
-    node.classList.add('show');
-    await wait(i===steps.length-1 ? 350 : 700);
-  }
-  const target = $('#finaltype');
-  if(target){
-    const ans = p.finalAns;
-    for(let i=0;i<ans.length;i++){
-      target.textContent += ans[i];
-      await wait(18);
-    }
-    const cur = root.querySelector('.cursor');
-    if(cur) cur.remove();
-  }
-}
+/* Shared async helper (used by the era animations) */
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-$('#runsim').addEventListener('click', runSim);
-$('#resetsim').addEventListener('click', ()=>{ $('#simsteps').innerHTML=''; });
-
-/* Sim understanding-check quiz — clickable repeatedly */
-(function wireSimQuiz(){
-  const wraps = $$('#simQuiz .eq-opt');
-  const fb = $('#simQuizFb');
-  const whys = [
-    'Not quite — LLMs understand the question fine. The issue is they have no live access to current weather data.',
-    'Exactly — LLMs only know what they were trained on. Live or private data needs a Tool (an API call) to reach.',
-    'Not the reason — LLMs are happy to discuss weather. The issue is they can\'t fetch live data on their own.',
-  ];
-  wraps.forEach((o, oi) => {
-    o.addEventListener('click', ()=>{
-      const correct = o.dataset.correct === '1';
-      wraps.forEach(x => x.classList.remove('right','wrong'));
-      o.classList.add(correct ? 'right' : 'wrong');
-      fb.classList.remove('show','ok','no');
-      void fb.offsetWidth;
-      fb.innerHTML = `<span class="eq-fb-icon ${correct?'ok':'no'}">${correct?'✓':'×'}</span> ${whys[oi]}`;
-      fb.classList.add('show', correct ? 'ok' : 'no');
-    });
-  });
-})();
 
 /* ============ MOUNTAIN MAP — atmospheric layered landscape ============ */
 // New approach: depth via 4 receding atmospheric layers (the classic 3D trick that
@@ -3280,7 +3667,7 @@ const trailWaypoints = [
   {x: 619, y: 424},  // 7
   {x: 517, y: 281},  // 8
   {x: 574, y: 142},  // 9
-  {x: mainPeak.x, y: mainPeak.y}  // 10 — SUMMIT
+  {x: mainPeak.x, y: mainPeak.y}  // 10, SUMMIT
 ];
 
 // === SVG DEFS — minimal set: pin shadows, summit pin gradient, atmospheric haze ===
@@ -3308,7 +3695,7 @@ defs.innerHTML = `
     <stop offset="70%"  stop-color="#000000" stop-opacity="0"/>
     <stop offset="100%" stop-color="#1A1C42" stop-opacity="0.18"/>
   </radialGradient>
-  <!-- Cool palette overlay — gentle navy/indigo wash to harmonize with the site -->
+  <!-- Cool palette overlay, gentle navy/indigo wash to harmonize with the site -->
   <linearGradient id="coolWash" x1="0%" y1="0%" x2="0%" y2="100%">
     <stop offset="0%"  stop-color="#252861" stop-opacity="0.10"/>
     <stop offset="50%" stop-color="#3F4493" stop-opacity="0.05"/>
@@ -3571,34 +3958,6 @@ if(goalListEl){
   });
 }
 
-/* ============ WELCOME · INTRO IDEAS PILL ============ */
-const ideaPool = [
-  "an AI tutor for the subject you hated most",
-  "a homework-procrastination-detector",
-  "a chatbot that writes in your own voice",
-  "an AI that grades your dog's photos",
-  "a recipe generator from whatever's in the fridge",
-  "an outfit recommender that learns your style",
-  "an AI that turns your notes into flashcards",
-  "a sports stats assistant for your favorite team",
-  "a music-mood-matcher for any moment",
-  "an AI co-pilot for your video edits",
-  "a college-essay brainstorming buddy",
-  "an AI that explains TikToks to your parents"
-];
-const ideaBtn = $('#ideaBtn');
-const ideaPill = $('#ideaPill');
-let ideaIdx = -1;
-if(ideaBtn){
-  ideaBtn.addEventListener('click', ()=>{
-    let next;
-    do { next = Math.floor(Math.random()*ideaPool.length); } while(next === ideaIdx && ideaPool.length > 1);
-    ideaIdx = next;
-    ideaPill.textContent = '💡  ' + ideaPool[next];
-    ideaPill.classList.add('show');
-  });
-}
-
 /* ============ MINDSET · USER vs BUILDER ============ */
 $$('.vs-card').forEach(card => {
   const handler = ()=>{
@@ -3620,13 +3979,13 @@ if(vsSlider && vsSliderFb){
     let msg;
     if(v <= 30){
       vsSliderFb.classList.add('user-side');
-      msg = `<strong>Perfect starting point.</strong> Most people start as users. By Day 10 you'll have shipped something <em>others can use</em> — and that's a much bigger leap than it sounds.`;
+      msg = `<strong>Perfect starting point.</strong> Most people start as users. By Day 10 you'll have shipped something <em>others can use</em>. And that's a much bigger leap than it sounds.`;
     } else if(v <= 70){
       vsSliderFb.classList.add('middle');
       msg = `<strong>You've started crossing over.</strong> You've poked around, maybe built a thing or two. Over the next 10 days you'll go from <em>experimenting</em> to <em>shipping</em>.`;
     } else {
       vsSliderFb.classList.add('builder-side');
-      msg = `<strong>Wow — already on the builder side.</strong> 🚀 You'll get to push way further: deeper systems, real users, sharper portfolio. We're going to build on what you already know.`;
+      msg = `<strong>Wow. Already on the builder side.</strong> 🚀 You'll get to push way further: deeper systems, real users, sharper portfolio. We're going to build on what you already know.`;
     }
     vsSliderFb.innerHTML = msg;
   }
@@ -3725,6 +4084,18 @@ function renderSagMatrix(){
   });
 }
 renderSagMatrix();
+
+/* Schedule at a glance: collapsible toggle */
+const sagToggle = $('#sagToggle');
+const sagCollapse = $('#sagCollapse');
+if(sagToggle && sagCollapse){
+  const ctaText = sagToggle.querySelector('.sag-cta-text');
+  sagToggle.addEventListener('click', ()=>{
+    const open = sagCollapse.classList.toggle('open');
+    sagToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(ctaText) ctaText.textContent = open ? 'Hide schedule' : 'View full schedule';
+  });
+}
 
 </script>
 </body>
