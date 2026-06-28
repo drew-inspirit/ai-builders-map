@@ -1522,10 +1522,10 @@ input#vsSlider::-moz-range-thumb{
   <button data-target="hero" class="active">Start</button>
   <button data-target="welcome">Welcome</button>
   <button data-target="mindset">Mindset</button>
-  <button data-target="risks">AI Risks</button>
   <button data-target="what">What is AI</button>
   <button data-target="timeline">Eras</button>
   <button data-target="blocks">Building Blocks</button>
+  <button data-target="risks">AI Risks</button>
   <button data-target="map">10-Day Map</button>
   <button data-target="next">Next</button>
 </nav>
@@ -1552,48 +1552,27 @@ input#vsSlider::-moz-range-thumb{
 <section id="welcome">
   <div class="container">
     <div class="eyebrow">Before we begin</div>
-    <h2>Welcome in 👋, meet the room.</h2>
-    <p class="lead">You're about to spend 10 days building real AI with a room full of other curious people. Let's get to know each other first, then we'll look at where we're headed.</p>
+    <h2>Welcome to Inspirit AI Scholars!</h2>
+    <p class="lead">Over the next 10 sessions, you'll learn AI concepts and skills and build real projects together. Let's go!</p>
 
     <div class="ask-room">
       <span class="ar-tag">✋ Ask the room</span>
       <p class="ar-text">"Drop one word in chat: <strong>how are you feeling about the next 10 days?</strong>"</p>
     </div>
 
-    <div class="welcome-grid">
-      <!-- Introductions card -->
-      <div class="wcard intros">
-        <div class="wcard-head">
-          <span class="wcard-badge">01</span>
-          <h3>Quick intros, your turn</h3>
-        </div>
-        <p class="wcard-sub">Share these three things.
-          <span class="zoom-hint" title="Out loud or in the chat, whichever feels right.">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            out loud or in the chat
-          </span>
-        </p>
-        <ol class="intro-prompts">
-          <li><span class="ip-num">1</span><div><strong>Your name</strong></div></li>
-          <li><span class="ip-num">2</span><div><strong>Where you're from</strong></div></li>
-          <li><span class="ip-num">3</span><div><strong>Chosen superpower?</strong></div></li>
-        </ol>
+    <!-- Today's Goals card -->
+    <div class="wcard goals" style="max-width:720px; margin-top:32px">
+      <div class="wcard-head">
+        <span class="wcard-badge">Today</span>
+        <h3>Today's goals</h3>
       </div>
-
-      <!-- Today's Goals card -->
-      <div class="wcard goals">
-        <div class="wcard-head">
-          <span class="wcard-badge">02</span>
-          <h3>Today's goals</h3>
-        </div>
-        <p class="wcard-sub">By the end of today, you'll:</p>
-        <ul class="goal-list" id="goalList">
-          <li data-idx="0"><span class="goal-check"></span><div><strong>Understand the program.</strong> Schedule, components, and what to expect each day.</div></li>
-          <li data-idx="1"><span class="goal-check"></span><div><strong>See what you'll build.</strong> The projects, apps, and portfolio you'll leave with.</div></li>
-          <li data-idx="2"><span class="goal-check"></span><div><strong>Start exploring with Python.</strong> Open your first notebook and load a real dataset.</div></li>
-        </ul>
-        <div class="goal-progress"><span id="goalCount">0</span> of 3 · click each as you cover it</div>
-      </div>
+      <p class="wcard-sub">By the end of today, you'll:</p>
+      <ul class="goal-list" id="goalList">
+        <li data-idx="0"><span class="goal-check"></span><div><strong>Understand the program.</strong> Schedule, components, and what to expect each day.</div></li>
+        <li data-idx="1"><span class="goal-check"></span><div><strong>See what you'll build.</strong> The models, projects, and apps you'll leave with.</div></li>
+        <li data-idx="2"><span class="goal-check"></span><div><strong>Start exploring with Python.</strong> Open your first notebook and load a real dataset.</div></li>
+      </ul>
+      <div class="goal-progress"><span id="goalCount">0</span> of 3 · click each as you cover it</div>
     </div>
   </div>
 </section>
@@ -1699,8 +1678,137 @@ input#vsSlider::-moz-range-thumb{
     </div>
 
     <div class="vs-segue" id="vsSegue">
-      <p><strong>Where are you now?</strong> Wherever you are, by Day 10 you'll have shipped something a real person could use. But before we tour what AI is, here's the part most builders skip.</p>
-      <button class="btn ghost" onclick="scrollToSec('risks')">Continue the tour <span class="arr">→</span></button>
+      <p><strong>Where are you now?</strong> Wherever you are, by Day 10 you'll have shipped something a real person could use. Now let's tour what AI actually is.</p>
+      <button class="btn ghost" onclick="scrollToSec('what')">Continue the tour <span class="arr">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT MAKES HUMANS INTELLIGENT ============ -->
+<section id="what">
+  <div class="container">
+    <div class="eyebrow">Stop 1 · What is AI, really?</div>
+    <h2>What makes humans intelligent?</h2>
+    <p class="lead">Before we define AI, think about <em>yourself</em>. What can a human mind do? Flip each card to see the modern AI built to imitate that ability.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop one word in chat: <strong>what makes humans intelligent?</strong> Go."</p>
+    </div>
+
+    <!-- Instructor-led discussion prompt -->
+    <div class="discuss-prompt">
+      <span class="dq-tag">Discuss · 2 min</span>
+      <div class="dq-body">
+        <p><strong>Before clicking, talk it out.</strong> What do <em>you</em> think makes humans intelligent? Try to list at least three abilities together as a class.</p>
+        <button class="wcard-btn" id="revealAbilitiesBtn">Now reveal the six abilities <span class="arr">→</span></button>
+      </div>
+    </div>
+
+    <div class="intel-wrap" id="intelWrap" style="opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .6s ease, margin-top .4s">
+      <div class="intel-grid" id="intelgrid"></div>
+      <div class="intel-progress">
+        <div class="dots" id="inteldots"></div>
+        <span id="intelcount">0 of 6 revealed</span>
+      </div>
+      <div class="intel-segue">
+        <p><strong>AI</strong> is the branch of computer science that builds machines to do these things: to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
+      </div>
+
+      <!-- Matching activity -->
+      <div class="match-game" id="matchGame">
+        <div class="match-head">
+          <div>
+            <div class="eyebrow" style="margin-bottom:6px">Quick activity · 1 min</div>
+            <h3 class="match-title">Match the example to the human ability.</h3>
+            <p class="match-sub">Drag (or click) each example to the human ability it most directly imitates.</p>
+          </div>
+          <button class="wcard-btn" id="matchResetBtn">Reset</button>
+        </div>
+        <div class="match-board">
+          <div class="match-examples" id="matchExamples"></div>
+          <div class="match-targets" id="matchTargets"></div>
+        </div>
+        <div class="match-status" id="matchStatus">0 of 4 matched</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERAS ============ -->
+<section id="timeline">
+  <div class="container">
+    <div class="eyebrow">Stop 2 · How we got here</div>
+    <h2>Seventy years of AI in five eras.</h2>
+    <p class="lead">Each era asked a question the previous one couldn't answer.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop your guess in chat: <strong>what year was the first AI invented?</strong> No peeking. Go."</p>
+    </div>
+
+    <div class="reveal-gate" id="erasGate">
+      <p class="rg-text">Collect answers first, then reveal the real timeline below.</p>
+      <button class="btn" id="erasRevealBtn">Reveal the timeline <span class="arr">→</span></button>
+    </div>
+
+    <div class="eras-content" id="erasContent">
+      <!-- Horizontal timeline -->
+      <div class="timeline-wrap">
+        <div class="timeline-track" id="timelineTrack"></div>
+        <div class="timeline-detail" id="timelineDetail"></div>
+      </div>
+
+    </div><!-- /.eras-content -->
+  </div>
+</section>
+
+<!-- ============ BUILDING BLOCKS ============ -->
+<section id="blocks">
+  <div class="container">
+    <div class="eyebrow">Stop 3 · The builder's toolkit</div>
+    <h2>Four parts in every AI product.</h2>
+    <p class="lead">Once you can name these four pieces, you can take apart almost any AI app. Click a card to expand it.</p>
+
+    <div class="ask-room">
+      <span class="ar-tag">✋ Ask the room</span>
+      <p class="ar-text">"Drop your favorite AI tool in chat (one word). We'll come back to it."</p>
+    </div>
+    <div class="blocks" id="blocks-grid"></div>
+
+    <!-- Matching activity: real products → block -->
+    <div class="match-game" id="bbMatchGame">
+      <div class="match-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Activity · 1 min</div>
+          <h3 class="match-title">Match the example to the block.</h3>
+          <p class="match-sub">Each real-world example is mostly one of the four blocks. Match them up.</p>
+        </div>
+        <button class="wcard-btn" id="bbMatchResetBtn">Reset</button>
+      </div>
+      <div class="match-board">
+        <div class="match-examples" id="bbExamples"></div>
+        <div class="match-targets" id="bbTargets"></div>
+      </div>
+      <div class="match-status" id="bbMatchStatus">0 of 4 matched</div>
+    </div>
+
+    <!-- Combine game: 2048-style, sandbox to discover the recipe -->
+    <div class="combine-game" id="combineGame">
+      <div class="combine-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Sandbox · 1 min</div>
+          <h3 class="combine-title">Try to create a System by combining the right blocks.</h3>
+          <p class="combine-sub">Think 2048. You have <strong>Models</strong> and <strong>Tools</strong>, drag them around and see what they make.</p>
+        </div>
+        <div class="combine-actions">
+          <button class="wcard-btn" id="combineSpawnModel"><span class="combine-pill model" style="margin-right:6px">Model</span>+</button>
+          <button class="wcard-btn" id="combineSpawnTool"><span class="combine-pill tool" style="margin-right:6px">Tool</span>+</button>
+          <button class="wcard-btn" id="combineReset">Reset</button>
+        </div>
+      </div>
+      <div class="combine-board" id="combineBoard"></div>
+      <div class="combine-status" id="combineStatus">Drag one tile onto another. Some pairs combine, others don't.</div>
     </div>
   </div>
 </section>
@@ -1708,7 +1816,7 @@ input#vsSlider::-moz-range-thumb{
 <!-- ============ AI RISKS · WHEN AI GETS IT WRONG ============ -->
 <section id="risks">
   <div class="container">
-    <div class="eyebrow">Before the tour · Critical Thinking Check</div>
+    <div class="eyebrow">Stop 4 · Critical Thinking Check</div>
     <h2>When AI gets it wrong.</h2>
     <p class="lead">Two real cases. Each with smart people, capable AI, but caused real harm. <strong>Predict what went wrong</strong>, then reveal what actually happened, and what the builders missed.</p>
 
@@ -1906,136 +2014,7 @@ input#vsSlider::-moz-range-thumb{
 
     <div class="risks-segue">
       <p><strong>The pattern.</strong> In both cases, smart builders shipped real AI, fast. They missed something a good critic would have caught. So the question for the next 10 days isn't just "can I build it?" but "<em>should I, and how do I check?</em>"</p>
-      <button class="btn ghost" onclick="scrollToSec('what')">Now let's tour what AI is <span class="arr">→</span></button>
-    </div>
-  </div>
-</section>
-
-<!-- ============ WHAT MAKES HUMANS INTELLIGENT ============ -->
-<section id="what">
-  <div class="container">
-    <div class="eyebrow">Stop 1 · What is AI, really?</div>
-    <h2>What makes humans intelligent?</h2>
-    <p class="lead">Before we define AI, think about <em>yourself</em>. What can a human mind do? Flip each card to see the modern AI built to imitate that ability.</p>
-
-    <div class="ask-room">
-      <span class="ar-tag">✋ Ask the room</span>
-      <p class="ar-text">"Drop one word in chat: <strong>what makes humans intelligent?</strong> Go."</p>
-    </div>
-
-    <!-- Instructor-led discussion prompt -->
-    <div class="discuss-prompt">
-      <span class="dq-tag">Discuss · 2 min</span>
-      <div class="dq-body">
-        <p><strong>Before clicking, talk it out.</strong> What do <em>you</em> think makes humans intelligent? Try to list at least three abilities together as a class.</p>
-        <button class="wcard-btn" id="revealAbilitiesBtn">Now reveal the six abilities <span class="arr">→</span></button>
-      </div>
-    </div>
-
-    <div class="intel-wrap" id="intelWrap" style="opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .6s ease, margin-top .4s">
-      <div class="intel-grid" id="intelgrid"></div>
-      <div class="intel-progress">
-        <div class="dots" id="inteldots"></div>
-        <span id="intelcount">0 of 6 revealed</span>
-      </div>
-      <div class="intel-segue">
-        <p><strong>AI</strong> is the branch of computer science that builds machines to do these things: to remember, sense, reason, decide, use language, and create. Every AI system you'll meet this program is an attempt at one of these <code>six human abilities</code>.</p>
-      </div>
-
-      <!-- Matching activity -->
-      <div class="match-game" id="matchGame">
-        <div class="match-head">
-          <div>
-            <div class="eyebrow" style="margin-bottom:6px">Quick activity · 3 min</div>
-            <h3 class="match-title">Match the example to the human ability.</h3>
-            <p class="match-sub">Drag (or click) each example to the human ability it most directly imitates.</p>
-          </div>
-          <button class="wcard-btn" id="matchResetBtn">Reset</button>
-        </div>
-        <div class="match-board">
-          <div class="match-examples" id="matchExamples"></div>
-          <div class="match-targets" id="matchTargets"></div>
-        </div>
-        <div class="match-status" id="matchStatus">0 of 4 matched</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ERAS ============ -->
-<section id="timeline">
-  <div class="container">
-    <div class="eyebrow">Stop 2 · How we got here</div>
-    <h2>Seventy years of AI in five eras.</h2>
-    <p class="lead">Each era asked a question the previous one couldn't answer.</p>
-
-    <div class="ask-room">
-      <span class="ar-tag">✋ Ask the room</span>
-      <p class="ar-text">"Drop your guess in chat: <strong>what year was the first AI invented?</strong> No peeking. Go."</p>
-    </div>
-
-    <div class="reveal-gate" id="erasGate">
-      <p class="rg-text">Collect answers first, then reveal the real timeline below.</p>
-      <button class="btn" id="erasRevealBtn">Reveal the timeline <span class="arr">→</span></button>
-    </div>
-
-    <div class="eras-content" id="erasContent">
-      <!-- Horizontal timeline -->
-      <div class="timeline-wrap">
-        <div class="timeline-track" id="timelineTrack"></div>
-        <div class="timeline-detail" id="timelineDetail"></div>
-      </div>
-
-    </div><!-- /.eras-content -->
-  </div>
-</section>
-
-<!-- ============ BUILDING BLOCKS ============ -->
-<section id="blocks">
-  <div class="container">
-    <div class="eyebrow">Stop 3 · The builder's toolkit</div>
-    <h2>Four parts in every AI product.</h2>
-    <p class="lead">Once you can name these four pieces, you can take apart almost any AI app. Click a card to expand it.</p>
-
-    <div class="ask-room">
-      <span class="ar-tag">✋ Ask the room</span>
-      <p class="ar-text">"Drop your favorite AI tool in chat (one word). We'll come back to it."</p>
-    </div>
-    <div class="blocks" id="blocks-grid"></div>
-
-    <!-- Matching activity: real products → block -->
-    <div class="match-game" id="bbMatchGame">
-      <div class="match-head">
-        <div>
-          <div class="eyebrow" style="margin-bottom:6px">Activity · 2 min</div>
-          <h3 class="match-title">Match the example to the block.</h3>
-          <p class="match-sub">Each real-world example is mostly one of the four blocks. Match them up.</p>
-        </div>
-        <button class="wcard-btn" id="bbMatchResetBtn">Reset</button>
-      </div>
-      <div class="match-board">
-        <div class="match-examples" id="bbExamples"></div>
-        <div class="match-targets" id="bbTargets"></div>
-      </div>
-      <div class="match-status" id="bbMatchStatus">0 of 4 matched</div>
-    </div>
-
-    <!-- Combine game: 2048-style, sandbox to discover the recipe -->
-    <div class="combine-game" id="combineGame">
-      <div class="combine-head">
-        <div>
-          <div class="eyebrow" style="margin-bottom:6px">Sandbox · 1 min</div>
-          <h3 class="combine-title">Try to create a System by combining the right blocks.</h3>
-          <p class="combine-sub">Think 2048. You have <strong>Models</strong> and <strong>Tools</strong>, drag them around and see what they make.</p>
-        </div>
-        <div class="combine-actions">
-          <button class="wcard-btn" id="combineSpawnModel"><span class="combine-pill model" style="margin-right:6px">Model</span>+</button>
-          <button class="wcard-btn" id="combineSpawnTool"><span class="combine-pill tool" style="margin-right:6px">Tool</span>+</button>
-          <button class="wcard-btn" id="combineReset">Reset</button>
-        </div>
-      </div>
-      <div class="combine-board" id="combineBoard"></div>
-      <div class="combine-status" id="combineStatus">Drag one tile onto another. Some pairs combine, others don't.</div>
+      <button class="btn ghost" onclick="scrollToSec('map')">See your 10-day map <span class="arr">→</span></button>
     </div>
   </div>
 </section>
@@ -2043,7 +2022,7 @@ input#vsSlider::-moz-range-thumb{
 <!-- ============ MAP ============ -->
 <section id="map">
   <div class="container">
-    <div class="eyebrow">Stop 4 · Your 10-day journey</div>
+    <div class="eyebrow">Stop 5 · Your 10-day journey</div>
     <h2>Your AI Builder's Map.</h2>
     <p class="lead">This is your map for the program. <strong>Each marker is one session</strong>, and clicking it shows what you'll learn, build, and use that day. You'll ascend from data fundamentals to a deployed AI project of your own.</p>
 
@@ -2476,11 +2455,11 @@ function svgEl(tag, attrs={}){
 }
 
 /* ============ CLICK-THROUGH NAVIGATION ============ */
-const sectionsList = ['hero','welcome','mindset','risks','what','timeline','blocks','map','next'];
+const sectionsList = ['hero','welcome','mindset','what','timeline','blocks','risks','map','next'];
 const sectionLabels = {
   hero:'Start', welcome:'Welcome', mindset:'Mindset',
   what:'What is AI', timeline:'Eras', blocks:'Building Blocks',
-  map:'10-Day Map', next:"What's next"
+  risks:'AI Risks', map:'10-Day Map', next:"What's next"
 };
 const navBtns = $$('#topnav button');
 const progressBar = $('#progressBar');
